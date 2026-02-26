@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using TiendaOnline.AppMVC.Data;
+using TiendaOnline.AppMVC.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<TiendaOnlineDbContext>(options =>
+builder.Services.AddDbContext<TiendaOnlineZapContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
