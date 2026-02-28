@@ -1,65 +1,98 @@
 ﻿@model IEnumerable<TiendaOnline.AppMVC.Models.Producto>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Producto";
 }
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Precio)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Descripcion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Estatus)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaRegistro)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaActualizacion)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Precio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descripcion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Estatus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaRegistro)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaActualizacion)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ProductoId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProductoId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProductoId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+        <h3 class="mb-0">Productos</h3>
+        <div class="text-muted">Listado general</div>
+    </div>
+
+    <a asp-action="Create" class="btn btn-primary">
+        + Nuevo producto
+    </a>
+</div>
+
+<div class="card shadow-sm products-card">
+    <div class="card-body p-0">
+
+
+    <div class="d-none d-md-flex products-header px-3 py-3">
+        <div class="col-md-1"></div> 
+        <div class="col-md-4">Nombre</div>
+        <div class="col-md-3">Precio</div>
+        <div class="col-md-2">Estado</div>
+        <div class="col-md-2 text-end">Acciones</div>
+    </div>
+
+
+        <!-- Filas -->
+        @foreach (var item in Model)
+        {
+            var activo = item.Estatus == 1;
+            string? imgUrl = item.ProductoImagens?.FirstOrDefault()?.Url;
+            <div class="product-row d-flex align-items-center">
+
+        <!-- Imagen -->
+        <div class="col-12 col-md-1 mb-3 mb-md-0">
+            @if (!string.IsNullOrWhiteSpace(imgUrl))
+            {
+                <img src="@imgUrl" class="thumb" alt="Imagen @item.Nombre" />
+            }
+            else
+            {
+                <div class="thumb d-flex align-items-center justify-content-center text-muted small">
+                    IMG
+                </div>
+            }
+        </div>
+
+        <!-- Nombre -->
+        <div class="col-12 col-md-4">
+            <div class="name">@item.Nombre</div>
+        </div>
+
+        <!-- Precio -->
+        <div class="col-6 col-md-3 mt-3 mt-md-0">
+            <div class="qty">
+                $@item.Precio.ToString("0.00") <small>USD</small>
+            </div>
+        </div>
+
+        <!-- Estado -->
+        <div class="col-6 col-md-2 mt-3 mt-md-0">
+            @if (activo)
+            {
+                <span class="badge-soft badge-soft-success">ACTIVO</span>
+            }
+            else
+            {
+                <span class="badge-soft badge-soft-danger">INACTIVO</span>
+            }
+        </div>
+
+        <!-- Acciones -->
+        <div class="col-12 col-md-2 mt-3 mt-md-0 d-flex justify-content-md-end gap-2">
+            <a class="action-btn" asp-action="Edit" asp-route-id="@item.ProductoId" title="Editar">
+                ✏️
+            </a>
+            <a class="action-btn" asp-action="Details" asp-route-id="@item.ProductoId" title="Detalles">
+                🔎
+            </a>
+            <a class="action-btn" asp-action="Delete" asp-route-id="@item.ProductoId" title="Eliminar">
+                🗑️
+            </a>
+        </div>
+
+    </div>
+        }
+    </div>
+
+    <div class="card-footer bg-white d-flex justify-content-between align-items-center">
+        <small class="text-muted">Mostrando @Model.Count() productos</small>
+    </div>
+</div>
