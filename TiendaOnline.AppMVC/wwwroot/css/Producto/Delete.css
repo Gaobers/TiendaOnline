@@ -1,0 +1,43 @@
+.delete-card {
+    border-radius: 16px;
+}
+
+.warning-box {
+    background: #fff4f4;
+    border: 1px solid #ffd6d6;
+    border-radius: 12px;
+    padding: 12px 16px;
+    color: #b4232c;
+    font-weight: 600;
+}
+
+.badge-soft {
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    display: inline-block;
+}
+
+.badge-soft-success {
+    background: #e9fbf2;
+    color: #128a4b;
+    border: 1px solid #c9f3dc;
+}
+
+.badge-soft-danger {
+    background: #ffecec;
+    color: #d11a2a;
+    border: 1px solid #ffd0d5;
+}
+
+.label {
+    color: #64748b;
+    font-size: .85rem;
+}
+
+.value {
+    font-weight: 700;
+    color: #0f172a;
+}
