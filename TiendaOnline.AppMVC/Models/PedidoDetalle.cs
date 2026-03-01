@@ -1,27 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TiendaOnline.AppMVC.Models;
-
-public partial class PedidoDetalle
+namespace TiendaOnline.AppMVC.Models
 {
-    public int PedidoDetalleId { get; set; }
+    public class PedidoDetalle
+    {
+        [Key]
+        public int PedidoDetalleId { get; set; }
 
-    public int PedidoId { get; set; }
+        public int PedidoId { get; set; }
+        public int TallaId { get; set; } // Solo una vez
+        public int ProductoId { get; set; }
 
-    public int ProductoId { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal SubTotal { get; set; }
 
-    public int TallaId { get; set; }
+        public string Producto { get; set; } = string.Empty;
+        public int Cantidad { get; set; }
 
-    public int Cantidad { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal PrecioUnitario { get; set; }
 
-    public decimal PrecioUnitario { get; set; }
-
-    public decimal SubTotal { get; set; }
-
-    public virtual Pedido Pedido { get; set; } = null!;
-
-    public virtual Producto Producto { get; set; } = null!;
-
-    public virtual Talla Talla { get; set; } = null!;
+        public virtual Pedido? Pedido { get; set; }
+        public virtual Talla? Talla { get; set; }
+    }
 }
+

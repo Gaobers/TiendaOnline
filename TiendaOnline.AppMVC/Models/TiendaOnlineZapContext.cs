@@ -121,10 +121,10 @@ public partial class TiendaOnlineZapContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PedidoDetalle_Pedido");
 
-            entity.HasOne(d => d.Producto).WithMany(p => p.PedidoDetalles)
-                .HasForeignKey(d => d.ProductoId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_PedidoDetalle_Producto");
+            // entity.HasOne(d => d.Talla).WithMany(p => p.PedidoDetalles)
+    //.HasForeignKey(d => d.TallaId)
+    //.OnDelete(DeleteBehavior.ClientSetNull)
+    //.HasConstraintName("FK_PedidoDetalle_Talla");
 
             entity.HasOne(d => d.Talla).WithMany(p => p.PedidoDetalles)
                 .HasForeignKey(d => d.TallaId)

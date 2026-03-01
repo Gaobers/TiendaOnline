@@ -1,25 +1,42 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Generic; // <--- AGREGA ESTA LÍNEA AHORA
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
-namespace TiendaOnline.AppMVC.Models;
-
-public partial class Pedido
+namespace TiendaOnline.AppMVC.Models
 {
-    public int PedidoId { get; set; }
+    public class Pedido
+    {
+        [Key]
+        public int PedidoId { get; set; }
+        public int ProductoId { get; set; }
+        public int TallaId { get; set; }
+        public decimal SubTotal { get; set; }
+        public string NumeroOrden { get; set; } = string.Empty;
 
-    public string NombreCliente { get; set; } = null!;
+        [Required]
+        [DisplayName("Nombre del Cliente")]
+        public string NombreCliente { get; set; } = string.Empty;
 
-    public string EmailCliente { get; set; } = null!;
+        [Required]
+        [EmailAddress]
+        public string EmailCliente { get; set; } = string.Empty;
 
-    public string DireccionEntrega { get; set; } = null!;
+        public string? DireccionEntrega { get; set; }
 
-    public string Estado { get; set; } = null!;
+        // ESTO ES LO QUE FALTABA PARA EL DBCONTEXT:
+        [DisplayName("Estado del Pedido")]
+        public string Estado { get; set; } = "PENDIENTE";
 
-    public decimal Total { get; set; }
+        [Required]
+        public decimal Total { get; set; }
 
-    public DateTime FechaRegistro { get; set; }
+        [DisplayName("Fecha de Registro")]
+        public DateTime FechaRegistro { get; set; }
 
-    public DateTime? FechaActualizacion { get; set; }
-
-    public virtual ICollection<PedidoDetalle> PedidoDetalles { get; set; } = new List<PedidoDetalle>();
+        [DisplayName("Fecha de Actualización")]
+        public DateTime? FechaActualizacion { get; set; }
+        // Esto crea el puente con los detalles del pedido
+        public virtual ICollection<PedidoDetalle> PedidoDetalles { get; set; } = new List<PedidoDetalle>();
+    }
 }
