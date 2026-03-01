@@ -1,0 +1,81 @@
+.products-card {
+    border-radius: 16px;
+}
+
+.products-header {
+    font-size: .72rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: #93a0b5;
+    font-weight: 600;
+}
+
+.product-row {
+    padding: 18px 16px;
+}
+
+    .product-row + .product-row {
+        border-top: 1px solid rgba(0,0,0,.05);
+    }
+
+.thumb {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    object-fit: cover;
+    background: #f2f4f8;
+    border: 1px solid rgba(0,0,0,.05);
+}
+
+.name {
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.qty {
+    font-weight: 800;
+    color: #0f172a;
+}
+
+    .qty small {
+        font-weight: 600;
+        color: #94a3b8;
+    }
+
+.badge-soft {
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+}
+
+.badge-soft-success {
+    background: #e9fbf2;
+    color: #128a4b;
+    border: 1px solid #c9f3dc;
+}
+
+.badge-soft-danger {
+    background: #ffecec;
+    color: #d11a2a;
+    border: 1px solid #ffd0d5;
+}
+
+.action-btn {
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    border: 1px solid rgba(0,0,0,.08);
+    background: white;
+    color: #64748b;
+    text-decoration: none;
+}
+
+    .action-btn:hover {
+        background: #f8fafc;
+        color: #0f172a;
+    }
