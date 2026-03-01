@@ -13,52 +13,86 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="UsuarioId" />
-            <div class="form-group">
+
+            <div class="form-group mb-3">
                 <label asp-for="Nombre" class="control-label"></label>
                 <input asp-for="Nombre" class="form-control" />
                 <span asp-validation-for="Nombre" class="text-danger"></span>
             </div>
-            <div class="form-group">
+
+            <div class="form-group mb-3">
                 <label asp-for="Correo" class="control-label"></label>
                 <input asp-for="Correo" class="form-control" />
                 <span asp-validation-for="Correo" class="text-danger"></span>
             </div>
-            <div class="form-group">
+
+            <div class="form-group mb-3">
                 <label asp-for="PasswordHash" class="control-label"></label>
                 <input asp-for="PasswordHash" class="form-control" />
                 <span asp-validation-for="PasswordHash" class="text-danger"></span>
             </div>
-            <div class="form-group">
+
+            <div class="form-group mb-3">
                 <label asp-for="Rol" class="control-label"></label>
                 <input asp-for="Rol" class="form-control" />
                 <span asp-validation-for="Rol" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Estatus" class="control-label"></label>
-                <input asp-for="Estatus" class="form-control" />
+
+            <div class="form-group mb-3">
+                <label class="control-label">Estado del Usuario</label>
+                <div class="form-check form-switch mt-1">
+                    @* Quitamos asp-for para evitar el error de System.Byte. 
+                       Usamos el nombre "Estatus" manualmente para que el controlador lo reciba.
+                    *@
+                    <input class="form-check-input" type="checkbox" role="switch" id="switchEstatus"
+                           name="Estatus" value="1" @(Model.Estatus == 1 ? "checked" : "")>
+
+                    <label class="form-check-label" for="switchEstatus" id="labelEstatus">
+                        @(Model.Estatus == 1 ? "Activo" : "Inactivo")
+                    </label>
+                </div>
+                @* Campo oculto para enviar '0' si el switch está apagado *@
+                <input type="hidden" name="Estatus" value="0" />
                 <span asp-validation-for="Estatus" class="text-danger"></span>
             </div>
-            <div class="form-group">
+
+            <div class="form-group mb-3">
                 <label asp-for="FechaRegistro" class="control-label"></label>
-                <input asp-for="FechaRegistro" class="form-control" />
+                <input asp-for="FechaRegistro" class="form-control" readonly />
                 <span asp-validation-for="FechaRegistro" class="text-danger"></span>
             </div>
-            <div class="form-group">
+
+            <div class="form-group mb-3">
                 <label asp-for="FechaActualizacion" class="control-label"></label>
-                <input asp-for="FechaActualizacion" class="form-control" />
+                <input asp-for="FechaActualizacion" class="form-control" readonly />
                 <span asp-validation-for="FechaActualizacion" class="text-danger"></span>
             </div>
-            <div class="form-group">
+
+            <div class="form-group mt-4">
                 <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary ms-2">Back to List</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const switchBtn = document.getElementById('switchEstatus');
+            const labelBtn = document.getElementById('labelEstatus');
+
+            switchBtn.addEventListener('change', function() {
+                // Actualiza el texto visualmente
+                labelBtn.textContent = this.checked ? 'Activo' : 'Inactivo';
+
+                // Asegura que el valor enviado sea 1 (marcado) o 0 (desmarcado)
+                this.value = this.checked ? "1" : "0";
+            });
+        });
+    </script>
 }
