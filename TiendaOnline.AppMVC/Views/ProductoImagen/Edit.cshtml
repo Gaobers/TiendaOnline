@@ -1,49 +1,114 @@
 ﻿@model TiendaOnline.AppMVC.Models.ProductoImagen
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar imagen";
+    var esPrincipal = Model.EsPrincipal;
 }
 
-<h1>Edit</h1>
 
-<h4>ProductoImagen</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ProductoImagenId" />
-            <div class="form-group">
-                <label asp-for="ProductoId" class="control-label"></label>
-                <select asp-for="ProductoId" class="form-control" asp-items="ViewBag.ProductoId"></select>
-                <span asp-validation-for="ProductoId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Url" class="control-label"></label>
-                <input asp-for="Url" class="form-control" />
-                <span asp-validation-for="Url" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="EsPrincipal" /> @Html.DisplayNameFor(model => model.EsPrincipal)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="FechaRegistro" class="control-label"></label>
-                <input asp-for="FechaRegistro" class="form-control" />
-                <span asp-validation-for="FechaRegistro" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+        <h3 class="mb-0">Editar imagen</h3>
+        <div class="text-muted">Actualiza la URL o cambia la imagen principal</div>
+    </div>
+
+    <div class="d-flex gap-2">
+        <a asp-action="Index" class="btn btn-outline-secondary">← Volver</a>
+        <a asp-action="Details" asp-route-id="@Model.ProductoImagenId" class="btn btn-outline-primary">
+            Ver detalles
+        </a>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<div class="row g-3">
+    <!-- Formulario -->
+    <div class="col-lg-7 col-xl-6">
+        <div class="card shadow-sm cardx">
+            <div class="card-body p-4">
+                <form asp-action="Edit" novalidate>
+@*                     <div asp-validation-summary="All" class="alert alert-danger py-2" role="alert"></div>
+ *@
+                    <input type="hidden" asp-for="ProductoImagenId" />
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+                    <div class="row g-3">
+                        <!-- Producto -->
+                        <div class="col-12">
+                            <label asp-for="ProductoId" class="form-label fw-semibold">Producto</label>
+                            <select asp-for="ProductoId" class="form-select" asp-items="ViewBag.ProductoId"></select>
+                            <span asp-validation-for="ProductoId" class="text-danger small"></span>
+                        </div>
+
+                        <!-- URL -->
+                        <div class="col-12">
+                            <label asp-for="Url" class="form-label fw-semibold">URL de la imagen</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-link-45deg"></i></span>
+                                <input asp-for="Url" class="form-control" id="urlInput"
+                                       placeholder="https://... o /uploads/..." autocomplete="off" />
+                            </div>
+                            <span asp-validation-for="Url" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Principal -->
+                        <div class="col-12">
+                            <label class="form-label fw-semibold d-block">Principal</label>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" asp-for="EsPrincipal" id="principalSwitch" />
+                                <label class="form-check-label" for="principalSwitch">
+                                    Marcar como imagen principal
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- FechaRegistro (solo lectura) -->
+                        <div class="col-12">
+                            <label asp-for="FechaRegistro" class="form-label fw-semibold">Fecha registro</label>
+                            <input asp-for="FechaRegistro" class="form-control" readonly />
+                            <div class="form-text">No se recomienda modificar esta fecha.</div>
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="col-12 d-flex gap-2 pt-2">
+                            <button type="submit" class="btn btn-primary">
+                                Guardar cambios
+                            </button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                Cancelar
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card-footer bg-white d-flex justify-content-between align-items-center">
+                <small class="text-muted">ID: @Model.ProductoImagenId</small>
+                <a asp-action="Delete" asp-route-id="@Model.ProductoImagenId" class="btn btn-outline-danger btn-sm">
+                    <i class="bi bi-trash me-1"></i> Eliminar
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview -->
+    <div class="col-lg-5 col-xl-6">
+        <div class="card shadow-sm cardx">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <div class="fw-semibold">Vista previa</div>
+                    <small class="text-muted">Se actualiza con la URL</small>
+                </div>
+
+                <div class="preview" id="previewBox">
+                    @if (!string.IsNullOrWhiteSpace(Model.Url))
+                    {
+                        <img src="@Model.Url" alt="Vista previa" loading="lazy" />
+                    }
+                    else
+                    {
+                        <span>PREVIEW</span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

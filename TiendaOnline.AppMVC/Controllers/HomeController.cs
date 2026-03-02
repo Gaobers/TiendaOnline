@@ -1,25 +1,32 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using TiendaOnline.AppMVC.Models;
+using TiendaOnline.AppMVC.Models.ViewModels;
 
-namespace TiendaOnline.AppMVC.Controllers
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    private readonly TiendaOnlineZapContext _context;
+
+    public HomeController(TiendaOnlineZapContext context)
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        _context = context;
+    }
 
-        public IActionResult Privacy()
+    public async Task<IActionResult> Index()
+    {
+        var vm = new DashboardVM
         {
-            return View();
-        }
+            TotalProductos = await _context.Productos.CountAsync(),
+            TotalImagenes = await _context.ProductoImagens.CountAsync(),
+            TotalPedidos = await _context.Pedidos.CountAsync(),
+            TotalUsuarios = await _context.Usuarios.CountAsync(),
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+            ProductosRecientes = await _context.Productos
+                .OrderByDescending(p => p.FechaRegistro)
+                .Take(5)
+                .ToListAsync()
+        };
+
+        return View(vm);
     }
 }

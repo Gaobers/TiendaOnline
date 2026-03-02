@@ -47,8 +47,7 @@ namespace TiendaOnline.AppMVC.Controllers
         // GET: ProductoImagen/Create
         public IActionResult Create()
         {
-            ViewData["ProductoId"] = new SelectList(_context.Productos, "ProductoId", "ProductoId");
-            return View();
+            ViewData["ProductoId"] = new SelectList(_context.Productos, "ProductoId", "Nombre"); return View();
         }
 
         // POST: ProductoImagen/Create
@@ -56,18 +55,33 @@ namespace TiendaOnline.AppMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductoImagenId,ProductoId,Url,EsPrincipal,FechaRegistro")] ProductoImagen productoImagen)
+        public async Task<IActionResult> Create([Bind("ProductoImagenId,ProductoId,Url,EsPrincipal")] ProductoImagen productoImagen)
         {
+            productoImagen.FechaRegistro = DateTime.Now;
+
+            productoImagen.Url = productoImagen.Url?.Trim();
+
+            ModelState.Remove("Producto");
             if (ModelState.IsValid)
             {
+                if (productoImagen.EsPrincipal)
+                {
+                    var otras = await _context.ProductoImagens
+                        .Where(x => x.ProductoId == productoImagen.ProductoId && x.EsPrincipal)
+                        .ToListAsync();
+
+                    foreach (var o in otras)
+                        o.EsPrincipal = false;
+                }
+
                 _context.Add(productoImagen);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductoId"] = new SelectList(_context.Productos, "ProductoId", "ProductoId", productoImagen.ProductoId);
+
+            ViewData["ProductoId"] = new SelectList(_context.Productos, "ProductoId", "Nombre", productoImagen.ProductoId);
             return View(productoImagen);
         }
-
         // GET: ProductoImagen/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -90,37 +104,39 @@ namespace TiendaOnline.AppMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductoImagenId,ProductoId,Url,EsPrincipal,FechaRegistro")] ProductoImagen productoImagen)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductoImagenId,ProductoId,Url,EsPrincipal")] ProductoImagen productoImagen)
         {
             if (id != productoImagen.ProductoImagenId)
-            {
                 return NotFound();
-            }
+
+            var original = await _context.ProductoImagens.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.ProductoImagenId == id);
+
+            if (original == null) return NotFound();
+
+            productoImagen.FechaRegistro = original.FechaRegistro;
+            productoImagen.Url = productoImagen.Url?.Trim();
 
             if (ModelState.IsValid)
             {
-                try
+                if (productoImagen.EsPrincipal)
                 {
-                    _context.Update(productoImagen);
-                    await _context.SaveChangesAsync();
+                    var otras = await _context.ProductoImagens
+                        .Where(x => x.ProductoId == productoImagen.ProductoId && x.EsPrincipal && x.ProductoImagenId != id)
+                        .ToListAsync();
+
+                    foreach (var o in otras)
+                        o.EsPrincipal = false;
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductoImagenExists(productoImagen.ProductoImagenId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+
+                _context.Update(productoImagen);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductoId"] = new SelectList(_context.Productos, "ProductoId", "ProductoId", productoImagen.ProductoId);
+
+            ViewData["ProductoId"] = new SelectList(_context.Productos, "ProductoId", "Nombre", productoImagen.ProductoId);
             return View(productoImagen);
         }
-
         // GET: ProductoImagen/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

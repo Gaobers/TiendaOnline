@@ -21,7 +21,11 @@ namespace TiendaOnline.AppMVC.Controllers
         // GET: Producto
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Productos.ToListAsync());
+            var productos = await _context.Productos
+                .Include(p => p.ProductoImagens) // <-- importante
+                .ToListAsync();
+
+            return View(productos);
         }
 
         // GET: Producto/Details/5
@@ -99,19 +103,16 @@ namespace TiendaOnline.AppMVC.Controllers
             if (id != producto.ProductoId)
                 return NotFound();
 
-            // Traer el registro original para proteger FechaRegistro
             var original = await _context.Productos.AsNoTracking()
                 .FirstOrDefaultAsync(p => p.ProductoId == id);
 
             if (original == null)
                 return NotFound();
 
-            // Mantener FechaRegistro original (no editable)
             producto.FechaRegistro = original.FechaRegistro;
 
             NormalizarYValidarProducto(producto, esEdicion: true);
 
-            // Validación de nombre único (excluyendo el mismo ID)
             if (!string.IsNullOrWhiteSpace(producto.Nombre))
             {
                 bool existe = await _context.Productos.AnyAsync(p =>
@@ -180,11 +181,9 @@ namespace TiendaOnline.AppMVC.Controllers
 
         private void NormalizarYValidarProducto(Producto producto, bool esEdicion)
         {
-            // Normalizar
             producto.Nombre = producto.Nombre?.Trim();
             producto.Descripcion = producto.Descripcion?.Trim();
 
-            // Validaciones sencillas (servidor)
             if (string.IsNullOrWhiteSpace(producto.Nombre))
                 ModelState.AddModelError("Nombre", "El nombre es obligatorio.");
 
@@ -197,15 +196,10 @@ namespace TiendaOnline.AppMVC.Controllers
             if (producto.Descripcion != null && producto.Descripcion.Length > 500)
                 ModelState.AddModelError("Descripcion", "Máximo 500 caracteres.");
 
-            // Defaults / reglas de fechas
             if (!esEdicion)
             {
-                // si tu DB ya tiene DEFAULT GETDATE(), esto igual no estorba
                 if (producto.FechaRegistro == default)
                     producto.FechaRegistro = DateTime.Now;
-
-                // si quieres que por defecto quede activo
-                // producto.Estatus = producto.Estatus == 0 ? (byte)1 : producto.Estatus;
             }
             else
             {

@@ -33,64 +33,62 @@
         @foreach (var item in Model)
         {
             var activo = item.Estatus == 1;
-            string? imgUrl = item.ProductoImagens?.FirstOrDefault()?.Url;
+
+            // Imagen principal o primera disponible
+            var imgUrl = item.ProductoImagens?
+                .OrderByDescending(i => i.EsPrincipal)      // primero la principal
+                .ThenByDescending(i => i.FechaRegistro)     // luego la más reciente
+                .Select(i => i.Url)
+                .FirstOrDefault();
+
             <div class="product-row d-flex align-items-center">
 
-        <!-- Imagen -->
-        <div class="col-12 col-md-1 mb-3 mb-md-0">
-            @if (!string.IsNullOrWhiteSpace(imgUrl))
-            {
-                <img src="@imgUrl" class="thumb" alt="Imagen @item.Nombre" />
-            }
-            else
-            {
-                <div class="thumb d-flex align-items-center justify-content-center text-muted small">
-                    IMG
+                <!-- Imagen -->
+                <div class="col-12 col-md-1 mb-3 mb-md-0">
+                    @if (!string.IsNullOrWhiteSpace(imgUrl))
+                    {
+                        <img src="@imgUrl" class="thumb" alt="Imagen @item.Nombre" loading="lazy" />
+                    }
+                    else
+                    {
+                        <div class="thumb d-flex align-items-center justify-content-center text-muted small">
+                            IMG
+                        </div>
+                    }
                 </div>
-            }
-        </div>
 
-        <!-- Nombre -->
-        <div class="col-12 col-md-4">
-            <div class="name">@item.Nombre</div>
-        </div>
+                <!-- Nombre -->
+                <div class="col-12 col-md-4">
+                    <div class="name">@item.Nombre</div>
+                </div>
 
-        <!-- Precio -->
-        <div class="col-6 col-md-3 mt-3 mt-md-0">
-            <div class="qty">
-                $@item.Precio.ToString("0.00") <small>USD</small>
+                <!-- Precio -->
+                <div class="col-6 col-md-3 mt-3 mt-md-0">
+                    <div class="qty">
+                        $@item.Precio.ToString("0.00") <small>USD</small>
+                    </div>
+                </div>
+
+                <!-- Estado -->
+                <div class="col-6 col-md-2 mt-3 mt-md-0">
+                    @if (activo)
+                    {
+                        <span class="badge-soft badge-soft-success">ACTIVO</span>
+                    }
+                    else
+                    {
+                        <span class="badge-soft badge-soft-danger">INACTIVO</span>
+                    }
+                </div>
+
+                <!-- Acciones -->
+                <div class="col-12 col-md-2 mt-3 mt-md-0 d-flex justify-content-md-end gap-2">
+                    <a class="action-btn" asp-action="Edit" asp-route-id="@item.ProductoId" title="Editar">✏️</a>
+                    <a class="action-btn" asp-action="Details" asp-route-id="@item.ProductoId" title="Detalles">🔎</a>
+                    <a class="action-btn" asp-action="Delete" asp-route-id="@item.ProductoId" title="Eliminar">🗑️</a>
+                </div>
             </div>
-        </div>
-
-        <!-- Estado -->
-        <div class="col-6 col-md-2 mt-3 mt-md-0">
-            @if (activo)
-            {
-                <span class="badge-soft badge-soft-success">ACTIVO</span>
-            }
-            else
-            {
-                <span class="badge-soft badge-soft-danger">INACTIVO</span>
-            }
-        </div>
-
-        <!-- Acciones -->
-        <div class="col-12 col-md-2 mt-3 mt-md-0 d-flex justify-content-md-end gap-2">
-            <a class="action-btn" asp-action="Edit" asp-route-id="@item.ProductoId" title="Editar">
-                ✏️
-            </a>
-            <a class="action-btn" asp-action="Details" asp-route-id="@item.ProductoId" title="Detalles">
-                🔎
-            </a>
-            <a class="action-btn" asp-action="Delete" asp-route-id="@item.ProductoId" title="Eliminar">
-                🗑️
-            </a>
-        </div>
-
-    </div>
         }
-    </div>
-
     <div class="card-footer bg-white d-flex justify-content-between align-items-center">
         <small class="text-muted">Mostrando @Model.Count() productos</small>
     </div>

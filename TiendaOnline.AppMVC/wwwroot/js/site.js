@@ -1,4 +1,13 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿(function () {
+    const path = window.location.pathname.toLowerCase();
+    const links = document.querySelectorAll('.navbar .nav-link');
 
-// Write your JavaScript code.
+    links.forEach(a => {
+        const href = (a.getAttribute('href') || '').toLowerCase();
+        if (!href || href === '#') return;
+
+        if (path === href || (href !== '/' && path.startsWith(href))) {
+            a.classList.add('active');
+        }
+    });
+})();

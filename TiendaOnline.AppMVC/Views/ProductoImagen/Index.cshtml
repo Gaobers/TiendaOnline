@@ -1,53 +1,99 @@
 ﻿@model IEnumerable<TiendaOnline.AppMVC.Models.ProductoImagen>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Imágenes de producto";
 }
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Url)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EsPrincipal)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaRegistro)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Producto)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Url)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EsPrincipal)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaRegistro)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Producto.ProductoId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ProductoImagenId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProductoImagenId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProductoImagenId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+        <h3 class="mb-0">Imágenes de producto</h3>
+        <div class="text-muted">Control y administración de imágenes</div>
+    </div>
+
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i> Nueva imagen
+    </a>
+</div>
+
+<div class="card shadow-sm cardx">
+    <div class="card-body p-0">
+
+        <!-- Header -->
+        <div class="d-none d-md-flex list-header px-3 py-3">
+            <div class="col-md-1"></div>
+            <div class="col-md-5">Producto / URL</div>
+            <div class="col-md-2">Principal</div>
+            <div class="col-md-2">Registro</div>
+            <div class="col-md-2 text-end">Acciones</div>
+        </div>
+
+        <!-- Filas -->
+        @foreach (var item in Model)
+        {
+            var esPrincipal = item.EsPrincipal;
+            var productoNombre = item.Producto?.Nombre;
+            var productoId = item.Producto?.ProductoId;
+
+            <div class="rowx d-flex align-items-center">
+                <!-- Preview -->
+                <div class="col-12 col-md-1 mb-3 mb-md-0">
+                    @if (!string.IsNullOrWhiteSpace(item.Url))
+                    {
+                        <img src="@item.Url" class="thumb" alt="Imagen" loading="lazy" />
+                    }
+                    else
+                    {
+                        <div class="thumb d-flex align-items-center justify-content-center text-muted small">
+                            IMG
+                        </div>
+                    }
+                </div>
+
+                <!-- Producto + URL -->
+                <div class="col-12 col-md-5">
+                    <div class="name">
+                        @(string.IsNullOrWhiteSpace(productoNombre) ? $"Producto #{productoId ?? 0}" : productoNombre)
+                    </div>
+                    <div class="sub mono truncate">@item.Url</div>
+                </div>
+
+                <!-- Principal -->
+                <div class="col-6 col-md-2 mt-3 mt-md-0">
+                    @if (esPrincipal)
+                    {
+                        <span class="badge-soft badge-soft-primary">PRINCIPAL</span>
+                    }
+                    else
+                    {
+                        <span class="badge-soft badge-soft-secondary">SECUNDARIA</span>
+                    }
+                </div>
+
+                <!-- Fecha -->
+                <div class="col-6 col-md-2 mt-3 mt-md-0">
+                    <div class="sub">
+                        @item.FechaRegistro.ToString("dd/MM/yyyy")
+                    </div>
+                </div>
+
+                <!-- Acciones -->
+                <div class="col-12 col-md-2 mt-3 mt-md-0 d-flex justify-content-md-end gap-2">
+                    <a class="action-btn" asp-action="Edit" asp-route-id="@item.ProductoImagenId" title="Editar">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                    <a class="action-btn" asp-action="Details" asp-route-id="@item.ProductoImagenId" title="Detalles">
+                        <i class="bi bi-search"></i>
+                    </a>
+                    <a class="action-btn" asp-action="Delete" asp-route-id="@item.ProductoImagenId" title="Eliminar">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="card-footer bg-white d-flex justify-content-between align-items-center">
+        <small class="text-muted">Mostrando @Model.Count() imágenes</small>
+    </div>
+</div>

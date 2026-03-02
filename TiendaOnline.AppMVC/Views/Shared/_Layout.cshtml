@@ -10,10 +10,15 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/TiendaOnline.AppMVC.styles.css" asp-append-version="true" />
 
-    <!-- Tus CSS por vista (si los estás usando como archivos) -->
     <link rel="stylesheet" href="~/css/Producto/Index.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/Producto/Details.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/Producto/Delete.css" asp-append-version="true" />
+
+    <link rel="stylesheet" href="~/css/ProductoImagen/Index.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/ProductoImagen/Create.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/ProductoImagen/Delete.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/ProductoImagen/Details.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/ProductoImagen/Edit.css" asp-append-version="true" />
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
@@ -126,31 +131,15 @@
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>>
 
-<!-- Tu JS por vista si aplica -->
 <script src="~/js/Producto/Edit.js" asp-append-version="true"></script>
 
-@await RenderSectionAsync("Scripts", required: false)
+<script src="~/js/ProductoImagen/Create.js" asp-append-version="true"></script>
+<script src="~/js/ProductoImagen/Edit.js" asp-append-version="true"></script>
 
-<script>
-    // Marca activo el link actual (sin tocar controladores)
-    (function () {
-        const path = window.location.pathname.toLowerCase();
-        const links = document.querySelectorAll('.navbar .nav-link');
+<script src="~/js/Producto/Edit.js" asp-append-version="true"></script>
 
-        links.forEach(a => {
-            const href = (a.getAttribute('href') || '').toLowerCase();
-            // Para tag helpers, href ya llega renderizado en HTML final
-            if (!href || href === '#' ) return;
-
-            // Activo si coincide exactamente o si la ruta empieza por el href
-            if (path === href || (href !== '/' && path.startsWith(href))) {
-                a.classList.add('active');
-            }
-        });
-    })();
-</script>
 
 </body>
 </html>
