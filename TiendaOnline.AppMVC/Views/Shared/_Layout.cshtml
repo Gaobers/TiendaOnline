@@ -1,69 +1,156 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - TiendaOnline.AppMVC</title>
-    <script type="importmap"></script>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/TiendaOnline.AppMVC.styles.css" asp-append-version="true" />
+
+    <!-- Tus CSS por vista (si los estás usando como archivos) -->
     <link rel="stylesheet" href="~/css/Producto/Index.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/Producto/Details.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/Producto/Delete.css" asp-append-version="true" />
-    <script src="~/js/Producto/Edit.js" asp-append-version="true"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
-<style>
-    body { font-family: 'Inter', sans-serif; background-color: #f4f7f9; }
-</style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+
+    @RenderSection("Styles", required: false)
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TiendaOnline.AppMVC</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li>
-                            <a class="nav-item text-dark" asp-area="" asp-controller="Producto" asp-action="Index">Producto</a>
-                        </li>
-                        <li>
-                            <a class="nav-item text-dark" asp-area="" asp-controller="ProductoImagen" asp-action="Index">ProductoImagen</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Pedidos" asp-action="Index">Pedidos</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - TiendaOnline.AppMVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+<body>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom navbar-shadow">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center gap-2"
+               asp-area="" asp-controller="Home" asp-action="Index">
+                <i class="bi bi-bag-heart-fill text-primary"></i>
+                <span>TiendaOnline</span>
+            </a>
+
+            <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#mainNav"
+                    aria-controls="mainNav" aria-expanded="false" aria-label="Menú">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNav">
+
+                <!-- Menú Izquierda -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-lg-1">
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           asp-controller="Home" asp-action="Index"
+                           asp-route-id=""
+                           class-active="true">
+                            <i class="bi bi-house-door me-1"></i> Inicio
+                        </a>
+                    </li>
+
+                    <!-- Dropdown Catálogo -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle"
+                           href="#"
+                           role="button"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            <i class="bi bi-grid me-1"></i> Catálogo
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item"
+                                   asp-controller="Producto" asp-action="Index">
+                                    <i class="bi bi-box-seam me-2"></i> Productos
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item"
+                                   asp-controller="ProductoImagen" asp-action="Index">
+                                    <i class="bi bi-image me-2"></i> Imágenes de producto
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           asp-controller="Pedidos" asp-action="Index">
+                            <i class="bi bi-receipt me-1"></i> Pedidos
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           asp-controller="Usuarios" asp-action="Index">
+                            <i class="bi bi-people me-1"></i> Usuarios
+                        </a>
+                    </li>
+
+@*                     <li class="nav-item">
+                        <a class="nav-link"
+                           asp-controller="Home" asp-action="Privacy">
+                            <i class="bi bi-shield-lock me-1"></i> Privacidad
+                        </a>
+                    </li> *@
+                </ul>
+
+            </div>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    </nav>
+</header>
+
+<!-- Contenido -->
+<div class="container-fluid py-3">
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+</div>
+
+<footer class="border-top footer text-muted bg-white">
+    <div class="container-fluid py-3 d-flex justify-content-between align-items-center">
+        <div>
+            &copy; 2026 - TiendaOnline.AppMVC
+        </div>
+        <div>
+            <a asp-controller="Home" asp-action="Privacy" class="text-muted text-decoration-none">
+                Privacidad
+            </a>
+        </div>
+    </div>
+</footer>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+<!-- Tu JS por vista si aplica -->
+<script src="~/js/Producto/Edit.js" asp-append-version="true"></script>
+
+@await RenderSectionAsync("Scripts", required: false)
+
+<script>
+    // Marca activo el link actual (sin tocar controladores)
+    (function () {
+        const path = window.location.pathname.toLowerCase();
+        const links = document.querySelectorAll('.navbar .nav-link');
+
+        links.forEach(a => {
+            const href = (a.getAttribute('href') || '').toLowerCase();
+            // Para tag helpers, href ya llega renderizado en HTML final
+            if (!href || href === '#' ) return;
+
+            // Activo si coincide exactamente o si la ruta empieza por el href
+            if (path === href || (href !== '/' && path.startsWith(href))) {
+                a.classList.add('active');
+            }
+        });
+    })();
+</script>
+
 </body>
 </html>

@@ -53,15 +53,24 @@ namespace TiendaOnline.AppMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductoId,Nombre,Precio,Descripcion,Estatus,FechaRegistro,FechaActualizacion")] Producto producto)
+        public async Task<IActionResult> Create([Bind("ProductoId,Nombre,Precio,Descripcion,Estatus")] Producto producto)
         {
-            if (ModelState.IsValid)
+            NormalizarYValidarProducto(producto, esEdicion: false);
+
+            // Validación de nombre único
+            if (!string.IsNullOrWhiteSpace(producto.Nombre))
             {
-                _context.Add(producto);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                bool existe = await _context.Productos.AnyAsync(p => p.Nombre == producto.Nombre);
+                if (existe)
+                    ModelState.AddModelError("Nombre", "Ya existe un producto con ese nombre.");
             }
-            return View(producto);
+
+            if (!ModelState.IsValid)
+                return View(producto);
+
+            _context.Add(producto);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Producto/Edit/5
@@ -80,39 +89,55 @@ namespace TiendaOnline.AppMVC.Controllers
             return View(producto);
         }
 
-        // POST: Producto/Edit/5
+        // POST: Producto/Edit
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductoId,Nombre,Precio,Descripcion,Estatus,FechaRegistro,FechaActualizacion")] Producto producto)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductoId,Nombre,Precio,Descripcion,Estatus")] Producto producto)
         {
             if (id != producto.ProductoId)
-            {
                 return NotFound();
+
+            // Traer el registro original para proteger FechaRegistro
+            var original = await _context.Productos.AsNoTracking()
+                .FirstOrDefaultAsync(p => p.ProductoId == id);
+
+            if (original == null)
+                return NotFound();
+
+            // Mantener FechaRegistro original (no editable)
+            producto.FechaRegistro = original.FechaRegistro;
+
+            NormalizarYValidarProducto(producto, esEdicion: true);
+
+            // Validación de nombre único (excluyendo el mismo ID)
+            if (!string.IsNullOrWhiteSpace(producto.Nombre))
+            {
+                bool existe = await _context.Productos.AnyAsync(p =>
+                    p.Nombre == producto.Nombre && p.ProductoId != producto.ProductoId);
+
+                if (existe)
+                    ModelState.AddModelError("Nombre", "Ya existe un producto con ese nombre.");
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View(producto);
+
+            try
             {
-                try
-                {
-                    _context.Update(producto);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductoExists(producto.ProductoId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(producto);
+                await _context.SaveChangesAsync();
             }
-            return View(producto);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProductoExists(producto.ProductoId))
+                    return NotFound();
+
+                throw;
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Producto/Delete/5
@@ -151,6 +176,41 @@ namespace TiendaOnline.AppMVC.Controllers
         private bool ProductoExists(int id)
         {
             return _context.Productos.Any(e => e.ProductoId == id);
+        }
+
+        private void NormalizarYValidarProducto(Producto producto, bool esEdicion)
+        {
+            // Normalizar
+            producto.Nombre = producto.Nombre?.Trim();
+            producto.Descripcion = producto.Descripcion?.Trim();
+
+            // Validaciones sencillas (servidor)
+            if (string.IsNullOrWhiteSpace(producto.Nombre))
+                ModelState.AddModelError("Nombre", "El nombre es obligatorio.");
+
+            if (producto.Nombre != null && producto.Nombre.Length > 80)
+                ModelState.AddModelError("Nombre", "Máximo 80 caracteres.");
+
+            if (producto.Precio <= 0)
+                ModelState.AddModelError("Precio", "El precio debe ser mayor que 0.");
+
+            if (producto.Descripcion != null && producto.Descripcion.Length > 500)
+                ModelState.AddModelError("Descripcion", "Máximo 500 caracteres.");
+
+            // Defaults / reglas de fechas
+            if (!esEdicion)
+            {
+                // si tu DB ya tiene DEFAULT GETDATE(), esto igual no estorba
+                if (producto.FechaRegistro == default)
+                    producto.FechaRegistro = DateTime.Now;
+
+                // si quieres que por defecto quede activo
+                // producto.Estatus = producto.Estatus == 0 ? (byte)1 : producto.Estatus;
+            }
+            else
+            {
+                producto.FechaActualizacion = DateTime.Now;
+            }
         }
     }
 }
