@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -9,7 +9,6 @@ namespace TiendaOnline.AppMVC.Models
     {
         [Key]
         public int PedidoId { get; set; }
-
         public string NumeroOrden { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El nombre es obligatorio")]
@@ -20,8 +19,7 @@ namespace TiendaOnline.AppMVC.Models
         [EmailAddress]
         public string EmailCliente { get; set; } = string.Empty;
 
-        public string DireccionEntrega { get; set; }
-
+        public string? DireccionEntrega { get; set; }
         public DateTime? FechaActualizacion { get; set; }
 
         [DisplayName("Estado del Pedido")]
@@ -33,11 +31,6 @@ namespace TiendaOnline.AppMVC.Models
         [DisplayName("Fecha de Registro")]
         public DateTime FechaRegistro { get; set; } = DateTime.Now;
 
-        // Propiedad de navegación para los detalles del pedido
-        // TiendaOnline.AppMVC\Models\Pedido.cs
-        // ...otros usings...
-
-        // Propiedad de navegación para los detalles del pedido
-        public virtual ICollection<PedidoDetalle> PedidoDetalles { get; set; }
+        public virtual ICollection<PedidoDetalle> PedidoDetalles { get; set; } = new List<PedidoDetalle>();
     }
-    }
+}

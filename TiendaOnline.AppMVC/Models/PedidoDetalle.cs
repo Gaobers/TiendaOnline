@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TiendaOnline.AppMVC.Models
@@ -23,8 +21,8 @@ namespace TiendaOnline.AppMVC.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal PrecioUnitario { get; set; }
 
-        public virtual Pedido? Pedido { get; set; }
-        public virtual Talla? Talla { get; set; }
+        public virtual Pedido Pedido { get; set; }
+        public virtual Talla Talla { get; set; }
     }
 }
 

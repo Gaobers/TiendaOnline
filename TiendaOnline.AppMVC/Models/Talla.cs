@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace TiendaOnline.AppMVC.Models;
+﻿namespace TiendaOnline.AppMVC.Models;
 
 public partial class Talla
 {

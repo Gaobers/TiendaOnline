@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace TiendaOnline.AppMVC.Models;
+﻿namespace TiendaOnline.AppMVC.Models;
 
 public partial class Producto
 {
@@ -11,7 +8,7 @@ public partial class Producto
 
     public decimal Precio { get; set; }
 
-    public string? Descripcion { get; set; }
+    public string Descripcion { get; set; }
 
     public byte Estatus { get; set; }
 

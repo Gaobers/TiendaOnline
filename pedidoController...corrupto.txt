@@ -1,0 +1,88 @@
+
+namespace TiendaOnline.AppMVC.Controllers
+{
+    public class PedidosController : Controller
+    {
+        // 1. LISTA ESTÁTICA (Base de datos temporal)
+        // La hacemos static para que los nuevos pedidos no se borren al navegar
+        private static List<Pedido> _listaPedidos = new List<Pedido>
+        {
+          new Pedido
+            {
+                PedidoId = 1,
+                NombreCliente = "Juan Pérez",
+                EmailCliente = "juan@example.com",                DireccionEntrega = "Calle Falsa 123",
+                Total = 150.50m,
+                Estado = "Pendiente",
+                FechaActualizacion = DateTime.Now
+            }
+        };
+
+        // Acción para ver la lista de pedidos
+        public IActionResult Index()
+        {
+            // Retornamos la lista que contiene los datos guardados
+            return View(_listaPedidos);
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Pedido pedido)
+        {
+            // Validación de precio en dólares
+            if (pedido.Total <= 0)
+            {
+                ModelState.AddModelError("Total", "El precio debe ser mayor a 0 dólares.");
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    // 2. LÓGICA DE GUARDADO REAL
+                    // Generamos un ID nuevo sumando 1 al último ID existente
+                    pedido.PedidoId = _listaPedidos.Count > 0 ? _listaPedidos.Max(p => p.PedidoId) + 1 : 1;
+                    pedido.FechaActualizacion = DateTime.Now;
+                    
+                    if (string.IsNullOrEmpty(pedido.Estado)) 
+                    {
+                        pedido.Estado = "Nuevo"; 
+                    }
+
+                    // AGREGAMOS EL PEDIDO A LA LISTA
+                    _listaPedidos.Add(pedido);
+
+                    TempData["Mensaje"] = "Pedido guardado correctamente en dólares ($).";
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Error al guardar el pedido: " + ex.Message);
+                }
+            }
+
+            return View(pedido);
+        }
+
+        // 3. AGREGAMOS ACCIONES DE EDICIÓN Y ELIMINACIÓN (Para que no den error 404)
+        
+        public IActionResult Edit(int id)
+        {
+            var pedido = _listaPedidos.FirstOrDefault(p => p.PedidoId == id);
+            if (pedido == null) return NotFound();
+            return View(pedido);
+        }
+
+        public IActionResult Delete(int id)
+        {
+            var pedido = _listaPedidos.FirstOrDefault(p => p.PedidoId == id);
+            if (pedido == null) return NotFound();
+            return View(pedido);
+        }
+    }
+}  

@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace TiendaOnline.AppMVC.Models;
+#nullable enable  // <-- Agrega esto al principio del archivo
 
-namespace TiendaOnline.AppMVC.Models;
-
+using System;
+// ... resto del código
 public partial class ProductoImagen
 {
     public int ProductoImagenId { get; set; }

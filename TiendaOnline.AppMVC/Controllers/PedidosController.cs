@@ -1,57 +1,70 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using TiendaOnline.AppMVC.Models;
 
 namespace TiendaOnline.AppMVC.Controllers
 {
     public class PedidosController : Controller
     {
-        // Acción para ver la lista de pedidos (Index)
-        public IActionResult Index()
+        // 1. LISTA ESTÁTICA (Sintaxis simplificada 'new()' para evitar avisos)
+        private static readonly List<Pedido> _listaPedidos = new()
         {
-            var listaPedidos = new List<Pedido>
+            new()
+
             {
-                new Pedido
-                {
-                    PedidoId = 1,
-                    NombreCliente = "Juan Pérez",
-                    EmailCliente = "juan@example.com",
-                    DireccionEntrega = "Calle Falsa 123",
-                    Total = 150.50m,
-                    FechaActualizacion = DateTime.Now
-                },
-                new Pedido
-                {
-                    PedidoId = 2,
-                    NombreCliente = "María López",
-                    EmailCliente = "maria@example.com",
-                    DireccionEntrega = "Av. Siempre Viva 742",
-                    Total = 85.00m,
-                    FechaActualizacion = DateTime.Now.AddDays(-1)
-                }
-            };
+                PedidoId = 1,
+                NombreCliente = "Juan Pérez",
+                EmailCliente = "juan@example.com",
+                DireccionEntrega = "Calle Falsa 123",
+                Total = 150.50m,
+                Estado = "Pendiente",
+                FechaActualizacion = DateTime.Now
+            }
+        };
 
-            return View(listaPedidos);
-        }
+        // 2. MÉTODOS (Todos dentro de la clase, pero fuera de la lista)
 
-        // Acción para mostrar el formulario de creación
-        public IActionResult Create()
-        {
-            return View();
-        }
+        public IActionResult Index() => View(_listaPedidos);
 
-        // Acción para recibir los datos del formulario (POST)
+        public IActionResult Create() => View();
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Pedido pedido)
         {
+            if (pedido.Total <= 0)
+            {
+                ModelState.AddModelError("Total", "El precio debe ser mayor a 0 dólares.");
+            }
+
             if (ModelState.IsValid)
             {
-                // Aquí guardarías en la base de datos
+                pedido.PedidoId = _listaPedidos.Count > 0 ? _listaPedidos.Max(p => p.PedidoId) + 1 : 1;
+                pedido.FechaActualizacion = DateTime.Now;
+
+                if (string.IsNullOrEmpty(pedido.Estado))
+                {
+                    pedido.Estado = "Nuevo";
+                }
+
+                _listaPedidos.Add(pedido);
+                TempData["Mensaje"] = "Pedido guardado correctamente.";
                 return RedirectToAction(nameof(Index));
             }
             return View(pedido);
         }
-    }
-}
+
+        public IActionResult Edit(int id)
+        {
+            var pedido = _listaPedidos.FirstOrDefault(p => p.PedidoId == id);
+            if (pedido == null) return NotFound();
+            return View(pedido);
+        }
+
+        public IActionResult Delete(int id)
+        {
+            var pedido = _listaPedidos.FirstOrDefault(p => p.PedidoId == id);
+            if (pedido == null) return NotFound();
+            return View(pedido);
+        }
+    } // Cierre de la Clase
+} // Cierre del Namespace

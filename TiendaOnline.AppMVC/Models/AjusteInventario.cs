@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace TiendaOnline.AppMVC.Models;
+﻿namespace TiendaOnline.AppMVC.Models;
 
 public partial class AjusteInventario
 {
@@ -13,7 +10,7 @@ public partial class AjusteInventario
 
     public int Cantidad { get; set; }
 
-    public string? Motivo { get; set; }
+    public string Motivo { get; set; }
 
     public DateTime FechaRegistro { get; set; }
 

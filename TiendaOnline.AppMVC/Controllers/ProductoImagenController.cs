@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TiendaOnline.AppMVC.Models;
@@ -28,18 +24,13 @@ namespace TiendaOnline.AppMVC.Controllers
         // GET: ProductoImagen/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var productoImagen = await _context.ProductoImagens
                 .Include(p => p.Producto)
                 .FirstOrDefaultAsync(m => m.ProductoImagenId == id);
-            if (productoImagen == null)
-            {
-                return NotFound();
-            }
+
+            if (productoImagen == null) return NotFound();
 
             return View(productoImagen);
         }
@@ -47,21 +38,22 @@ namespace TiendaOnline.AppMVC.Controllers
         // GET: ProductoImagen/Create
         public IActionResult Create()
         {
-            ViewData["ProductoId"] = new SelectList(_context.Productos, "ProductoId", "Nombre"); return View();
+            // Cambié "Nombre" por "Nombre" (asegúrate que tu modelo Producto tenga esa propiedad)
+            ViewData["ProductoId"] = new SelectList(_context.Productos, "ProductoId", "Nombre");
+            return View();
         }
 
-        // POST: ProductoImagen/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductoImagenId,ProductoId,Url,EsPrincipal")] ProductoImagen productoImagen)
         {
+            // CORRECCIÓN: Si Url viene nulo, asignamos un string vacío para evitar errores de referencia
+            productoImagen.Url = productoImagen.Url?.Trim() ?? "";
             productoImagen.FechaRegistro = DateTime.Now;
 
-            productoImagen.Url = productoImagen.Url?.Trim();
-
+            // Eliminamos "Producto" del ModelState porque es una propiedad de navegación y siempre será null en el POST
             ModelState.Remove("Producto");
+
             if (ModelState.IsValid)
             {
                 if (productoImagen.EsPrincipal)
@@ -70,8 +62,7 @@ namespace TiendaOnline.AppMVC.Controllers
                         .Where(x => x.ProductoId == productoImagen.ProductoId && x.EsPrincipal)
                         .ToListAsync();
 
-                    foreach (var o in otras)
-                        o.EsPrincipal = false;
+                    foreach (var o in otras) o.EsPrincipal = false;
                 }
 
                 _context.Add(productoImagen);
@@ -82,40 +73,36 @@ namespace TiendaOnline.AppMVC.Controllers
             ViewData["ProductoId"] = new SelectList(_context.Productos, "ProductoId", "Nombre", productoImagen.ProductoId);
             return View(productoImagen);
         }
-        // GET: ProductoImagen/Edit/5
+
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var productoImagen = await _context.ProductoImagens.FindAsync(id);
-            if (productoImagen == null)
-            {
-                return NotFound();
-            }
-            ViewData["ProductoId"] = new SelectList(_context.Productos, "ProductoId", "ProductoId", productoImagen.ProductoId);
+            if (productoImagen == null) return NotFound();
+
+            // CORRECCIÓN: Usar "Nombre" en lugar de "ProductoId" para que el dropdown sea legible
+            ViewData["ProductoId"] = new SelectList(_context.Productos, "ProductoId", "Nombre", productoImagen.ProductoId);
             return View(productoImagen);
         }
 
-        // POST: ProductoImagen/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ProductoImagenId,ProductoId,Url,EsPrincipal")] ProductoImagen productoImagen)
         {
-            if (id != productoImagen.ProductoImagenId)
-                return NotFound();
+            if (id != productoImagen.ProductoImagenId) return NotFound();
 
+            // Usamos AsNoTracking para comparar sin bloquear la base de datos
             var original = await _context.ProductoImagens.AsNoTracking()
                 .FirstOrDefaultAsync(x => x.ProductoImagenId == id);
 
             if (original == null) return NotFound();
 
+            // CORRECCIÓN: Asegurar que no sea nulo antes de guardar
+            productoImagen.Url = productoImagen.Url?.Trim() ?? original.Url;
             productoImagen.FechaRegistro = original.FechaRegistro;
-            productoImagen.Url = productoImagen.Url?.Trim();
+
+            ModelState.Remove("Producto");
 
             if (ModelState.IsValid)
             {
@@ -125,8 +112,7 @@ namespace TiendaOnline.AppMVC.Controllers
                         .Where(x => x.ProductoId == productoImagen.ProductoId && x.EsPrincipal && x.ProductoImagenId != id)
                         .ToListAsync();
 
-                    foreach (var o in otras)
-                        o.EsPrincipal = false;
+                    foreach (var o in otras) o.EsPrincipal = false;
                 }
 
                 _context.Update(productoImagen);
@@ -137,26 +123,20 @@ namespace TiendaOnline.AppMVC.Controllers
             ViewData["ProductoId"] = new SelectList(_context.Productos, "ProductoId", "Nombre", productoImagen.ProductoId);
             return View(productoImagen);
         }
-        // GET: ProductoImagen/Delete/5
+
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var productoImagen = await _context.ProductoImagens
                 .Include(p => p.Producto)
                 .FirstOrDefaultAsync(m => m.ProductoImagenId == id);
-            if (productoImagen == null)
-            {
-                return NotFound();
-            }
+
+            if (productoImagen == null) return NotFound();
 
             return View(productoImagen);
         }
 
-        // POST: ProductoImagen/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -165,9 +145,9 @@ namespace TiendaOnline.AppMVC.Controllers
             if (productoImagen != null)
             {
                 _context.ProductoImagens.Remove(productoImagen);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

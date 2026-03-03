@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using TiendaOnline.AppMVC.Models;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace TiendaOnline.AppMVC.Models;
 
@@ -122,9 +119,9 @@ public partial class TiendaOnlineZapContext : DbContext
                 .HasConstraintName("FK_PedidoDetalle_Pedido");
 
             // entity.HasOne(d => d.Talla).WithMany(p => p.PedidoDetalles)
-    //.HasForeignKey(d => d.TallaId)
-    //.OnDelete(DeleteBehavior.ClientSetNull)
-    //.HasConstraintName("FK_PedidoDetalle_Talla");
+            //.HasForeignKey(d => d.TallaId)
+            //.OnDelete(DeleteBehavior.ClientSetNull)
+            //.HasConstraintName("FK_PedidoDetalle_Talla");
 
             entity.HasOne(d => d.Talla).WithMany(p => p.PedidoDetalles)
                 .HasForeignKey(d => d.TallaId)
