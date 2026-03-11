@@ -1,0 +1,17 @@
+cambios a preparación .. git add
+para regresar o sacar  git restore --staged
+de preparación a área local git commit 
+corregir commit      git commit --amend -m 
+de local a preparación  git reset --soft HEAD-1
+regresa todo el proyecto git reset --hard <ID-del-commit>
+restaurar git swhitch
+copia de repositorio git Branch   / git checkout    -b
+combinar commit    git merge commit 
+para borrar toda la rama git bratch -D  
+combinar y borrar git 
+
+actualizar repositorio loca con el remoto git pull origin< nombre- de- la -rama >
+actualizar sin remplazar git fetch origin 
+volver a clonar git fech origin 
+                git reset --hard origin rama 
+  
