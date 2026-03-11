@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Globalization; // Necesario para la moneda
 using System.Linq;
 using TiendaOnline.AppMVC.Models;
 
@@ -8,96 +9,108 @@ namespace TiendaOnline.AppMVC.Controllers
 {
     public class PedidosController : Controller
     {
-        // Usamos una lista estática para simular una base de datos temporal
+        // Lista estática temporal
         private static List<Pedido> _listaPedidos = new List<Pedido>
         {
-            new Pedido { PedidoId = 1, NombreCliente = "Juan Pérez", EmailCliente = "juan@example.com", DireccionEntrega = "Calle Falsa 123", Total = 150.50m, FechaActualizacion = DateTime.Now },
-            new Pedido { PedidoId = 2, NombreCliente = "María López", EmailCliente = "maria@example.com", DireccionEntrega = "Av. Siempre Viva 742", Total = 85.00m, FechaActualizacion = DateTime.Now.AddDays(-1) }
+            new Pedido { PedidoId = 1, NumeroOrden = "ORD-001", NombreCliente = "Juan Pérez", EmailCliente = "juan@example.com", DireccionEntrega = "Calle Falsa 123", Total = 150.50m, Estado = "Completado", FechaRegistro = DateTime.Now, FechaActualizacion = DateTime.Now },
+            new Pedido { PedidoId = 2, NumeroOrden = "ORD-002", NombreCliente = "María López", EmailCliente = "maria@example.com", DireccionEntrega = "Av. Siempre Viva 742", Total = 85.00m, Estado = "Pendiente", FechaRegistro = DateTime.Now.AddDays(-1), FechaActualizacion = DateTime.Now.AddDays(-1) }
         };
 
-        // Acción para ver la lista de pedidos
+        // Forzamos la cultura de Estados Unidos para que el símbolo sea $
+        private readonly CultureInfo _culturaDolar = new CultureInfo("en-US");
+
         public IActionResult Index()
         {
-            // Retornamos la lista compartida, no una nueva cada vez
+            // Pasamos la cultura a la vista mediante el hilo actual para asegurar el símbolo $
+            System.Threading.Thread.CurrentThread.CurrentCulture = _culturaDolar;
+            System.Threading.Thread.CurrentThread.CurrentUICulture = _culturaDolar;
+
             return View(_listaPedidos);
         }
+
         public IActionResult Create()
         {
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Pedido pedido)
-        {
-            // 1. ESTA ES LA LÍNEA CLAVE: 
-            // Le decimos a C# que ignore lo que venga del formulario sobre la fecha
-            ModelState.Remove("FechaActualizacion");
+        {  ModelState.Remove("FechaActualizacion");
+            ModelState.Remove("FechaRegistro");
+            ModelState.Remove("NumeroOrden");
+            ModelState.Remove("Estado");
 
             if (ModelState.IsValid)
-            {
-                // 2. Generamos el ID
-                pedido.PedidoId = _listaPedidos.Count > 0 ? _listaPedidos.Max(p => p.PedidoId) + 1 : 1;
-
-                // 3. ASIGNAMOS LA FECHA AQUÍ MANUALMENTE
+            {     pedido.PedidoId = _listaPedidos.Count > 0 ? _listaPedidos.Max(p => p.PedidoId) + 1 : 1;
+                pedido.NumeroOrden = "ORD-" + pedido.PedidoId.ToString("D3");
+                pedido.FechaRegistro = DateTime.Now;
                 pedido.FechaActualizacion = DateTime.Now;
+                pedido.Estado = "Pendiente"; // Estado inicial
+                _listaPedidos.Add(pedido);        return RedirectToAction(nameof(Index));
+            }         return View(pedido);
+        }             public IActionResult Edit(int id)
+        {
+            var pedido = _listaPedidos.FirstOrDefault(p => p.PedidoId == id);
+            if (pedido == null) return NotFound();
+            return View(pedido);
+      }     [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Pedido pedidoEditado)
+        {
+            var pedidoOriginal = _listaPedidos.FirstOrDefault(p => p.PedidoId == id);
 
-                // 4. Guardamos
-                _listaPedidos.Add(pedido);
+            // Quitamos la validación de fecha porque la generamos nosotros
+            ModelState.Remove("FechaActualizacion");
+            if (pedidoOriginal != null && ModelState.IsValid)
+            {
+                // ACTUALIZACIÓN DE DATOS
+                pedidoOriginal.NombreCliente = pedidoEditado.NombreCliente;
+                pedidoOriginal.EmailCliente = pedidoEditado.EmailCliente;
+                pedidoOriginal.DireccionEntrega = pedidoEditado.DireccionEntrega;
+                pedidoOriginal.Total = pedidoEditado.Total;
+
+                // ACTUALIZACIÓN DE ESTADO (AQUÍ SE CAMBIA EL ESTADO)
+                pedidoOriginal.Estado = pedidoEditado.Estado;
+
+                pedidoOriginal.FechaActualizacion = DateTime.Now;
 
                 return RedirectToAction(nameof(Index));
             }
-            // Si hay error, regresamos a la vista
-            return View(pedido);
+            return View(pedidoEditado);
         }
 
-            // === BOTÓN EDITAR (VISTA) ===
-        public IActionResult Edit(int id)
+        public IActionResult Details(int id)
         {
             var pedido = _listaPedidos.FirstOrDefault(p => p.PedidoId == id);
             if (pedido == null) return NotFound();
             return View(pedido);
         }
 
-        // === BOTÓN EDITAR (GUARDAR CAMBIOS) ===
+        // Método extra para cambiar estado rápidamente
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Pedido pedidoActualizado)
-        {
-            ModelState.Remove("FechaActualizacion");
-            var pedidoEnLista = _listaPedidos.FirstOrDefault(p => p.PedidoId == id);
-
-            if (pedidoEnLista != null && ModelState.IsValid)
-            {
-                pedidoEnLista.NombreCliente = pedidoActualizado.NombreCliente;
-                pedidoEnLista.EmailCliente = pedidoActualizado.EmailCliente;
-                pedidoEnLista.DireccionEntrega = pedidoActualizado.DireccionEntrega;
-                pedidoEnLista.Total = pedidoActualizado.Total;
-                pedidoEnLista.FechaActualizacion = DateTime.Now; // Se actualiza la fecha al editar
-
-                return RedirectToAction(nameof(Index));
-            }
-            return View(pedidoActualizado);
-        }
-
-        // === BOTÓN ELIMINAR (VISTA DE CONFIRMACIÓN) ===
-        public IActionResult Delete(int id)
-        {
-            var pedido = _listaPedidos.FirstOrDefault(p => p.PedidoId == id);
-            if (pedido == null) return NotFound();
-            return View(pedido);
-        }
-
-        // === BOTÓN ELIMINAR (CONFIRMAR BORRADO) ===
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public IActionResult ActualizarEstado(int id, string nuevoEstado)
         {
             var pedido = _listaPedidos.FirstOrDefault(p => p.PedidoId == id);
             if (pedido != null)
             {
-                _listaPedidos.Remove(pedido);
+                pedido.Estado = nuevoEstado;
+                pedido.FechaActualizacion = DateTime.Now;
             }
+            return RedirectToAction(nameof(Index));
+        }      public IActionResult Delete(int id)
+        {
+            var pedido = _listaPedidos.FirstOrDefault(p => p.PedidoId == id);
+            if (pedido == null) return NotFound();
+            return View(pedido);
+        }         [HttpPost, ActionName("Delete")]
+                   [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var pedido = _listaPedidos.FirstOrDefault(p => p.PedidoId == id);
+            if (pedido != null) _listaPedidos.Remove(pedido);
             return RedirectToAction(nameof(Index));
         }
     }
-    }
+}
