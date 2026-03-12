@@ -112,6 +112,18 @@ namespace TiendaOnline.AppMVC.Controllers
             var pedido = _listaPedidos.FirstOrDefault(p => p.PedidoId == id);
             if (pedido != null) _listaPedidos.Remove(pedido);
             return RedirectToAction(nameof(Index));
+        }      public IActionResult Delete(int id)
+        {
+            var pedido = _listaPedidos.FirstOrDefault(p => p.PedidoId == id);
+            if (pedido == null) return NotFound();
+            return View(pedido);
+        }         [HttpPost, ActionName("Delete")]
+                   [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var pedido = _listaPedidos.FirstOrDefault(p => p.PedidoId == id);
+            if (pedido != null) _listaPedidos.Remove(pedido);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
