@@ -91,15 +91,19 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
+                        var nombreEstado = item.EstadoPedido != null
+                            ? item.EstadoPedido.Nombre
+                            : item.EstadoPedidoId.ToString();
+
                         <tr>
                             <td class="ps-4">
                                 <span class="text-muted fw-medium">
-                                    #@item.PedidoId
+                                    #@item.Id
                                 </span>
                             </td>
                             <td>
                                 <span class="fw-bold text-dark">
-                                    @item.NumeroOrden
+                                    ORD-@item.Id.ToString("D3")
                                 </span>
                             </td>
                             <td>
@@ -115,26 +119,26 @@
                             <td>
                                 <span class="text-muted">
                                     <i class="bi bi-calendar3 me-1"></i>
-                                    @item.FechaRegistro.ToShortDateString()
+                                    @item.FechaCreacion.ToShortDateString()
                                 </span>
                             </td>
                             <td>
-                                @if (item.Estado == "Completado")
+                                @if (nombreEstado == "ENTREGADO" || nombreEstado == "Completado")
                                 {
                                     <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill border border-success border-opacity-25">
-                                        Completado
+                                        @nombreEstado
                                     </span>
                                 }
-                                else if (item.Estado == "Pendiente")
+                                else if (nombreEstado == "PENDIENTE" || nombreEstado == "Pendiente")
                                 {
                                     <span class="badge bg-warning-subtle text-warning-emphasis px-3 py-2 rounded-pill border border-warning border-opacity-25">
-                                        Pendiente
+                                        @nombreEstado
                                     </span>
                                 }
                                 else
                                 {
                                     <span class="badge bg-secondary-subtle text-secondary px-3 py-2 rounded-pill">
-                                        @item.Estado
+                                        @nombreEstado
                                     </span>
                                 }
                             </td>
@@ -154,7 +158,7 @@
                                         <li>
                                             <a class="dropdown-item"
                                                    asp-action="Edit"
-                                                   asp-route-id="@item.PedidoId">
+                                                   asp-route-id="@item.Id">
                                                 <i class="bi bi-pencil me-2 text-primary"></i>
                                                 Editar
                                             </a>
@@ -162,7 +166,7 @@
                                         <li>
                                             <a class="dropdown-item"
                                                    asp-action="Details"
-                                                   asp-route-id="@item.PedidoId">
+                                                   asp-route-id="@item.Id">
                                                 <i class="bi bi-eye me-2 text-info"></i>
                                                 Detalles
                                             </a>
@@ -171,7 +175,7 @@
                                         <li>
                                             <a class="dropdown-item text-danger"
                                                    asp-action="Delete"
-                                                   asp-route-id="@item.PedidoId">
+                                                   asp-route-id="@item.Id">
                                                 <i class="bi bi-trash me-2"></i>
                                                 Eliminar
                                             </a>
@@ -185,4 +189,4 @@
             </table>
         </div>
     </div>
-</div>      
+</div>

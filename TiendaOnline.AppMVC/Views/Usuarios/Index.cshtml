@@ -25,7 +25,7 @@
                             <th class="ps-4 py-3">@Html.DisplayNameFor(model => model.Nombre)</th>
                             <th>@Html.DisplayNameFor(model => model.Correo)</th>
                             <th><i class="bi bi-key-fill me-1"></i>Clave</th>
-                            <th>@Html.DisplayNameFor(model => model.Rol)</th>
+                            <th>Rol</th>
                             <th class="text-center">@Html.DisplayNameFor(model => model.Estatus)</th>
                             <th>Registro</th>
                             <th class="text-center">Acciones</th>
@@ -54,7 +54,7 @@
                                 </td>
                                 <td>
                                     <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2">
-                                        @Html.DisplayFor(modelItem => item.Rol)
+                                        @(item.Rol != null ? item.Rol.Nombre : "")
                                     </span>
                                 </td>
                                 <td class="text-center">
@@ -66,18 +66,18 @@
                                 </td>
                                 <td>
                                     <div class="small text-muted">
-                                        <i class="bi bi-calendar3 me-1"></i>@item.FechaRegistro.ToString("dd MMM yyyy")
+                                        <i class="bi bi-calendar3 me-1"></i>@item.FechaCreacion.ToString("dd MMM yyyy")
                                     </div>
                                 </td>
                                 <td class="text-center px-4">
                                     <div class="btn-group shadow-sm">
-                                        <a asp-action="Edit" asp-route-id="@item.UsuarioId" class="btn btn-white btn-sm border" title="Editar">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-white btn-sm border" title="Editar">
                                             <i class="bi bi-pencil-square text-primary"></i>
                                         </a>
-                                        <a asp-action="Details" asp-route-id="@item.UsuarioId" class="btn btn-white btn-sm border" title="Ver detalles">
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-white btn-sm border" title="Ver detalles">
                                             <i class="bi bi-info-circle text-info"></i>
                                         </a>
-                                        <a asp-action="Delete" asp-route-id="@item.UsuarioId" class="btn btn-white btn-sm border" title="Eliminar">
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-white btn-sm border" title="Eliminar">
                                             <i class="bi bi-trash3 text-danger"></i>
                                         </a>
                                     </div>

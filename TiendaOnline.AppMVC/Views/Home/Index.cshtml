@@ -1,7 +1,7 @@
 ﻿@model TiendaOnline.AppMVC.Models.ViewModels.DashboardVM
 
 @{
-    ViewData["Title"] = "Dashboard";
+    ViewData["Title"] = "Home";
 }
 
 @section Styles {
@@ -116,7 +116,9 @@
                         <div class="rowx d-flex align-items-center justify-content-between">
                             <div>
                                 <div class="fw-semibold">@p.Nombre</div>
-                                <div class="text-muted small">@p.FechaRegistro.ToString("dd/MM/yyyy")</div>
+                               <!--
+                                <div class="text-muted small"> hhhh@p.FechaRegistro.ToString("dd/MM/yyyy")</div>  
+                                    -->
                             </div>
                             <div class="fw-bold">$@p.Precio.ToString("0.00")</div>
                         </div>

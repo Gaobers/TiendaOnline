@@ -5,7 +5,7 @@ namespace TiendaOnline.AppMVC.Models;
 
 public partial class Inventario
 {
-    public int InventarioId { get; set; }
+    public int Id { get; set; }
 
     public int ProductoId { get; set; }
 
@@ -13,9 +13,15 @@ public partial class Inventario
 
     public int Stock { get; set; }
 
+    public int StockMinimo { get; set; }
+
     public DateTime FechaActualizacion { get; set; }
 
-    public virtual ICollection<AjusteInventario> AjusteInventarios { get; set; } = new List<AjusteInventario>();
+    public virtual ICollection<AjustesInventario> AjustesInventarios { get; set; } = new List<AjustesInventario>();
+
+    public virtual ICollection<DetallesCarrito> DetallesCarritos { get; set; } = new List<DetallesCarrito>();
+
+    public virtual ICollection<DetallesPedido> DetallesPedidos { get; set; } = new List<DetallesPedido>();
 
     public virtual Producto Producto { get; set; } = null!;
 

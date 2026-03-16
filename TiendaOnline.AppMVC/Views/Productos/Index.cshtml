@@ -16,17 +16,17 @@
     </a>
 </div>
 
-<div class="card shadow-sm products-card">
+<div class="card shadow-sm products-card"></div>
     <div class="card-body p-0">
 
 
-    <div class="d-none d-md-flex products-header px-3 py-3">
-        <div class="col-md-1"></div> 
-        <div class="col-md-4">Nombre</div>
-        <div class="col-md-3">Precio</div>
-        <div class="col-md-2">Estado</div>
-        <div class="col-md-2 text-end">Acciones</div>
-    </div>
+        <div class="d-none d-md-flex products-header px-3 py-3">
+            <div class="col-md-1"></div>
+            <div class="col-md-4">Nombre</div>
+            <div class="col-md-3">Precio</div>
+            <div class="col-md-2">Estado</div>
+            <div class="col-md-2 text-end">Acciones</div>
+        </div>
 
 
         <!-- Filas -->
@@ -35,9 +35,9 @@
             var activo = item.Estatus == 1;
 
             // Imagen principal o primera disponible
-            var imgUrl = item.ProductoImagens?
+            var imgUrl = item.ProductosImagenes?
                 .OrderByDescending(i => i.EsPrincipal)      // primero la principal
-                .ThenByDescending(i => i.FechaRegistro)     // luego la más reciente
+                .ThenByDescending(i => i.FechaCreacion)     // luego la más reciente
                 .Select(i => i.Url)
                 .FirstOrDefault();
 
@@ -83,13 +83,13 @@
 
                 <!-- Acciones -->
                 <div class="col-12 col-md-2 mt-3 mt-md-0 d-flex justify-content-md-end gap-2">
-                    <a class="action-btn" asp-action="Edit" asp-route-id="@item.ProductoId" title="Editar">✏️</a>
-                    <a class="action-btn" asp-action="Details" asp-route-id="@item.ProductoId" title="Detalles">🔎</a>
-                    <a class="action-btn" asp-action="Delete" asp-route-id="@item.ProductoId" title="Eliminar">🗑️</a>
+                    <a class="action-btn" asp-action="Edit" asp-route-id="@item.Id" title="Editar">✏️</a>
+                    <a class="action-btn" asp-action="Details" asp-route-id="@item.Id" title="Detalles">🔎</a>
+                    <a class="action-btn" asp-action="Delete" asp-route-id="@item.Id" title="Eliminar">🗑️</a>
                 </div>
             </div>
         }
-    <div class="card-footer bg-white d-flex justify-content-between align-items-center">
-        <small class="text-muted">Mostrando @Model.Count() productos</small>
+        <div class="card-footer bg-white d-flex justify-content-between align-items-center">
+            <small class="text-muted">Mostrando @Model.Count() productos</small>
+        </div>
     </div>
-</div>

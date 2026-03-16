@@ -1,42 +1,65 @@
 ﻿using System;
-using System.Collections.Generic; // <--- AGREGA ESTA LÍNEA AHORA
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
-namespace TiendaOnline.AppMVC.Models
+namespace TiendaOnline.AppMVC.Models;
+
+public partial class Pedido
 {
-    public class Pedido
-    {
-        [Key]
-        public int PedidoId { get; set; }
-        public int ProductoId { get; set; }
-        public int TallaId { get; set; }
-        public decimal SubTotal { get; set; }
-        public string NumeroOrden { get; set; } = string.Empty;
+    public int Id { get; set; }
 
-        [Required]
-        [DisplayName("Nombre del Cliente")]
-        public string NombreCliente { get; set; } = string.Empty;
+    public string NombreCliente { get; set; } = null!;
 
-        [Required]
-        [EmailAddress]
-        public string EmailCliente { get; set; } = string.Empty;
+    public string EmailCliente { get; set; } = null!;
 
-        public string? DireccionEntrega { get; set; }
+    public string DireccionEntrega { get; set; } = null!;
 
-        // ESTO ES LO QUE FALTABA PARA EL DBCONTEXT:
-        [DisplayName("Estado del Pedido")]
-        public string Estado { get; set; } = "PENDIENTE";
+    public decimal Total { get; set; }
 
-        [Required]
-        public decimal Total { get; set; }
+    public DateTime FechaCreacion { get; set; }
 
-        [DisplayName("Fecha de Registro")]
-        public DateTime FechaRegistro { get; set; }
+    public DateTime? FechaActualizacion { get; set; }
 
-        [DisplayName("Fecha de Actualización")]
-        public DateTime? FechaActualizacion { get; set; }
-        // Esto crea el puente con los detalles del pedido
-        public virtual ICollection<PedidoDetalle> PedidoDetalles { get; set; } = new List<PedidoDetalle>();
-    }
+    public int UsuarioId { get; set; }
+
+    public int? DireccionUsuarioId { get; set; }
+
+    public int MetodoEnvioId { get; set; }
+
+    public int EstadoPedidoId { get; set; }
+
+    public int? CuponId { get; set; }
+
+    public string? ApellidoCliente { get; set; }
+
+    public string? TelefonoCliente { get; set; }
+
+    public string? ReferenciaEntrega { get; set; }
+
+    public decimal SubTotal { get; set; }
+
+    public decimal DescuentoTotal { get; set; }
+
+    public decimal CostoEnvio { get; set; }
+
+    public string? Observaciones { get; set; }
+
+    public virtual Cupone? Cupon { get; set; }
+
+    public virtual ICollection<DetallesPedido> DetallesPedidos { get; set; } = new List<DetallesPedido>();
+
+    public virtual DireccionesUsuario? DireccionUsuario { get; set; }
+
+    public virtual EstadosPedido EstadoPedido { get; set; } = null!;
+
+    public virtual ICollection<HistorialesEstadosPedido> HistorialesEstadosPedidos { get; set; } = new List<HistorialesEstadosPedido>();
+
+    public virtual MetodosEnvio MetodoEnvio { get; set; } = null!;
+
+    public virtual ICollection<Notificacione> Notificaciones { get; set; } = new List<Notificacione>();
+
+    public virtual ICollection<Pago> Pagos { get; set; } = new List<Pago>();
+
+    public virtual UsosCupone? UsosCupone { get; set; }
+
+    public virtual Usuario Usuario { get; set; } = null!;
 }
