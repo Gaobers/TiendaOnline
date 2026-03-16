@@ -17,12 +17,11 @@ public class HomeController : Controller
         var vm = new DashboardVM
         {
             TotalProductos = await _context.Productos.CountAsync(),
-            TotalImagenes = await _context.ProductoImagens.CountAsync(),
             TotalPedidos = await _context.Pedidos.CountAsync(),
             TotalUsuarios = await _context.Usuarios.CountAsync(),
 
             ProductosRecientes = await _context.Productos
-                .OrderByDescending(p => p.FechaRegistro)
+                .OrderByDescending(p => p.FechaCreacion)
                 .Take(5)
                 .ToListAsync()
         };
