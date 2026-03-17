@@ -113,6 +113,8 @@ public partial class TiendaOnlineZapContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Categori__3214EC0798379AD1");
 
+            entity.ToTable(tb => tb.HasCheckConstraint("CHK_Categorias_Estatus", "[Estatus] IN (0,1)"));
+
             entity.HasIndex(e => e.Nombre, "UQ__Categori__75E3EFCF351C20E8").IsUnique();
 
             entity.Property(e => e.Descripcion)
@@ -132,6 +134,8 @@ public partial class TiendaOnlineZapContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Colores__3214EC07C78C3D1E");
 
+            entity.ToTable(tb => tb.HasCheckConstraint("CHK_Colores_Estatus", "[Estatus] IN (0,1)"));
+
             entity.HasIndex(e => e.Nombre, "UQ__Colores__75E3EFCF86E3D4E6").IsUnique();
 
             entity.Property(e => e.CodigoHex)
@@ -149,6 +153,13 @@ public partial class TiendaOnlineZapContext : DbContext
         modelBuilder.Entity<Cupone>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Cupones__3214EC07D85B54F7");
+
+            entity.ToTable(tb =>
+            {
+                tb.HasCheckConstraint("CHK_Cupones_Estatus", "[Estatus] IN (0,1)");
+                tb.HasCheckConstraint("CHK_Cupones_TipoDescuento", "[TipoDescuento] IN ('PORCENTAJE', 'MONTO')");
+                tb.HasCheckConstraint("CHK_Cupones_Fechas", "[FechaFin] >= [FechaInicio]");
+            });
 
             entity.HasIndex(e => e.Codigo, "UQ__Cupones__06370DAC3FE68CC8").IsUnique();
 
@@ -223,6 +234,8 @@ public partial class TiendaOnlineZapContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Direccio__3214EC074A853243");
 
+            entity.ToTable(tb => tb.HasCheckConstraint("CHK_DireccionesUsuarios_Estatus", "[Estatus] IN (0,1)"));
+
             entity.Property(e => e.Alias)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -256,6 +269,8 @@ public partial class TiendaOnlineZapContext : DbContext
         modelBuilder.Entity<EstadosPedido>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__EstadosP__3214EC078BEC3F4E");
+
+            entity.ToTable(tb => tb.HasCheckConstraint("CHK_EstadosPedidos_Estatus", "[Estatus] IN (0,1)"));
 
             entity.HasIndex(e => e.Nombre, "UQ__EstadosP__75E3EFCFE6716995").IsUnique();
 
@@ -322,6 +337,8 @@ public partial class TiendaOnlineZapContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Marcas__3214EC07DB268714");
 
+            entity.ToTable(tb => tb.HasCheckConstraint("CHK_Marcas_Estatus", "[Estatus] IN (0,1)"));
+
             entity.HasIndex(e => e.Nombre, "UQ__Marcas__75E3EFCFD2041FB1").IsUnique();
 
             entity.Property(e => e.Descripcion)
@@ -341,7 +358,7 @@ public partial class TiendaOnlineZapContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__MetodosE__3214EC070FEED193");
 
-            entity.ToTable("MetodosEnvio");
+            entity.ToTable("MetodosEnvio", tb => tb.HasCheckConstraint("CHK_MetodosEnvio_Estatus", "[Estatus] IN (0,1)"));
 
             entity.HasIndex(e => e.Nombre, "UQ__MetodosE__75E3EFCF411DBC99").IsUnique();
 
@@ -365,7 +382,7 @@ public partial class TiendaOnlineZapContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__MetodosP__3214EC079FCA3954");
 
-            entity.ToTable("MetodosPago");
+            entity.ToTable("MetodosPago", tb => tb.HasCheckConstraint("CHK_MetodosPago_Estatus", "[Estatus] IN (0,1)"));
 
             entity.HasIndex(e => e.Nombre, "UQ__MetodosP__75E3EFCFDE4488B0").IsUnique();
 
@@ -500,6 +517,8 @@ public partial class TiendaOnlineZapContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Producto__A430AEA3C8F52465");
 
+            entity.ToTable(tb => tb.HasCheckConstraint("CHK_Productos_Estatus", "[Estatus] IN (0,1)"));
+
             entity.HasIndex(e => e.Sku, "UQ_Productos_Sku").IsUnique();
 
             entity.HasIndex(e => e.Nombre, "UQ__Producto__75E3EFCFF3D3F582").IsUnique();
@@ -576,6 +595,8 @@ public partial class TiendaOnlineZapContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Roles__3214EC0713DBC2AF");
 
+            entity.ToTable(tb => tb.HasCheckConstraint("CHK_Roles_Estatus", "[Estatus] IN (0,1)"));
+
             entity.HasIndex(e => e.Nombre, "UQ__Roles__75E3EFCF1BF7A26A").IsUnique();
 
             entity.Property(e => e.Descripcion)
@@ -593,6 +614,8 @@ public partial class TiendaOnlineZapContext : DbContext
         modelBuilder.Entity<Talla>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Tallas__3214EC0710782118");
+
+            entity.ToTable(tb => tb.HasCheckConstraint("CHK_Tallas_Estatus", "[Estatus] IN (0,1)"));
 
             entity.HasIndex(e => e.Numero, "UQ__Tallas__7E532BC6A265B055").IsUnique();
 
@@ -635,6 +658,8 @@ public partial class TiendaOnlineZapContext : DbContext
         modelBuilder.Entity<Usuario>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Usuario__2B3DE7B8550B75B7");
+
+            entity.ToTable(tb => tb.HasCheckConstraint("CHK_Usuarios_Estatus", "[Estatus] IN (1,2,3,4)"));
 
             entity.HasIndex(e => e.Correo, "UQ__Usuario__60695A19B064666A").IsUnique();
 
