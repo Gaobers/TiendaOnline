@@ -69,14 +69,8 @@
                         <ul class="dropdown-menu">
                             <li>
                                 <a class="dropdown-item"
-                                   asp-controller="Producto" asp-action="Index">
+                                   asp-controller="Productos" asp-action="Index">
                                     <i class="bi bi-box-seam me-2"></i> Productos
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item"
-                                   asp-controller="ProductoImagen" asp-action="Index">
-                                    <i class="bi bi-image me-2"></i> Imágenes de producto
                                 </a>
                             </li>
                         </ul>
@@ -124,14 +118,12 @@
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>>
+<script src="~/js/site.js" asp-append-version="true"></script>
 
 <script src="~/js/Producto/Edit.js" asp-append-version="true"></script>
 
 <script src="~/js/ProductoImagen/Create.js" asp-append-version="true"></script>
 <script src="~/js/ProductoImagen/Edit.js" asp-append-version="true"></script>
-
-<script src="~/js/Producto/Edit.js" asp-append-version="true"></script>
 
     @RenderSection("Scripts", required: false)
 </body>

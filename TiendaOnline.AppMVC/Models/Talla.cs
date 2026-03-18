@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace TiendaOnline.AppMVC.Models;
 
@@ -7,6 +8,7 @@ public partial class Talla
 {
     public int Id { get; set; }
 
+    [Display(Name = "Talla")]
     public string Numero { get; set; } = null!;
 
     public byte Estatus { get; set; }
