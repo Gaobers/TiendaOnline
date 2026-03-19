@@ -23,7 +23,7 @@ public partial class Usuario
     public int RolId { get; set; }
 
     public string? Apellido { get; set; }
-
+    [Phone(ErrorMessage = "Caracteres no permitidos")]
     public string? Telefono { get; set; }
 
     public virtual ICollection<AjustesInventario> AjustesInventarios { get; set; } = new List<AjustesInventario>();
