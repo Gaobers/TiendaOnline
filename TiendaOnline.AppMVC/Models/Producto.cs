@@ -5,7 +5,7 @@ namespace TiendaOnline.AppMVC.Models;
 
 public partial class Producto
 {
-    public int ProductoId { get; set; }
+    public int Id { get; set; }
 
     public string Nombre { get; set; } = null!;
 
@@ -15,13 +15,29 @@ public partial class Producto
 
     public byte Estatus { get; set; }
 
-    public DateTime FechaRegistro { get; set; }
+    public DateTime FechaCreacion { get; set; }
 
     public DateTime? FechaActualizacion { get; set; }
 
+    public int CategoriaId { get; set; }
+
+    public int MarcaId { get; set; }
+
+    public string Sku { get; set; } = null!;
+
+    public string? Genero { get; set; }
+
+    public string? Material { get; set; }
+
+    public bool EsDestacado { get; set; }
+
+    public virtual Categoria Categoria { get; set; } = null!;
+
     public virtual ICollection<Inventario> Inventarios { get; set; } = new List<Inventario>();
 
-    public virtual ICollection<PedidoDetalle> PedidoDetalles { get; set; } = new List<PedidoDetalle>();
+    public virtual Marca Marca { get; set; } = null!;
 
-    public virtual ICollection<ProductoImagen> ProductoImagens { get; set; } = new List<ProductoImagen>();
+    public virtual ICollection<ProductosColore> ProductosColores { get; set; } = new List<ProductosColore>();
+
+    public virtual ICollection<ProductosImagene> ProductosImagenes { get; set; } = new List<ProductosImagene>();
 }

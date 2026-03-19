@@ -1,129 +1,187 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Globalization; // Necesario para la moneda
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using TiendaOnline.AppMVC.Models;
 
 namespace TiendaOnline.AppMVC.Controllers
 {
     public class PedidosController : Controller
     {
-        // Lista estática temporal
-        private static List<Pedido> _listaPedidos = new List<Pedido>
+        private readonly TiendaOnlineZapContext _context;
+
+        public PedidosController(TiendaOnlineZapContext context)
         {
-            new Pedido { PedidoId = 1, NumeroOrden = "ORD-001", NombreCliente = "Juan Pérez", EmailCliente = "juan@example.com", DireccionEntrega = "Calle Falsa 123", Total = 150.50m, Estado = "Completado", FechaRegistro = DateTime.Now, FechaActualizacion = DateTime.Now },
-            new Pedido { PedidoId = 2, NumeroOrden = "ORD-002", NombreCliente = "María López", EmailCliente = "maria@example.com", DireccionEntrega = "Av. Siempre Viva 742", Total = 85.00m, Estado = "Pendiente", FechaRegistro = DateTime.Now.AddDays(-1), FechaActualizacion = DateTime.Now.AddDays(-1) }
-        };
-
-        // Forzamos la cultura de Estados Unidos para que el símbolo sea $
-        private readonly CultureInfo _culturaDolar = new CultureInfo("en-US");
-
-        public IActionResult Index()
-        {
-            // Pasamos la cultura a la vista mediante el hilo actual para asegurar el símbolo $
-            System.Threading.Thread.CurrentThread.CurrentCulture = _culturaDolar;
-            System.Threading.Thread.CurrentThread.CurrentUICulture = _culturaDolar;
-
-            return View(_listaPedidos);
+            _context = context;
         }
 
+        // GET: Pedidos
+        public async Task<IActionResult> Index()
+        {
+            var tiendaOnlineZapContext = _context.Pedidos.Include(p => p.Cupon).Include(p => p.DireccionUsuario).Include(p => p.EstadoPedido).Include(p => p.MetodoEnvio).Include(p => p.Usuario);
+            return View(await tiendaOnlineZapContext.ToListAsync());
+        }
+
+        // GET: Pedidos/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var pedido = await _context.Pedidos
+                .Include(p => p.Cupon)
+                .Include(p => p.DireccionUsuario)
+                .Include(p => p.EstadoPedido)
+                .Include(p => p.MetodoEnvio)
+                .Include(p => p.Usuario)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (pedido == null)
+            {
+                return NotFound();
+            }
+
+            return View(pedido);
+        }
+
+        // GET: Pedidos/Create
         public IActionResult Create()
         {
+            ViewData["CuponId"] = new SelectList(_context.Cupones, "Id", "Codigo");
+            ViewData["DireccionUsuarioId"] = new SelectList(_context.DireccionesUsuarios, "Id", "DireccionExacta");
+            ViewData["EstadoPedidoId"] = new SelectList(_context.EstadosPedidos, "Id", "Nombre");
+            ViewData["MetodoEnvioId"] = new SelectList(_context.MetodosEnvios, "Id", "Nombre");
+            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "Nombre");
             return View();
         }
 
+        // POST: Pedidos/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Pedido pedido)
-        {  ModelState.Remove("FechaActualizacion");
-            ModelState.Remove("FechaRegistro");
-            ModelState.Remove("NumeroOrden");
-            ModelState.Remove("Estado");
-
+        public async Task<IActionResult> Create([Bind("Id,NombreCliente,EmailCliente,DireccionEntrega,Total,FechaCreacion,FechaActualizacion,UsuarioId,DireccionUsuarioId,MetodoEnvioId,EstadoPedidoId,CuponId,ApellidoCliente,TelefonoCliente,ReferenciaEntrega,SubTotal,DescuentoTotal,CostoEnvio,Observaciones")] Pedido pedido)
+        {
             if (ModelState.IsValid)
-            {     pedido.PedidoId = _listaPedidos.Count > 0 ? _listaPedidos.Max(p => p.PedidoId) + 1 : 1;
-                pedido.NumeroOrden = "ORD-" + pedido.PedidoId.ToString("D3");
-                pedido.FechaRegistro = DateTime.Now;
-                pedido.FechaActualizacion = DateTime.Now;
-                pedido.Estado = "Pendiente"; // Estado inicial
-                _listaPedidos.Add(pedido);        return RedirectToAction(nameof(Index));
-            }         return View(pedido);
-        }             public IActionResult Edit(int id)
-        {
-            var pedido = _listaPedidos.FirstOrDefault(p => p.PedidoId == id);
-            if (pedido == null) return NotFound();
-            return View(pedido);
-      }     [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Pedido pedidoEditado)
-        {
-            var pedidoOriginal = _listaPedidos.FirstOrDefault(p => p.PedidoId == id);
-
-            // Quitamos la validación de fecha porque la generamos nosotros
-            ModelState.Remove("FechaActualizacion");
-            if (pedidoOriginal != null && ModelState.IsValid)
             {
-                // ACTUALIZACIÓN DE DATOS
-                pedidoOriginal.NombreCliente = pedidoEditado.NombreCliente;
-                pedidoOriginal.EmailCliente = pedidoEditado.EmailCliente;
-                pedidoOriginal.DireccionEntrega = pedidoEditado.DireccionEntrega;
-                pedidoOriginal.Total = pedidoEditado.Total;
-
-                // ACTUALIZACIÓN DE ESTADO (AQUÍ SE CAMBIA EL ESTADO)
-                pedidoOriginal.Estado = pedidoEditado.Estado;
-
-                pedidoOriginal.FechaActualizacion = DateTime.Now;
-
+                _context.Add(pedido);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(pedidoEditado);
-        }
-
-        public IActionResult Details(int id)
-        {
-            var pedido = _listaPedidos.FirstOrDefault(p => p.PedidoId == id);
-            if (pedido == null) return NotFound();
+            ViewData["CuponId"] = new SelectList(_context.Cupones, "Id", "Id", pedido.CuponId);
+            ViewData["DireccionUsuarioId"] = new SelectList(_context.DireccionesUsuarios, "Id", "Id", pedido.DireccionUsuarioId);
+            ViewData["EstadoPedidoId"] = new SelectList(_context.EstadosPedidos, "Id", "Id", pedido.EstadoPedidoId);
+            ViewData["MetodoEnvioId"] = new SelectList(_context.MetodosEnvios, "Id", "Id", pedido.MetodoEnvioId);
+            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "Id", pedido.UsuarioId);
             return View(pedido);
         }
 
-        // Método extra para cambiar estado rápidamente
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult ActualizarEstado(int id, string nuevoEstado)
+        // GET: Pedidos/Edit/5
+        public async Task<IActionResult> Edit(int? id)
         {
-            var pedido = _listaPedidos.FirstOrDefault(p => p.PedidoId == id);
-            if (pedido != null)
+            if (id == null)
             {
-                pedido.Estado = nuevoEstado;
-                pedido.FechaActualizacion = DateTime.Now;
+                return NotFound();
             }
 
-            return RedirectToAction(nameof(Index));
-        }      public IActionResult Delete(int id)
-        {
-            var pedido = _listaPedidos.FirstOrDefault(p => p.PedidoId == id);
-            if (pedido == null) return NotFound();
+            var pedido = await _context.Pedidos.FindAsync(id);
+            if (pedido == null)
+            {
+                return NotFound();
+            }
+            ViewData["CuponId"] = new SelectList(_context.Cupones, "Id", "Id", pedido.CuponId);
+            ViewData["DireccionUsuarioId"] = new SelectList(_context.DireccionesUsuarios, "Id", "Id", pedido.DireccionUsuarioId);
+            ViewData["EstadoPedidoId"] = new SelectList(_context.EstadosPedidos, "Id", "Id", pedido.EstadoPedidoId);
+            ViewData["MetodoEnvioId"] = new SelectList(_context.MetodosEnvios, "Id", "Id", pedido.MetodoEnvioId);
+            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "Id", pedido.UsuarioId);
             return View(pedido);
-        }         [HttpPost, ActionName("Delete")]
-                   [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        }
+
+        // POST: Pedidos/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,NombreCliente,EmailCliente,DireccionEntrega,Total,FechaCreacion,FechaActualizacion,UsuarioId,DireccionUsuarioId,MetodoEnvioId,EstadoPedidoId,CuponId,ApellidoCliente,TelefonoCliente,ReferenciaEntrega,SubTotal,DescuentoTotal,CostoEnvio,Observaciones")] Pedido pedido)
         {
-            var pedido = _listaPedidos.FirstOrDefault(p => p.PedidoId == id);
-            if (pedido != null) _listaPedidos.Remove(pedido);
-            return RedirectToAction(nameof(Index));
-        }      public IActionResult Delete(int id)
-        {
-            var pedido = _listaPedidos.FirstOrDefault(p => p.PedidoId == id);
-            if (pedido == null) return NotFound();
+            if (id != pedido.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(pedido);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!PedidoExists(pedido.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["CuponId"] = new SelectList(_context.Cupones, "Id", "Id", pedido.CuponId);
+            ViewData["DireccionUsuarioId"] = new SelectList(_context.DireccionesUsuarios, "Id", "Id", pedido.DireccionUsuarioId);
+            ViewData["EstadoPedidoId"] = new SelectList(_context.EstadosPedidos, "Id", "Id", pedido.EstadoPedidoId);
+            ViewData["MetodoEnvioId"] = new SelectList(_context.MetodosEnvios, "Id", "Id", pedido.MetodoEnvioId);
+            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "Id", pedido.UsuarioId);
             return View(pedido);
-        }         [HttpPost, ActionName("Delete")]
-                   [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        }
+
+        // GET: Pedidos/Delete/5
+        public async Task<IActionResult> Delete(int? id)
         {
-            var pedido = _listaPedidos.FirstOrDefault(p => p.PedidoId == id);
-            if (pedido != null) _listaPedidos.Remove(pedido);
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var pedido = await _context.Pedidos
+                .Include(p => p.Cupon)
+                .Include(p => p.DireccionUsuario)
+                .Include(p => p.EstadoPedido)
+                .Include(p => p.MetodoEnvio)
+                .Include(p => p.Usuario)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (pedido == null)
+            {
+                return NotFound();
+            }
+
+            return View(pedido);
+        }
+
+        // POST: Pedidos/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var pedido = await _context.Pedidos.FindAsync(id);
+            if (pedido != null)
+            {
+                _context.Pedidos.Remove(pedido);
+            }
+
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        private bool PedidoExists(int id)
+        {
+            return _context.Pedidos.Any(e => e.Id == id);
         }
     }
 }
