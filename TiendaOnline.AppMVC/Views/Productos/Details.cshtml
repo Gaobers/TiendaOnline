@@ -2,89 +2,104 @@
 
 @{
     ViewData["Title"] = "Details";
+    var activo = Model.Estatus == 1;
+
+    var imgUrl = Model.ProductosImagenes?
+        .OrderByDescending(i => i.EsPrincipal)
+        .ThenByDescending(i => i.FechaCreacion)
+        .Select(i => i.Url)
+        .FirstOrDefault();
 }
 
-<h1>Details</h1>
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+        <h3 class="mb-0">Detalle del producto</h3>
+        <div class="text-muted">Información general</div>
+    </div>
 
-<div>
-    <h4>Producto</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Precio)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Precio)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Descripcion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Descripcion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Estatus)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Estatus)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaCreacion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaCreacion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaActualizacion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaActualizacion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Sku)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Sku)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Genero)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Genero)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Material)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Material)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EsDestacado)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EsDestacado)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Categoria)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Categoria.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Marca)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Marca.Id)
-        </dd>
-    </dl>
+    <div class="d-flex gap-2">
+        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Editar</a>
+        <a asp-action="Index" class="btn btn-outline-secondary">Volver</a>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<div class="card shadow-sm products-card">
+    <div class="card-body p-4">
+
+        <div class="d-flex align-items-center gap-3 mb-4">
+            @if (!string.IsNullOrWhiteSpace(imgUrl))
+            {
+                <img src="@imgUrl" class="thumb" alt="Imagen @Model.Nombre" />
+            }
+            else
+            {
+                <div class="thumb">IMG</div>
+            }
+
+            <div>
+                <h4 class="mb-1">@Model.Nombre</h4>
+
+                @if (activo)
+                {
+                    <span class="badge-soft badge-soft-success">ACTIVO</span>
+                }
+                else
+                {
+                    <span class="badge-soft badge-soft-danger">INACTIVO</span>
+                }
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="label">Precio</div>
+                <div class="value">$@Model.Precio.ToString("0.00")</div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="label">SKU</div>
+                <div class="value">@Model.Sku</div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="label">Categoría</div>
+                <div class="value">@(Model.Categoria?.Nombre ?? Model.Categoria?.Id.ToString())</div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="label">Marca</div>
+                <div class="value">@(Model.Marca?.Nombre ?? Model.Marca?.Id.ToString())</div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="label">Género</div>
+                <div class="value">@Model.Genero</div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="label">Material</div>
+                <div class="value">@Model.Material</div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="label">Destacado</div>
+                <div class="value">@(Model.EsDestacado ? "Sí" : "No")</div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="label">Fecha de creación</div>
+                <div class="value">@Model.FechaCreacion</div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="label">Última actualización</div>
+                <div class="value">@Model.FechaActualizacion</div>
+            </div>
+
+            <div class="col-12">
+                <div class="label">Descripción</div>
+                <div class="value">@Model.Descripcion</div>
+            </div>
+        </div>
+    </div>
 </div>

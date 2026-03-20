@@ -1,0 +1,40 @@
+.edit-card {
+    border-radius: 16px;
+}
+
+    .edit-card .card-body {
+        background: #fff;
+    }
+
+.form-label {
+    color: #64748b;
+    font-size: .9rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.form-control,
+.form-select {
+    border-radius: 12px;
+    min-height: 44px;
+    border: 1px solid rgba(0,0,0,.08);
+    box-shadow: none;
+}
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #94a3b8;
+        box-shadow: 0 0 0 0.15rem rgba(148, 163, 184, 0.15);
+    }
+
+textarea.form-control {
+    min-height: auto;
+}
+
+.form-check-input {
+    border-radius: 6px;
+}
+
+.text-danger {
+    font-size: .85rem;
+}
