@@ -13,6 +13,8 @@ public partial class Usuario
     [Required(ErrorMessage = "El correo electrónico no puede estar vacío.")]
     public string Correo { get; set; } = null!;
 
+    [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$",
+       ErrorMessage = "La contraseña debe tener al menos 8 digitos, letra mayúscula, minúscula, simbolos y números.")]
     public string PasswordHash { get; set; } = null!;
 
     public byte Estatus { get; set; }
