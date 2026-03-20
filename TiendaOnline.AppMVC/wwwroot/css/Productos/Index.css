@@ -1,30 +1,38 @@
 .products-card {
     border-radius: 16px;
+    overflow: hidden;
 }
 
 .products-header {
-    font-size: .72rem;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    color: #93a0b5;
-    font-weight: 600;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: .85rem;
+    font-weight: 700;
+    letter-spacing: .03em;
+    border-bottom: 1px solid #e2e8f0;
 }
 
 .product-row {
-    padding: 18px 16px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 1rem;
+    border-bottom: 1px solid #e2e8f0;
+    transition: background 0.2s ease;
+    flex-wrap: wrap;
 }
 
-    .product-row + .product-row {
-        border-top: 1px solid rgba(0,0,0,.05);
+    .product-row:hover {
+        background: #fcfdff;
     }
 
 .thumb {
-    width: 50px;
-    height: 50px;
-    border-radius: 12px;
+    width: 56px;
+    height: 56px;
     object-fit: cover;
-    background: #f2f4f8;
-    border: 1px solid rgba(0,0,0,.05);
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
 }
 
 .name {
@@ -33,49 +41,11 @@
 }
 
 .qty {
-    font-weight: 800;
+    font-weight: 700;
     color: #0f172a;
 }
 
     .qty small {
-        font-weight: 600;
-        color: #94a3b8;
-    }
-
-.badge-soft {
-    border-radius: 999px;
-    padding: 6px 10px;
-    font-size: .72rem;
-    font-weight: 700;
-    letter-spacing: .08em;
-}
-
-.badge-soft-success {
-    background: #e9fbf2;
-    color: #128a4b;
-    border: 1px solid #c9f3dc;
-}
-
-.badge-soft-danger {
-    background: #ffecec;
-    color: #d11a2a;
-    border: 1px solid #ffd0d5;
-}
-
-.action-btn {
-    width: 36px;
-    height: 36px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-    border: 1px solid rgba(0,0,0,.08);
-    background: white;
-    color: #64748b;
-    text-decoration: none;
-}
-
-    .action-btn:hover {
-        background: #f8fafc;
-        color: #0f172a;
+        font-weight: 500;
+        color: #64748b;
     }

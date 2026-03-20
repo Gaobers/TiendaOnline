@@ -1,48 +1,83 @@
 ﻿@model TiendaOnline.AppMVC.Models.Inventario
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalles";
+    var bajoStock = Model.Stock <= Model.StockMinimo;
+    var agotado = Model.Stock == 0;
 }
 
-<h1>Details</h1>
+<div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+    <div>
+        <h3 class="mb-0">Detalle de inventario</h3>
+        <div class="text-muted">Información completa del registro</div>
+    </div>
 
-<div>
-    <h4>Inventario</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Stock)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Stock)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StockMinimo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StockMinimo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaActualizacion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaActualizacion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Producto)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Producto.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Talla)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Talla.Id)
-        </dd>
-    </dl>
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        Volver
+    </a>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<div class="card shadow-sm inv-card">
+    <div class="card-body p-4">
+
+        <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+            <div>
+                <h4 class="mb-1">
+                    @(Model.Producto?.Nombre ?? "Sin producto")
+                </h4>
+                <div class="text-muted">
+                    Talla: @(Model.Talla?.Numero ?? Model.Talla?.Id.ToString() ?? "N/A")
+                </div>
+            </div>
+
+            @if (agotado)
+            {
+                <span class="inv-badge inv-badge-danger">AGOTADO</span>
+            }
+            else if (bajoStock)
+            {
+                <span class="inv-badge inv-badge-warning">BAJO</span>
+            }
+            else
+            {
+                <span class="inv-badge inv-badge-success">OK</span>
+            }
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="inv-text-label">Stock actual</div>
+                <div class="inv-text-value">@Model.Stock</div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="inv-text-label">Stock mínimo</div>
+                <div class="inv-text-value">@Model.StockMinimo</div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="inv-text-label">Fecha de actualización</div>
+                <div class="inv-text-value">@Model.FechaActualizacion</div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="inv-text-label">Producto</div>
+                <div class="inv-text-value">@(Model.Producto?.Nombre ?? "Sin producto")</div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="inv-text-label">Talla</div>
+                <div class="inv-text-value">@(Model.Talla?.Numero ?? Model.TallaId.ToString())</div>
+            </div>
+        </div>
+
+        <div class="mt-4 d-flex gap-2 flex-wrap">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+                Editar
+            </a>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                Volver
+            </a>
+        </div>
+    </div>
 </div>

@@ -1,0 +1,36 @@
+.inventory-card {
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.inventory-header {
+    background: #f8fafc;
+    color: #64748b;
+    font-size: .85rem;
+    font-weight: 700;
+    letter-spacing: .03em;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.inventory-row {
+    transition: background 0.2s ease;
+}
+
+    .inventory-row:hover {
+        background: #fcfdff;
+    }
+
+.item-name {
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.item-value {
+    color: #334155;
+    font-weight: 500;
+}
+
+.item-stock {
+    font-weight: 700;
+    color: #0f172a;
+}
