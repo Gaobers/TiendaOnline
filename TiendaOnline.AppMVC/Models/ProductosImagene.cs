@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace TiendaOnline.AppMVC.Models;
 
-public partial class ProductoImagen
+public partial class ProductosImagene
 {
-    public int ProductoImagenId { get; set; }
+    public int Id { get; set; }
 
     public int ProductoId { get; set; }
 
@@ -13,7 +13,9 @@ public partial class ProductoImagen
 
     public bool EsPrincipal { get; set; }
 
-    public DateTime FechaRegistro { get; set; }
+    public DateTime FechaCreacion { get; set; }
+
+    public int Orden { get; set; }
 
     public virtual Producto Producto { get; set; } = null!;
 }

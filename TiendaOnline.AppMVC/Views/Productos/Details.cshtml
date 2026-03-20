@@ -1,4 +1,4 @@
-﻿@model TiendaOnline.AppMVC.Models.Usuario
+﻿@model TiendaOnline.AppMVC.Models.Producto
 
 @{
     ViewData["Title"] = "Details";
@@ -7,7 +7,7 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Usuario</h4>
+    <h4>Producto</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -17,16 +17,16 @@
             @Html.DisplayFor(model => model.Nombre)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Correo)
+            @Html.DisplayNameFor(model => model.Precio)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Correo)
+            @Html.DisplayFor(model => model.Precio)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PasswordHash)
+            @Html.DisplayNameFor(model => model.Descripcion)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PasswordHash)
+            @Html.DisplayFor(model => model.Descripcion)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Estatus)
@@ -47,22 +47,40 @@
             @Html.DisplayFor(model => model.FechaActualizacion)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Apellido)
+            @Html.DisplayNameFor(model => model.Sku)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Apellido)
+            @Html.DisplayFor(model => model.Sku)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Telefono)
+            @Html.DisplayNameFor(model => model.Genero)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Telefono)
+            @Html.DisplayFor(model => model.Genero)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Rol)
+            @Html.DisplayNameFor(model => model.Material)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Rol.Id)
+            @Html.DisplayFor(model => model.Material)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EsDestacado)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EsDestacado)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Categoria)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Categoria.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Marca)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Marca.Id)
         </dd>
     </dl>
 </div>
