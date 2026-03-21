@@ -15,8 +15,6 @@ public partial class Pedido
     public string NombreCliente { get; set; } = null!;
 
 
-    [Required(ErrorMessage = "El correo electrónico es obligatorio")]
-    [EmailAddress(ErrorMessage = "El formato del correo no es válido")]
     public string EmailCliente { get; set; } = null!;
 
     [Required(ErrorMessage = "La dirección de entrega es obligatoria")]
