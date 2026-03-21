@@ -9,6 +9,7 @@ public partial class Pedido
 
     public string NombreCliente { get; set; } = null!;
 
+
     public string EmailCliente { get; set; } = null!;
 
     public string DireccionEntrega { get; set; } = null!;
