@@ -22,33 +22,41 @@ public partial class Producto
     [Display(Name = "Descripción del Producto")]
     public string? Descripcion { get; set; }
 
+
     public byte Estatus { get; set; }
 
     public DateTime FechaCreacion { get; set; }
 
+
     [Display(Name = "Fecha de Actualización")]
     public DateTime? FechaActualizacion { get; set; }
+
 
     [Required(ErrorMessage = "La categoría es obligatoria.")]
     [Range(1, int.MaxValue, ErrorMessage = "Debes seleccionar una categoría válida.")]
     [Display(Name = "Categoría")]
     public int CategoriaId { get; set; }
 
+
     [Required(ErrorMessage = "La marca es obligatoria.")]
     [Range(1, int.MaxValue, ErrorMessage = "Debes seleccionar una marca válida.")]
     [Display(Name = "Marca")]
     public int MarcaId { get; set; }
+
 
     [Required(ErrorMessage = "El SKU es obligatorio.")]
     [StringLength(30, MinimumLength = 3, ErrorMessage = "El SKU debe tener entre 3 y 30 caracteres.")]
     [Display(Name = "SKU")]
     public string Sku { get; set; } = null!;
 
+
     [StringLength(10, ErrorMessage = "El campo no puede exceder 10 caracteres")]
     public string? Genero { get; set; }
 
+
     [StringLength(20, ErrorMessage = "El material no puede exceder 20 caracteres.")]
     public string? Material { get; set; }
+
 
     [Display(Name = "Destacado")]
     public bool EsDestacado { get; set; }
