@@ -62,4 +62,5 @@ public partial class Pedido
     public virtual UsosCupone? UsosCupone { get; set; }
 
     public virtual Usuario Usuario { get; set; } = null!;
+
 }
