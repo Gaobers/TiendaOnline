@@ -7,11 +7,17 @@ namespace TiendaOnline.AppMVC.Models;
 public partial class Usuario
 {
     public int Id { get; set; }
+
     [Required(ErrorMessage ="El nombre es obligatorio")]
     public string Nombre { get; set; } = null!;
 
+   
+    [Required(ErrorMessage = "El correo electrónico no puede estar vacío.")]
     public string Correo { get; set; } = null!;
 
+
+    [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$",
+       ErrorMessage = "La contraseña debe tener al menos 8 digitos, letra mayúscula, minúscula, simbolos y números.")]
     public string PasswordHash { get; set; } = null!;
 
     public byte Estatus { get; set; }
@@ -22,7 +28,10 @@ public partial class Usuario
 
     public int RolId { get; set; }
 
+    [StringLength(50, ErrorMessage = "El campo no puede tener más de 50 caracteres")]
+    [RegularExpression(@"^(?!.*(.)\1{4,}).*$", ErrorMessage = "No se permiten caracteres repetitivos excesivos")]
     public string? Apellido { get; set; }
+
     [Phone(ErrorMessage = "Caracteres no permitidos")]
     public string? Telefono { get; set; }
 
