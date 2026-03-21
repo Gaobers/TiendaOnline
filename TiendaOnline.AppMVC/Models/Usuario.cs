@@ -28,10 +28,9 @@ public partial class Usuario
 
     public int RolId { get; set; }
 
-    [StringLength(20, MinimumLength = 2,
-        ErrorMessage = "El apellido debe tener entre 2 y 20 caracteres")]
+    [StringLength(50, ErrorMessage = "El campo no puede tener más de 50 caracteres")]
+    [RegularExpression(@"^(?!.*(.)\1{4,}).*$", ErrorMessage = "No se permiten caracteres repetitivos excesivos")]
     public string? Apellido { get; set; }
-
 
     [Phone(ErrorMessage = "Caracteres no permitidos")]
     public string? Telefono { get; set; }
