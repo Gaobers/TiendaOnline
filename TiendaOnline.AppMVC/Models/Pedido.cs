@@ -15,6 +15,8 @@ public partial class Pedido
     public string NombreCliente { get; set; } = null!;
 
 
+    [Required(ErrorMessage = "El correo electrónico es obligatorio")]
+    [EmailAddress(ErrorMessage = "El formato del correo no es válido")]
     public string EmailCliente { get; set; } = null!;
 
     [Required(ErrorMessage = "La dirección de entrega es obligatoria")]
@@ -53,6 +55,9 @@ public partial class Pedido
     public string? ApellidoCliente { get; set; }
 
     [Phone(ErrorMessage = "El formato del teléfono no es válido")]
+    public string? TelefonoCliente { get; set; }
+    public string? ReferenciaEntrega { get; set; }
+    public decimal DescuentoTotal { get; set; }
     public string? TelefonoCliente { get; set; } public string? ReferenciaEntrega { get; set; }
   public decimal DescuentoTotal { get; set; }
     public string? Observaciones { get; set; }
