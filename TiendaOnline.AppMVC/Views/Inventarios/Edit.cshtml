@@ -1,0 +1,73 @@
+﻿@model TiendaOnline.AppMVC.Models.Inventario
+
+@{
+    ViewData["Title"] = "Editar";
+}
+
+<div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+    <div>
+        <h3 class="mb-0">Editar inventario</h3>
+        <div class="text-muted">Actualiza la información del registro</div>
+    </div>
+
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        Volver
+    </a>
+</div>
+
+<div class="card shadow-sm inv-card">
+    <div class="card-body p-4">
+        <form asp-action="Edit">
+            <input type="hidden" asp-for="Id" />
+
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger inv-validation-box mb-4"></div>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label asp-for="ProductoId" class="form-label inv-label"></label>
+                    <select asp-for="ProductoId" class="form-select inv-input" asp-items="ViewBag.ProductoId">
+                        <option value="">Seleccione un producto</option>
+                    </select>
+                    <span asp-validation-for="ProductoId" class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="TallaId" class="form-label inv-label"></label>
+                    <select asp-for="TallaId" class="form-select inv-input" asp-items="ViewBag.TallaId">
+                        <option value="">Seleccione una talla</option>
+                    </select>
+                    <span asp-validation-for="TallaId" class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Stock" class="form-label inv-label"></label>
+                    <input asp-for="Stock" type="number" class="form-control inv-input" />
+                    <span asp-validation-for="Stock" class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="StockMinimo" class="form-label inv-label"></label>
+                    <input asp-for="StockMinimo" type="number" class="form-control inv-input" />
+                    <span asp-validation-for="StockMinimo" class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="FechaActualizacion" class="form-label inv-label"></label>
+                    <input asp-for="FechaActualizacion" type="datetime-local" class="form-control inv-input" />
+                    <span asp-validation-for="FechaActualizacion" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex gap-2 flex-wrap">
+                <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

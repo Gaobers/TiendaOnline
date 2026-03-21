@@ -2,89 +2,111 @@
 
 @{
     ViewData["Title"] = "Details";
+    var activo = Model.Estatus == 1;
+
+    var imgUrl = Model.ProductosImagenes?
+        .OrderByDescending(i => i.EsPrincipal)
+        .ThenByDescending(i => i.FechaCreacion)
+        .Select(i => i.Url)
+        .FirstOrDefault();
 }
 
-<h1>Details</h1>
+<div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+    <div>
+        <h3 class="mb-0">Detalle del producto</h3>
+        <div class="text-muted">Información general</div>
+    </div>
 
-<div>
-    <h4>Producto</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Precio)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Precio)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Descripcion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Descripcion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Estatus)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Estatus)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaCreacion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaCreacion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaActualizacion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaActualizacion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Sku)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Sku)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Genero)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Genero)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Material)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Material)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EsDestacado)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EsDestacado)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Categoria)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Categoria.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Marca)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Marca.Id)
-        </dd>
-    </dl>
+    <div class="d-flex gap-2 flex-wrap">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Editar</a>
+        <a asp-action="Index" class="btn btn-outline-secondary">Volver</a>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<div class="card shadow-sm prod-card">
+    <div class="card-body p-4">
+
+        <div class="d-flex align-items-center gap-3 mb-4 flex-wrap">
+            @if (!string.IsNullOrWhiteSpace(imgUrl))
+            {
+                <img src="@imgUrl" class="prod-thumb" alt="Imagen @Model.Nombre" />
+            }
+            else
+            {
+                <div class="prod-thumb d-flex align-items-center justify-content-center text-muted small">
+                    IMG
+                </div>
+            }
+
+            <div>
+                <h4 class="mb-1">@Model.Nombre</h4>
+
+                @if (activo)
+                {
+                    <span class="prod-badge prod-badge-success">ACTIVO</span>
+                }
+                else
+                {
+                    <span class="prod-badge prod-badge-danger">INACTIVO</span>
+                }
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="prod-text-label">Precio</div>
+                <div class="prod-text-value">$@Model.Precio.ToString("0.00")</div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="prod-text-label">SKU</div>
+                <div class="prod-text-value">@Model.Sku</div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="prod-text-label">Estado</div>
+                <div class="prod-text-value">@(activo ? "Activo" : "Inactivo")</div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="prod-text-label">Categoría</div>
+                <div class="prod-text-value">@(Model.Categoria?.Nombre ?? Model.Categoria?.Id.ToString())</div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="prod-text-label">Marca</div>
+                <div class="prod-text-value">@(Model.Marca?.Nombre ?? Model.Marca?.Id.ToString())</div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="prod-text-label">Género</div>
+                <div class="prod-text-value">@Model.Genero</div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="prod-text-label">Material</div>
+                <div class="prod-text-value">@Model.Material</div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="prod-text-label">Destacado</div>
+                <div class="prod-text-value">@(Model.EsDestacado ? "Sí" : "No")</div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="prod-text-label">Fecha de creación</div>
+                <div class="prod-text-value">@Model.FechaCreacion</div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="prod-text-label">Última actualización</div>
+                <div class="prod-text-value">@Model.FechaActualizacion</div>
+            </div>
+
+            <div class="col-12">
+                <div class="prod-text-label">Descripción</div>
+                <div class="prod-text-value">@Model.Descripcion</div>
+            </div>
+        </div>
+    </div>
 </div>

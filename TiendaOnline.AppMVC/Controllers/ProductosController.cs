@@ -101,10 +101,17 @@ namespace TiendaOnline.AppMVC.Controllers
                 return NotFound();
             }
 
+            ModelState.Remove("Categoria");
+            ModelState.Remove("Marca");
+            ModelState.Remove("Inventarios");
+            ModelState.Remove("ProductosColores");
+            ModelState.Remove("ProductosImagenes");
+
             if (ModelState.IsValid)
             {
                 try
                 {
+                    producto.FechaActualizacion = DateTime.Now;
                     _context.Update(producto);
                     await _context.SaveChangesAsync();
                 }
@@ -114,18 +121,17 @@ namespace TiendaOnline.AppMVC.Controllers
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+
+                    throw;
                 }
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Id", producto.CategoriaId);
-            ViewData["MarcaId"] = new SelectList(_context.Marcas, "Id", "Id", producto.MarcaId);
+
+            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Nombre", producto.CategoriaId);
+            ViewData["MarcaId"] = new SelectList(_context.Marcas, "Id", "Nombre", producto.MarcaId);
             return View(producto);
         }
-
         // GET: Productos/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

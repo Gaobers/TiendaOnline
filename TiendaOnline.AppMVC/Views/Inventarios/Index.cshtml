@@ -1,0 +1,66 @@
+﻿@model IEnumerable<TiendaOnline.AppMVC.Models.Inventario>
+
+@{
+    ViewData["Title"] = "Inventario";
+}
+
+<div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+    <div>
+        <h3 class="mb-0">Inventario</h3>
+        <div class="text-muted">Listado general</div>
+    </div>
+
+    <a asp-action="Create" class="btn btn-primary">
+        + Nuevo registro
+    </a>
+</div>
+
+<div class="card shadow-sm inventory-card">
+    <div class="card-body p-0">
+
+        <div class="d-none d-md-flex inventory-header px-3 py-3">
+            <div class="col-md-3">Producto</div>
+            <div class="col-md-2">Talla</div>
+            <div class="col-md-2">Stock</div>
+            <div class="col-md-2">Stock mínimo</div>
+            <div class="col-md-2 text-end">Acciones</div>
+        </div>
+
+        @foreach (var item in Model)
+        {
+            var bajoStock = item.Stock <= item.StockMinimo;
+            var agotado = item.Stock == 0;
+
+            <div class="inventory-row d-flex align-items-center px-3 py-3 border-bottom flex-wrap">
+
+                <div class="col-12 col-md-3 mb-2 mb-md-0">
+                    <div class="item-name">
+                        @(item.Producto?.Nombre ?? "Sin producto")
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-2 mb-2 mb-md-0">
+                    <div class="text-muted small d-md-none">Talla</div>
+                    <div class="item-value">
+                        @(item.Talla?.Numero ?? item.Talla?.Id.ToString() ?? "Sin talla")
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-2 mb-2 mb-md-0">
+                    <div class="text-muted small d-md-none">Stock</div>
+                    <div class="item-stock">@item.Stock</div>
+                </div>
+
+                <div class="col-6 col-md-2 mt-2 mt-md-0">
+                    <div class="text-muted small d-md-none">Stock mínimo</div>
+                    <div class="item-value">@item.StockMinimo</div>
+                </div>
+                <div class="col-12 col-md-2 mt-3 mt-md-0 d-flex justify-content-md-end gap-2">
+                    <a class="inv-action-btn" asp-action="Edit" asp-route-id="@item.Id" title="Editar">✏️</a>
+                    <a class="inv-action-btn" asp-action="Details" asp-route-id="@item.Id" title="Detalles">🔎</a>
+                    <a class="inv-action-btn" asp-action="Delete" asp-route-id="@item.Id" title="Eliminar">🗑️</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>

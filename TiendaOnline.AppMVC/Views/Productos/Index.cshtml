@@ -4,8 +4,7 @@
     ViewData["Title"] = "Producto";
 }
 
-
-<div class="d-flex align-items-center justify-content-between mb-3">
+<div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
     <div>
         <h3 class="mb-0">Productos</h3>
         <div class="text-muted">Listado general</div>
@@ -16,9 +15,8 @@
     </a>
 </div>
 
-<div class="card shadow-sm products-card"></div>
+<div class="card shadow-sm products-card">
     <div class="card-body p-0">
-
 
         <div class="d-none d-md-flex products-header px-3 py-3">
             <div class="col-md-1"></div>
@@ -28,22 +26,17 @@
             <div class="col-md-2 text-end">Acciones</div>
         </div>
 
-
-        <!-- Filas -->
         @foreach (var item in Model)
         {
             var activo = item.Estatus == 1;
 
-            // Imagen principal o primera disponible
             var imgUrl = item.ProductosImagenes?
-                .OrderByDescending(i => i.EsPrincipal)      // primero la principal
-                .ThenByDescending(i => i.FechaCreacion)     // luego la más reciente
+                .OrderByDescending(i => i.EsPrincipal)
+                .ThenByDescending(i => i.FechaCreacion)
                 .Select(i => i.Url)
                 .FirstOrDefault();
 
             <div class="product-row d-flex align-items-center">
-
-                <!-- Imagen -->
                 <div class="col-12 col-md-1 mb-3 mb-md-0">
                     @if (!string.IsNullOrWhiteSpace(imgUrl))
                     {
@@ -57,39 +50,37 @@
                     }
                 </div>
 
-                <!-- Nombre -->
                 <div class="col-12 col-md-4">
                     <div class="name">@item.Nombre</div>
                 </div>
 
-                <!-- Precio -->
                 <div class="col-6 col-md-3 mt-3 mt-md-0">
                     <div class="qty">
                         $@item.Precio.ToString("0.00") <small>USD</small>
                     </div>
                 </div>
 
-                <!-- Estado -->
                 <div class="col-6 col-md-2 mt-3 mt-md-0">
                     @if (activo)
                     {
-                        <span class="badge-soft badge-soft-success">ACTIVO</span>
+                        <span class="prod-badge prod-badge-success">ACTIVO</span>
                     }
                     else
                     {
-                        <span class="badge-soft badge-soft-danger">INACTIVO</span>
+                        <span class="prod-badge prod-badge-danger">INACTIVO</span>
                     }
                 </div>
 
-                <!-- Acciones -->
                 <div class="col-12 col-md-2 mt-3 mt-md-0 d-flex justify-content-md-end gap-2">
-                    <a class="action-btn" asp-action="Edit" asp-route-id="@item.Id" title="Editar">✏️</a>
-                    <a class="action-btn" asp-action="Details" asp-route-id="@item.Id" title="Detalles">🔎</a>
-                    <a class="action-btn" asp-action="Delete" asp-route-id="@item.Id" title="Eliminar">🗑️</a>
+                    <a class="prod-action-btn" asp-action="Edit" asp-route-id="@item.Id" title="Editar">✏️</a>
+                    <a class="prod-action-btn" asp-action="Details" asp-route-id="@item.Id" title="Detalles">🔎</a>
+                    <a class="prod-action-btn" asp-action="Delete" asp-route-id="@item.Id" title="Eliminar">🗑️</a>
                 </div>
             </div>
         }
-        <div class="card-footer bg-white d-flex justify-content-between align-items-center">
-            <small class="text-muted">Mostrando @Model.Count() productos</small>
-        </div>
     </div>
+
+    <div class="card-footer bg-white d-flex justify-content-between align-items-center">
+        <small class="text-muted">Mostrando @Model.Count() productos</small>
+    </div>
+</div>

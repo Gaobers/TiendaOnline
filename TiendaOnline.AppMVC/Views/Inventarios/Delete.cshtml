@@ -1,0 +1,78 @@
+﻿@model TiendaOnline.AppMVC.Models.Inventario
+
+@{
+    ViewData["Title"] = "Eliminar";
+    var bajoStock = Model.Stock <= Model.StockMinimo;
+    var agotado = Model.Stock == 0;
+}
+
+<div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+    <div>
+        <h3 class="mb-0">Eliminar registro</h3>
+        <div class="text-muted">Confirma la eliminación del inventario</div>
+    </div>
+
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        Volver
+    </a>
+</div>
+
+<div class="card shadow-sm delete-card">
+    <div class="card-body p-4">
+
+        <!-- Advertencia -->
+        <div class="warning-box mb-4">
+            ¿Estás seguro de que deseas eliminar este registro?
+        </div>
+
+        <!-- Encabezado -->
+        <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+            <div>
+                <h4 class="mb-1">
+                    @(Model.Producto?.Nombre ?? "Sin producto")
+                </h4>
+                <div class="text-muted">
+                    Talla: @(Model.Talla?.Numero ?? Model.Talla?.Id.ToString() ?? "N/A")
+                </div>
+            </div>
+
+            @if (agotado)
+            {
+                <span class="inv-badge inv-badge-danger">AGOTADO</span>
+            }
+            else if (bajoStock)
+            {
+                <span class="inv-badge inv-badge-warning">BAJO</span>
+            }
+            else
+            {
+                <span class="inv-badge inv-badge-success">OK</span>
+            }
+        </div>
+
+        <!-- Datos -->
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="inv-text-label">Stock</div>
+                <div class="inv-text-value">@Model.Stock</div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="inv-text-label">Stock mínimo</div>
+                <div class="inv-text-value">@Model.StockMinimo</div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="inv-text-label">Fecha actualización</div>
+                <div class="inv-text-value">@Model.FechaActualizacion</div>
+            </div>
+        </div>
+
+        <!-- Acciones -->
+        <form asp-action="Delete" class="mt-4">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger">Eliminar</button>
+            <a asp-action="Index" class="btn btn-outline-secondary ms-2">Cancelar</a>
+        </form>
+    </div>
+</div>
