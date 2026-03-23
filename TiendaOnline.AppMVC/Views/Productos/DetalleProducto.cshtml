@@ -1,4 +1,4 @@
-﻿@*@model TiendaOnline.AppMVC.Models.Producto
+﻿@model Producto
 
 <h1>@Model.Nombre</h1>
 
@@ -7,7 +7,7 @@
 <p><strong>Marca:</strong> @Model.Marca.Nombre</p>
 <p><strong>Categoría:</strong> @Model.Categoria.Nombre</p>
 
-<button class="btn btn-success">Comprar</button> *@
+<button class="btn btn-success">Comprar</button> 
 public async Task<IActionResult>
 DetalleProducto(int? id)
 {
