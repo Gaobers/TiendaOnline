@@ -1,0 +1,310 @@
+:root {
+    --admin-primary: #0d6efd;
+    --admin-primary-dark: #0b5ed7;
+    --admin-success: #198754;
+    --admin-success-soft: #d1e7dd;
+    --admin-danger: #dc3545;
+    --admin-danger-soft: #f8d7da;
+    --admin-info: #0dcaf0;
+    --admin-warning: #ffc107;
+    --admin-bg: #f5f7fb;
+    --admin-surface: #ffffff;
+    --admin-border: #e5e7eb;
+    --admin-text: #212529;
+    --admin-text-muted: #6c757d;
+    --admin-radius-sm: 10px;
+    --admin-radius-md: 16px;
+    --admin-radius-lg: 20px;
+    --admin-shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    --admin-shadow-md: 0 0.5rem 1rem rgba(0, 0, 0, 0.10);
+}
+
+.admin-index-page {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.admin-hero-card {
+    border: 0;
+    border-radius: var(--admin-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--admin-shadow-sm);
+    background: linear-gradient(135deg, var(--admin-primary) 0%, #3d8bfd 100%);
+    color: #fff;
+    margin-bottom: 1.5rem;
+}
+
+    .admin-hero-card .card-body {
+        padding: 1.5rem;
+    }
+
+.admin-hero-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.admin-hero-subtitle {
+    margin-bottom: 0;
+    opacity: 0.9;
+    font-size: 0.95rem;
+}
+
+.admin-btn-main {
+    border-radius: 0.75rem;
+    font-weight: 600;
+    padding: 0.75rem 1.2rem;
+    box-shadow: var(--admin-shadow-sm);
+}
+
+.admin-filter-card,
+.admin-table-card {
+    border: 0;
+    border-radius: var(--admin-radius-md);
+    overflow: hidden;
+    box-shadow: var(--admin-shadow-sm);
+    background-color: var(--admin-surface);
+}
+
+.admin-filter-card {
+    margin-bottom: 1rem;
+}
+
+    .admin-filter-card .card-body,
+    .admin-table-card .card-body {
+        padding: 1.25rem;
+    }
+
+.admin-filter-label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--admin-text);
+    margin-bottom: 0.45rem;
+}
+
+.admin-filter-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+}
+
+    .admin-filter-actions .btn {
+        min-width: 140px;
+        border-radius: 0.75rem;
+        font-weight: 600;
+    }
+
+.admin-table {
+    margin-bottom: 0;
+}
+
+    .admin-table thead th {
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: #495057;
+        background-color: #f8f9fa;
+        border-bottom: 1px solid var(--admin-border);
+        padding-top: 0.9rem;
+        padding-bottom: 0.9rem;
+        white-space: nowrap;
+    }
+
+    .admin-table tbody td {
+        vertical-align: middle;
+    }
+
+    .admin-table tbody tr:hover {
+        background-color: #fafcff;
+    }
+
+.admin-avatar-circle {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(13, 110, 253, 0.10);
+    color: var(--admin-primary);
+    flex-shrink: 0;
+}
+
+.admin-user-name {
+    font-weight: 700;
+    color: var(--admin-text);
+}
+
+.admin-mail-link {
+    text-decoration: none;
+    color: var(--admin-text-muted);
+}
+
+    .admin-mail-link:hover {
+        color: var(--admin-primary);
+    }
+
+.admin-code-badge {
+    max-width: 120px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: monospace;
+    font-weight: 400;
+    border-radius: 0.6rem;
+    padding: 0.45rem 0.65rem;
+}
+
+.admin-role-badge {
+    border-radius: 999px;
+    padding: 0.45rem 0.8rem;
+    font-weight: 600;
+}
+
+.admin-status-badge {
+    border-radius: 999px;
+    padding: 0.45rem 0.9rem;
+    font-weight: 700;
+}
+
+.admin-status-active {
+    background-color: var(--admin-success-soft);
+    color: var(--admin-success);
+    border: 1px solid #badbcc;
+}
+
+.admin-status-inactive {
+    background-color: var(--admin-danger-soft);
+    color: var(--admin-danger);
+    border: 1px solid #f5c2c7;
+}
+
+.admin-date-text {
+    font-size: 0.9rem;
+    color: var(--admin-text-muted);
+}
+
+.admin-actions .btn {
+    border-radius: 0.65rem;
+}
+
+    .admin-actions .btn:hover {
+        background-color: #f8f9fa;
+    }
+
+.admin-card-footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid var(--admin-border);
+    padding: 0.9rem 1rem;
+    text-align: center;
+    color: var(--admin-text-muted);
+    font-size: 0.9rem;
+}
+
+.admin-empty-state {
+    padding: 2rem 1rem;
+    text-align: center;
+    color: var(--admin-text-muted);
+}
+
+@media (max-width: 991.98px) {
+    .admin-hero-card .card-body {
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .admin-hero-title {
+        font-size: 1.45rem;
+    }
+
+    .admin-filter-actions .btn {
+        width: 100%;
+    }
+}
+
+
+/* PRODUCTOS - NORMALIZAR CON TABLAS */
+
+.products-card {
+    border: 0;
+    border-radius: var(--admin-radius-md);
+    overflow: hidden;
+    box-shadow: var(--admin-shadow-sm);
+    background-color: var(--admin-surface);
+}
+
+/* HEADER tipo tabla */
+.products-header {
+    background-color: #f8f9fa;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #495057;
+    border-bottom: 1px solid var(--admin-border);
+}
+
+/* FILAS */
+.product-row {
+    padding: 1rem;
+    border-bottom: 1px solid var(--admin-border);
+    transition: background-color 0.2s ease;
+}
+
+    .product-row:hover {
+        background-color: #fafcff;
+    }
+
+/* IMAGEN */
+.thumb {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid var(--admin-border);
+}
+
+/* NOMBRE */
+.name {
+    font-weight: 700;
+    color: var(--admin-text);
+}
+
+/* PRECIO */
+.qty {
+    font-weight: 600;
+}
+
+/* BADGES (igual que usuarios) */
+.prod-badge {
+    border-radius: 999px;
+    padding: 0.4rem 0.8rem;
+    font-weight: 700;
+    font-size: 0.75rem;
+}
+
+.prod-badge-success {
+    background-color: #d1e7dd;
+    color: #198754;
+    border: 1px solid #badbcc;
+}
+
+.prod-badge-danger {
+    background-color: #f8d7da;
+    color: #dc3545;
+    border: 1px solid #f5c2c7;
+}
+
+/* BOTONES ACCIONES */
+.prod-action-btn {
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    padding: 6px 10px;
+    background-color: white;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+    .prod-action-btn:hover {
+        background-color: #f8f9fa;
+    }
