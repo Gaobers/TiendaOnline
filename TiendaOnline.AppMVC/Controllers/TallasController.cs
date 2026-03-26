@@ -19,10 +19,26 @@ namespace TiendaOnline.AppMVC.Controllers
         }
 
         // GET: Tallas
-        public async Task<IActionResult> Index()
+        //Filtros
+        public async Task<IActionResult> Index(string numero, byte? estatus, int top = 10)
         {
-            return View(await _context.Tallas.ToListAsync());
+            var query = _context.Tallas.AsQueryable();
+            //Numero
+            if (!string.IsNullOrWhiteSpace(numero))
+                query = query.Where(c => c.Numero.Contains(numero));
+
+            //Estado
+            if (estatus.HasValue)
+                query = query.Where(c => c.Estatus == estatus.Value);
+
+            //Top
+            query = query.Take(top);
+
+            var categorias = await query.ToListAsync();
+
+            return View(categorias);
         }
+        
 
         // GET: Tallas/Details/5
         public async Task<IActionResult> Details(int? id)
