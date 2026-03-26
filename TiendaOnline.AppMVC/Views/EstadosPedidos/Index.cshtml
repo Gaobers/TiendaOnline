@@ -175,7 +175,7 @@
         </div>
 
         <div class="admin-card-footer">
-            Total: <strong>@Model.Count()</strong> estados
+            Total: <strong>@(Model?.Count() ?? 0)</strong> estados
         </div>
     </div>
 

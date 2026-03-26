@@ -192,7 +192,7 @@
         </div>
 
         <div class="admin-card-footer">
-            Total: <strong>@Model.Count()</strong> métodos
+            Total: <strong>@(Model?.Count() ?? 0)</strong> métodos
         </div>
     </div>
 
