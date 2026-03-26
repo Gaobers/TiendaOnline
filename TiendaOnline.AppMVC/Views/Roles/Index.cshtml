@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TiendaOnline.AppMVC.Models.Role>
+﻿@model IEnumerable<Role>
 
 @{
     ViewData["Title"] = "Roles";
@@ -189,7 +189,7 @@
         </div>
 
         <div class="admin-card-footer">
-            Total: <strong>@Model.Count()</strong> roles
+            Total: <strong>@(Model?.Count() ?? 0)</strong> roles
         </div>
     </div>
 

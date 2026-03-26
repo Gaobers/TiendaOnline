@@ -221,7 +221,7 @@
         </div>
 
         <div class="admin-card-footer">
-            Total: <strong>@Model.Count()</strong> direcciones
+            Total: <strong>@(Model?.Count() ?? 0)</strong> direcciones
         </div>
     </div>
 
