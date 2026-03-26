@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace TiendaOnline.AppMVC.Models;
 
 public partial class MetodosEnvio
 {
     public int Id { get; set; }
-
+    [Required(ErrorMessage = "El nombre es obligatorio")]
     public string Nombre { get; set; } = null!;
 
     public string? Descripcion { get; set; }
-
+    [Required(ErrorMessage = "El costo de envío es obligatorio")]
     public decimal Costo { get; set; }
-
+    [StringLength(50, ErrorMessage = "El tiempo estimado es demasiado largo")]
     public string? TiempoEstimado { get; set; }
 
     public byte Estatus { get; set; }
