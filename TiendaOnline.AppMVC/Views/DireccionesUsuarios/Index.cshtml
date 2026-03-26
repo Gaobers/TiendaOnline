@@ -1,0 +1,228 @@
+﻿@model IEnumerable<DireccionesUsuario>
+
+@{
+    ViewData["Title"] = "Direcciones de Usuario";
+
+    var filtroAlias = Context.Request.Query["alias"].ToString();
+    var filtroDepartamento = Context.Request.Query["departamento"].ToString();
+    var top = Context.Request.Query["top"].ToString();
+
+    if (string.IsNullOrWhiteSpace(top))
+    {
+        top = "10";
+    }
+}
+
+<div class="container-fluid px-lg-5 admin-index-page">
+
+    <!-- HERO -->
+    <div class="card admin-hero-card">
+        <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="admin-hero-title">
+                    <i class="bi bi-geo-alt me-2"></i>Direcciones
+                </h1>
+                <p class="admin-hero-subtitle">
+                    Administra las direcciones registradas por los usuarios.
+                </p>
+            </div>
+
+            <a asp-action="Create" class="btn btn-light admin-btn-main">
+                <i class="bi bi-plus-lg me-1"></i> Nueva dirección
+            </a>
+        </div>
+    </div>
+
+    <!-- FILTRO -->
+    <div class="card admin-filter-card">
+        <div class="card-body">
+            <form method="get">
+                <div class="row g-3 align-items-end">
+
+                    <!-- ALIAS -->
+                    <div class="col-12 col-md-6 col-xl-3">
+                        <label class="form-label admin-filter-label">Alias</label>
+                        <div class="input-group shadow-sm admin-filter-group">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-tag text-primary"></i>
+                            </span>
+                            <input type="text"
+                                   name="alias"
+                                   class="form-control"
+                                   placeholder="Ej: Casa, Oficina..."
+                                   value="@filtroAlias" />
+                        </div>
+                    </div>
+
+                    <!-- DEPARTAMENTO -->
+                    <div class="col-12 col-md-6 col-xl-5">
+                        <label class="form-label admin-filter-label">Departamento</label>
+                        <div class="input-group shadow-sm admin-filter-group">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-map text-primary"></i>
+                            </span>
+                            <input type="text"
+                                   name="departamento"
+                                   class="form-control"
+                                   placeholder="Buscar por departamento..."
+                                   value="@filtroDepartamento" />
+                        </div>
+                    </div>
+
+                    <!-- TOP -->
+                    <div class="col-12 col-md-4 col-xl-2">
+                        <label class="form-label admin-filter-label">Top registros</label>
+                        <div class="input-group shadow-sm admin-filter-group">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-list-ol text-primary"></i>
+                            </span>
+                            <select name="top" class="form-select">
+                                <option value="10" selected="@(top == "10")">10</option>
+                                <option value="25" selected="@(top == "25")">25</option>
+                                <option value="50" selected="@(top == "50")">50</option>
+                                <option value="100" selected="@(top == "100")">100</option>
+                                <option value="@int.MaxValue">Todos</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- BOTONES -->
+                    <div class="col-12">
+                        <div class="admin-filter-actions">
+                            <button type="submit" class="btn btn-primary shadow-sm">
+                                <i class="bi bi-search me-2"></i>Buscar
+                            </button>
+
+                            <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
+                                <i class="bi bi-arrow-clockwise me-2"></i>Limpiar
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TABLA -->
+    <div class="card admin-table-card">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle admin-table">
+                <thead>
+                    <tr>
+                        <th>Dirección</th>
+                        <th>Ubicación</th>
+                        <th>Contacto</th>
+                        <th>Usuario</th>
+                        <th class="text-center">Principal</th>
+                        <th class="text-center">Estado</th>
+                        <th>Creación</th>
+                        <th class="text-end">Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <!-- DIRECCION -->
+                                <td>
+                                    <div class="fw-bold">@item.Alias</div>
+                                    <div class="text-muted small">@item.DireccionExacta</div>
+                                </td>
+
+                                <!-- UBICACION -->
+                                <td>
+                                    <div>@item.Departamento</div>
+                                    <div class="text-muted small">@item.Municipio</div>
+                                </td>
+
+                                <!-- CONTACTO -->
+                                <td>
+                                    <div>@item.TelefonoContacto</div>
+                                    <div class="text-muted small">
+                                        @(string.IsNullOrWhiteSpace(item.Referencia) ? "Sin referencia" : item.Referencia)
+                                    </div>
+                                </td>
+
+                                <!-- USUARIO -->
+                                <td>
+                                    @(item.Usuario?.Correo ?? "Sin usuario")
+                                </td>
+
+                                <!-- PRINCIPAL -->
+                                <td class="text-center">
+                                    @if (item.EsPrincipal)
+                                    {
+                                        <span class="admin-status-badge admin-status-active">
+                                            Sí
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-light text-dark border">
+                                            No
+                                        </span>
+                                    }
+                                </td>
+
+                                <!-- ESTADO -->
+                                <td class="text-center">
+                                    @if (item.Estatus == 1)
+                                    {
+                                        <span class="admin-status-badge admin-status-active">
+                                            Activo
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="admin-status-badge admin-status-inactive">
+                                            Inactivo
+                                        </span>
+                                    }
+                                </td>
+
+                                <!-- FECHA -->
+                                <td>
+                                    @item.FechaCreacion.ToShortDateString()
+                                </td>
+
+                                <!-- ACCIONES -->
+                                <td class="text-end">
+                                    <div class="btn-group">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm border">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm border">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm border">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8">
+                                <div class="admin-empty-state">
+                                    No hay direcciones registradas.
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="admin-card-footer">
+            Total: <strong>@(Model?.Count() ?? 0)</strong> direcciones
+        </div>
+    </div>
+
+</div>

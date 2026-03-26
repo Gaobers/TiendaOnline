@@ -1,86 +1,214 @@
-﻿@model IEnumerable<TiendaOnline.AppMVC.Models.Producto>
+﻿@model IEnumerable<Producto>
 
 @{
-    ViewData["Title"] = "Producto";
+    ViewData["Title"] = "Productos";
+
+    var filtroNombre = Context.Request.Query["nombre"].ToString();
+    var filtroPrecio = Context.Request.Query["precio"].ToString();
+    var top = Context.Request.Query["top"].ToString();
+
+    if (string.IsNullOrWhiteSpace(top))
+    {
+        top = "10";
+    }
 }
 
-<div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
-    <div>
-        <h3 class="mb-0">Productos</h3>
-        <div class="text-muted">Listado general</div>
+<div class="container-fluid px-lg-5 admin-index-page">
+
+    <!-- HERO -->
+    <div class="card admin-hero-card">
+        <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="admin-hero-title">
+                    <i class="bi bi-box-seam me-2"></i>Productos
+                </h1>
+                <p class="admin-hero-subtitle">
+                    Administra el catálogo de productos.
+                </p>
+            </div>
+
+            <a asp-action="Create" class="btn btn-light admin-btn-main">
+                <i class="bi bi-plus-lg me-1"></i> Nuevo producto
+            </a>
+        </div>
     </div>
 
-    <a asp-action="Create" class="btn btn-primary">
-        + Nuevo producto
-    </a>
-</div>
+    <!-- FILTRO -->
+    <div class="card admin-filter-card">
+        <div class="card-body">
+            <form method="get">
+                <div class="row g-3 align-items-end">
 
-<div class="card shadow-sm products-card">
-    <div class="card-body p-0">
+                    <!-- NOMBRE -->
+                    <div class="col-12 col-md-6 col-xl-3">
+                        <label class="form-label admin-filter-label">Nombre</label>
+                        <div class="input-group shadow-sm admin-filter-group">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-tag text-primary"></i>
+                            </span>
+                            <input type="text"
+                                   name="nombre"
+                                   class="form-control"
+                                   placeholder="Ej: Producto..."
+                                   value="@filtroNombre" />
+                        </div>
+                    </div>
 
-        <div class="d-none d-md-flex products-header px-3 py-3">
-            <div class="col-md-1"></div>
-            <div class="col-md-4">Nombre</div>
-            <div class="col-md-3">Precio</div>
-            <div class="col-md-2">Estado</div>
-            <div class="col-md-2 text-end">Acciones</div>
+                    <!-- PRECIO -->
+                    <div class="col-12 col-md-6 col-xl-5">
+                        <label class="form-label admin-filter-label">Precio máximo</label>
+                        <div class="input-group shadow-sm admin-filter-group">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-currency-dollar text-primary"></i>
+                            </span>
+                            <input type="number"
+                                   name="precio"
+                                   class="form-control"
+                                   placeholder="Ej: 1000"
+                                   value="@filtroPrecio" />
+                        </div>
+                    </div>
+
+                    <!-- TOP -->
+                    <div class="col-12 col-md-4 col-xl-2">
+                        <label class="form-label admin-filter-label">Top registros</label>
+                        <div class="input-group shadow-sm admin-filter-group">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-list-ol text-primary"></i>
+                            </span>
+                            <select name="top" class="form-select">
+                                <option value="10" selected="@(top == "10")">10</option>
+                                <option value="25" selected="@(top == "25")">25</option>
+                                <option value="50" selected="@(top == "50")">50</option>
+                                <option value="100" selected="@(top == "100")">100</option>
+                                <option value="500" selected="@(top == "500")">500</option>
+                                <option value="@int.MaxValue" selected="@(top == int.MaxValue.ToString())">Todos</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- BOTONES -->
+                    <div class="col-12">
+                        <div class="admin-filter-actions">
+
+                            <button type="submit" class="btn btn-primary shadow-sm">
+                                <i class="bi bi-search me-2"></i>Buscar
+                            </button>
+
+                            <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
+                                <i class="bi bi-arrow-clockwise me-2"></i>Limpiar
+                            </a>
+
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TABLA -->
+    <div class="card admin-table-card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle admin-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th class="text-center">Estado</th>
+                            <th class="text-end pe-4">Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var item in Model)
+                            {
+                                var imgUrl = item.ProductosImagenes?
+                                    .OrderByDescending(i => i.EsPrincipal)
+                                    .ThenByDescending(i => i.FechaCreacion)
+                                    .Select(i => i.Url)
+                                    .FirstOrDefault();
+
+                                <tr>
+                                    <!-- IMAGEN -->
+                                    <td>
+                                        @if (!string.IsNullOrWhiteSpace(imgUrl))
+                                        {
+                                            <img src="@imgUrl" class="thumb" />
+                                        }
+                                        else
+                                        {
+                                            <div class="thumb d-flex justify-content-center align-items-center">
+                                                IMG
+                                            </div>
+                                        }
+                                    </td>
+
+                                    <!-- NOMBRE -->
+                                    <td>
+                                        <strong>@item.Nombre</strong>
+                                    </td>
+
+                                    <!-- PRECIO -->
+                                    <td>
+                                        $@item.Precio.ToString("0.00")
+                                    </td>
+
+                                    <!-- ESTADO -->
+                                    <td class="text-center">
+                                        @if (item.Estatus == 1)
+                                        {
+                                            <span class="admin-status-badge admin-status-active">
+                                                Activo
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="admin-status-badge admin-status-inactive">
+                                                Inactivo
+                                            </span>
+                                        }
+                                    </td>
+
+                                    <!-- ACCIONES -->
+                                    <td class="text-end pe-4">
+                                        <div class="btn-group">
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm border">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm border">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm border">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5">
+                                    <div class="admin-empty-state">
+                                        No se encontraron productos.
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        @foreach (var item in Model)
-        {
-            var activo = item.Estatus == 1;
-
-            var imgUrl = item.ProductosImagenes?
-                .OrderByDescending(i => i.EsPrincipal)
-                .ThenByDescending(i => i.FechaCreacion)
-                .Select(i => i.Url)
-                .FirstOrDefault();
-
-            <div class="product-row d-flex align-items-center">
-                <div class="col-12 col-md-1 mb-3 mb-md-0">
-                    @if (!string.IsNullOrWhiteSpace(imgUrl))
-                    {
-                        <img src="@imgUrl" class="thumb" alt="Imagen @item.Nombre" loading="lazy" />
-                    }
-                    else
-                    {
-                        <div class="thumb d-flex align-items-center justify-content-center text-muted small">
-                            IMG
-                        </div>
-                    }
-                </div>
-
-                <div class="col-12 col-md-4">
-                    <div class="name">@item.Nombre</div>
-                </div>
-
-                <div class="col-6 col-md-3 mt-3 mt-md-0">
-                    <div class="qty">
-                        $@item.Precio.ToString("0.00") <small>USD</small>
-                    </div>
-                </div>
-
-                <div class="col-6 col-md-2 mt-3 mt-md-0">
-                    @if (activo)
-                    {
-                        <span class="prod-badge prod-badge-success">ACTIVO</span>
-                    }
-                    else
-                    {
-                        <span class="prod-badge prod-badge-danger">INACTIVO</span>
-                    }
-                </div>
-
-                <div class="col-12 col-md-2 mt-3 mt-md-0 d-flex justify-content-md-end gap-2">
-                    <a class="prod-action-btn" asp-action="Edit" asp-route-id="@item.Id" title="Editar">✏️</a>
-                    <a class="prod-action-btn" asp-action="Details" asp-route-id="@item.Id" title="Detalles">🔎</a>
-                    <a class="prod-action-btn" asp-action="Delete" asp-route-id="@item.Id" title="Eliminar">🗑️</a>
-                </div>
-            </div>
-        }
+        <div class="admin-card-footer">
+            Total: <strong>@(Model?.Count() ?? 0)</strong> productos
+        </div>
     </div>
 
-    <div class="card-footer bg-white d-flex justify-content-between align-items-center">
-        <small class="text-muted">Mostrando @Model.Count() productos</small>
-    </div>
 </div>

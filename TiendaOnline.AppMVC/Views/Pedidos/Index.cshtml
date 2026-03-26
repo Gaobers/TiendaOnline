@@ -1,186 +1,197 @@
-﻿@using System.Linq
-@using TiendaOnline
-@using TiendaOnline.AppMVC.Models
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@model IEnumerable<TiendaOnline.AppMVC.Models.Pedido>
+﻿@model IEnumerable<Pedido>
 
 @{
-    ViewData["Title"] = "Panel de Control - Pedidos";
+    ViewData["Title"] = "Pedidos";
+
+    var filtroCliente = Context.Request.Query["cliente"].ToString();
+    var filtroEstado = Context.Request.Query["estado"].ToString();
+    var top = Context.Request.Query["top"].ToString();
+
+    if (string.IsNullOrWhiteSpace(top))
+    {
+        top = "10";
+    }
 }
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<div class="container-fluid px-lg-5 admin-index-page">
 
-<div class="container-fluid py-4" style="background-color: #f8f9fa;">
+    <!-- HERO -->
+    <div class="card admin-hero-card">
+        <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="admin-hero-title">
+                    <i class="bi bi-cart-check me-2"></i>Pedidos
+                </h1>
+                <p class="admin-hero-subtitle">
+                    Administra y monitorea las órdenes del sistema.
+                </p>
+            </div>
 
-    <div class="row mb-4 align-items-center">
-        <div class="col">
-            <h2 class="fw-bold text-dark">
-                <i class="bi bi-cart-check-fill text-primary me-2"></i>
-                Gestión de Pedidos
-            </h2>
-            <p class="text-muted">
-                Monitorea y gestiona las ventas de tu tienda en tiempo real.
-            </p>
-        </div>
-        <div class="col-auto">
-            <a asp-action="Create" class="btn btn-primary btn-lg shadow-sm border-0">
-                <i class="bi bi-plus-lg me-1"></i> Nuevo Pedido
+            <a asp-action="Create" class="btn btn-light admin-btn-main">
+                <i class="bi bi-plus-lg me-1"></i> Nuevo pedido
             </a>
         </div>
     </div>
 
-    <div class="row g-3 mb-4">
+    <!-- FILTRO -->
+    <div class="card admin-filter-card">
+        <div class="card-body">
+            <form method="get">
+                <div class="row g-3 align-items-end">
 
-        <!-- Total Órdenes -->
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-shrink-0 bg-primary bg-opacity-10 p-3 rounded">
-                            <i class="bi bi-bag-fill text-primary fs-3"></i>
-                        </div>
-                        <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-0 text-muted">Total Órdenes</h6>
-                            <h4 class="mb-0 fw-bold">@Model.Count()</h4>
+                    <!-- CLIENTE -->
+                    <div class="col-12 col-md-6 col-xl-4">
+                        <label class="form-label admin-filter-label">Cliente</label>
+                        <div class="input-group shadow-sm admin-filter-group">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-person text-primary"></i>
+                            </span>
+                            <input type="text"
+                                   name="cliente"
+                                   class="form-control"
+                                   placeholder="Nombre del cliente..."
+                                   value="@filtroCliente" />
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- Venta Total -->
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-shrink-0 bg-success bg-opacity-10 p-3 rounded">
-                            <i class="bi bi-cash-stack text-success fs-3"></i>
-                        </div>
-                        <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-0 text-muted">Venta Total</h6>
-                            <h4 class="mb-0 fw-bold">
-                                @Model.Sum(x => x.Total).ToString("C")
-                            </h4>
+                    <!-- ESTADO -->
+                    <div class="col-12 col-md-6 col-xl-3">
+                        <label class="form-label admin-filter-label">Estado</label>
+                        <div class="input-group shadow-sm admin-filter-group">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-flag text-primary"></i>
+                            </span>
+                            <input type="text"
+                                   name="estado"
+                                   class="form-control"
+                                   placeholder="Ej: Pendiente..."
+                                   value="@filtroEstado" />
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
 
+                    <!-- TOP -->
+                    <div class="col-12 col-md-4 col-xl-2">
+                        <label class="form-label admin-filter-label">Top registros</label>
+                        <div class="input-group shadow-sm admin-filter-group">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-list-ol text-primary"></i>
+                            </span>
+                            <select name="top" class="form-select">
+                                <option value="10" selected="@(top == "10")">10</option>
+                                <option value="25" selected="@(top == "25")">25</option>
+                                <option value="50" selected="@(top == "50")">50</option>
+                                <option value="100" selected="@(top == "100")">100</option>
+                                <option value="@int.MaxValue">Todos</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- BOTONES -->
+                    <div class="col-12">
+                        <div class="admin-filter-actions">
+
+                            <button type="submit" class="btn btn-primary shadow-sm">
+                                <i class="bi bi-search me-2"></i>Buscar
+                            </button>
+
+                            <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
+                                <i class="bi bi-arrow-clockwise me-2"></i>Limpiar
+                            </a>
+
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
     </div>
 
-    <!-- Tabla -->
-    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-        <div class="card-header bg-white py-3 border-0">
-            <h5 class="mb-0 fw-bold text-secondary">Listado Reciente</h5>
-        </div>
-
+    <!-- TABLA -->
+    <div class="card admin-table-card">
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="bg-light">
-                    <tr class="text-muted text-uppercase small">
-                        <th class="ps-4 py-3">ID</th>
+            <table class="table table-hover align-middle admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
                         <th>Orden</th>
                         <th>Cliente</th>
                         <th>Fecha</th>
-                        <th>Estado</th>
+                        <th class="text-center">Estado</th>
                         <th>Total</th>
                         <th class="text-center">Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        var nombreEstado = item.EstadoPedido != null
-                            ? item.EstadoPedido.Nombre
-                            : item.EstadoPedidoId.ToString();
 
-                        <tr>
-                            <td class="ps-4">
-                                <span class="text-muted fw-medium">
-                                    #@item.Id
-                                </span>
-                            </td>
-                            <td>
-                                <span class="fw-bold text-dark">
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            var estado = item.EstadoPedido?.Nombre ?? "N/A";
+
+                            <tr>
+                                <td>#@item.Id</td>
+
+                                <td class="fw-bold">
                                     ORD-@item.Id.ToString("D3")
-                                </span>
-                            </td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <div class="bg-secondary bg-opacity-10 rounded-circle p-2 me-2">
-                                        <i class="bi bi-person text-secondary"></i>
-                                    </div>
-                                    <span class="fw-medium">
-                                        @item.NombreCliente
-                                    </span>
-                                </div>
-                            </td>
-                            <td>
-                                <span class="text-muted">
-                                    <i class="bi bi-calendar3 me-1"></i>
+                                </td>
+
+                                <td>
+                                    <i class="bi bi-person me-1"></i>
+                                    @item.NombreCliente
+                                </td>
+
+                                <td>
                                     @item.FechaCreacion.ToShortDateString()
-                                </span>
-                            </td>
-                            <td>
-                                @if (nombreEstado == "ENTREGADO" || nombreEstado == "Completado")
-                                {
-                                    <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill border border-success border-opacity-25">
-                                        @nombreEstado
-                                    </span>
-                                }
-                                else if (nombreEstado == "PENDIENTE" || nombreEstado == "Pendiente")
-                                {
-                                    <span class="badge bg-warning-subtle text-warning-emphasis px-3 py-2 rounded-pill border border-warning border-opacity-25">
-                                        @nombreEstado
-                                    </span>
-                                }
-                                else
-                                {
-                                    <span class="badge bg-secondary-subtle text-secondary px-3 py-2 rounded-pill">
-                                        @nombreEstado
-                                    </span>
-                                }
-                            </td>
-                            <td>
-                                <span class="fw-bold text-dark">
+                                </td>
+
+                                <td class="text-center">
+                                    @if (estado.ToLower().Contains("entregado"))
+                                    {
+                                        <span class="admin-status-badge admin-status-active">
+                                            @estado
+                                        </span>
+                                    }
+                                    else if (estado.ToLower().Contains("pendiente"))
+                                    {
+                                        <span class="badge bg-warning text-dark">
+                                            @estado
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">
+                                            @estado
+                                        </span>
+                                    }
+                                </td>
+
+                                <td class="fw-bold">
                                     @item.Total.ToString("C")
-                                </span>
-                            </td>
-                            <td class="text-center">
-                                <div class="dropdown">
-                                    <button class="btn btn-light btn-sm rounded-circle"
-                                            type="button"
-                                            data-bs-toggle="dropdown">
-                                        <i class="bi bi-three-dots-vertical"></i>
-                                    </button>
-                                    <ul class="dropdown-menu shadow border-0">
-                                        <li>
-                                            <a class="dropdown-item"
-                                                   asp-action="Edit"
-                                                   asp-route-id="@item.Id">
-                                                <i class="bi bi-pencil me-2 text-primary"></i>
-                                                Editar
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item"
-                                                   asp-action="Details"
-                                                   asp-route-id="@item.Id">
-                                                <i class="bi bi-eye me-2 text-info"></i>
-                                                Detalles
-                                            </a>
-                                        </li>
-                                        <li><hr class="dropdown-divider" /></li>
-                                        <li>
-                                            <a class="dropdown-item text-danger"
-                                                   asp-action="Delete"
-                                                   asp-route-id="@item.Id">
-                                                <i class="bi bi-trash me-2"></i>
-                                                Eliminar
-                                            </a>
-                                        </li>
-                                    </ul>
+                                </td>
+
+                                <td class="text-center">
+                                    <div class="btn-group">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm border">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm border">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm border">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7">
+                                <div class="admin-empty-state">
+                                    No se encontraron pedidos.
                                 </div>
                             </td>
                         </tr>
@@ -188,5 +199,10 @@
                 </tbody>
             </table>
         </div>
+
+        <div class="admin-card-footer">
+            Total: <strong>@(Model?.Count() ?? 0)</strong> pedidos
+        </div>
     </div>
+
 </div>
