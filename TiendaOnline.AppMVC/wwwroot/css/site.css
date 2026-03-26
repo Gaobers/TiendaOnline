@@ -53,3 +53,31 @@ body {
 .navbar-shadow {
     box-shadow: 0 6px 18px rgba(15, 23, 42, .06);
 }
+
+.admin-action-btn {
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+/* EDITAR */
+.admin-btn-edit {
+    background-color: rgba(59, 130, 246, 0.1); /* azul suave */
+    color: #2563eb;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+    .admin-btn-edit:hover {
+        background-color: rgba(59, 130, 246, 0.2);
+    }
+
+/* VER */
+.admin-btn-view {
+    background-color: rgba(16, 185, 129, 0.1); /* verde suave */
+    color: #059669;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+    .admin-btn-view:hover {
+        background-color: rgba(16, 185, 129, 0.2);
+    }
