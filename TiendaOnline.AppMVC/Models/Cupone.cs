@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace TiendaOnline.AppMVC.Models;
 
@@ -7,10 +8,12 @@ public partial class Cupone
 {
     public int Id { get; set; }
 
+    [Required(ErrorMessage = "El codigo es obligatorio")]
     public string Codigo { get; set; } = null!;
 
     public string? Descripcion { get; set; }
 
+    [Required(ErrorMessage = "El tipo de descuento es obligatorio")]
     public string TipoDescuento { get; set; } = null!;
 
     public decimal ValorDescuento { get; set; }

@@ -23,10 +23,13 @@
                 <input asp-for="CodigoHex" class="form-control" />
                 <span asp-validation-for="CodigoHex" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Estatus" class="control-label"></label>
-                <input asp-for="Estatus" class="form-control" />
-                <span asp-validation-for="Estatus" class="text-danger"></span>
+            <div class="col-md-6">
+                <label class="form-label prod-label">Estado</label>
+                <select asp-for="Estatus" class="form-select prod-input">
+                    <option value="1">Activo</option>
+                    <option value="0">Inactivo</option>
+                </select>
+                <span asp-validation-for="Estatus" class="text-danger small"></span>
             </div>
             <div class="form-group">
                 <label asp-for="FechaCreacion" class="control-label"></label>
