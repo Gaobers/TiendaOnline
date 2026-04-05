@@ -11,10 +11,13 @@ public partial class DireccionesUsuario
     public int UsuarioId { get; set; }
 
     public string? Alias { get; set; }
+
     [Required(ErrorMessage = "El departamento es obligatorio")]
     public string Departamento { get; set; } = null!;
+
     [Required(ErrorMessage = "El municipio es obligatorio")]
     public string Municipio { get; set; } = null!;
+
     [Required(ErrorMessage = "La dirección exacta es obligatoria")]
     [Display(Name = "Dirección Exacta")]
     public string DireccionExacta { get; set; } = null!;

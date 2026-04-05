@@ -7,27 +7,21 @@
     <title>@ViewData["Title"] - TiendaOnline.AppMVC</title>
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/TiendaOnline.AppMVC.styles.css" asp-append-version="true" />
 
 
-    @*Admin*@
-    <link rel="stylesheet" href="~/css/admin/admin.css" asp-append-version="true" />
-
-    @*Productos Estilos*@
-    <link rel="stylesheet" href="~/css/Productos/Index.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/Productos/Global.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/Productos/Delete.css" asp-append-version="true" />
-
-    @*Inventarios Estilos*@
-    <link rel="stylesheet" href="~/css/Inventarios/Index.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/Inventarios/Delete.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/Inventarios/Global.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin/base/variables.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin/components/page.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin/components/cards.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin/components/filters.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin/components/tables.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin/components/utilities.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin/components/buttons.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin/components/badges.css" asp-append-version="true" />
 
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
 
     @RenderSection("Styles", required: false)
 </head>
@@ -124,11 +118,6 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
-
-<script src="~/js/Producto/Edit.js" asp-append-version="true"></script>
-
-<script src="~/js/ProductoImagen/Create.js" asp-append-version="true"></script>
-<script src="~/js/ProductoImagen/Edit.js" asp-append-version="true"></script>
 
     @RenderSection("Scripts", required: false)
 </body>
