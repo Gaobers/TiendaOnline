@@ -1,13 +1,20 @@
-.estPedidos-index .est-ped-col-nombre {
-    width: 6%;
+.inventario-index .inv-col-producto {
+    width: 10%;
 }
 
-.estPedidos-index .est-ped-col-estado {
-    width: 15%;
-    text-align: center;
+.inventario-index .inv-col-talla {
+    width: 10%;
 }
 
-.estPedidos-index .est-ped-col-acciones {
+.inventario-index .inv-col-stock {
+    width: 10%;
+}
+
+.inventario-index .inv-col-stockminimo {
+    width: 10%;
+}
+
+.inventario-index .inv-col-acciones {
     width: 10%;
     text-align: center;
     white-space: nowrap;
