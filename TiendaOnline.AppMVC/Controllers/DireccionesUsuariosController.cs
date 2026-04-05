@@ -19,10 +19,24 @@ namespace TiendaOnline.AppMVC.Controllers
         }
 
         // GET: DireccionesUsuarios
-        public async Task<IActionResult> Index()
+        //Filtros
+        public async Task<IActionResult> Index(string telefono, byte? estatus, int top = 10)
         {
-            var tiendaOnlineZapContext = _context.DireccionesUsuarios.Include(d => d.Usuario);
-            return View(await tiendaOnlineZapContext.ToListAsync());
+            var query = _context.DireccionesUsuarios.AsQueryable();
+
+            //Telefono
+            if (!string.IsNullOrWhiteSpace(telefono))
+                query = query.Where(d => d.TelefonoContacto != null && d.TelefonoContacto.Contains(telefono));
+
+            //Estado
+            if (estatus.HasValue)
+                query = query.Where(d => d.Estatus == estatus);
+
+            //Top
+            query = query.Take(top);
+            var direccionesUsuarios = await query.ToListAsync();
+
+            return View(direccionesUsuarios);
         }
 
         // GET: DireccionesUsuarios/Details/5
