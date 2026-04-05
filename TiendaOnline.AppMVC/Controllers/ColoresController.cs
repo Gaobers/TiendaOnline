@@ -19,9 +19,22 @@ namespace TiendaOnline.AppMVC.Controllers
         }
 
         // GET: Colores
-        public async Task<IActionResult> Index()
+        //Filtros
+        public async Task<IActionResult> Index(string nombre, byte? estatus, int top = 10)
         {
-            return View(await _context.Colores.ToListAsync());
+            var query = _context.Colores.AsQueryable();
+
+            //Nombre
+            if (!string.IsNullOrWhiteSpace(nombre))
+                query = query.Where(c => c.Nombre.Contains(nombre));
+            //Estado
+            if (estatus.HasValue)
+                query = query.Where(c => c.Estatus == estatus.Value);
+            //Top
+            query = query.Take(top);
+
+            var colores = await query.ToListAsync();
+            return View(colores);
         }
 
         // GET: Colores/Details/5
