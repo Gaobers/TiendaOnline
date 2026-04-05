@@ -19,9 +19,22 @@ namespace TiendaOnline.AppMVC.Controllers
         }
 
         // GET: EstadosPedidos
-        public async Task<IActionResult> Index()
+        //Filtros
+        public async Task<IActionResult> Index(string nombre, byte? estatus, int top = 10)
         {
-            return View(await _context.EstadosPedidos.ToListAsync());
+            var query = _context.EstadosPedidos.AsQueryable();
+
+            //Nombre
+            if (!string.IsNullOrWhiteSpace(nombre))
+                query = query.Where(c => c.Nombre.Contains(nombre));
+            //Estado
+            if (estatus.HasValue)
+                query = query.Where(c => c.Estatus == estatus);
+            //Top
+            query = query.Take(top);
+
+            var estadosPedidos = await query.ToListAsync();
+            return View(estadosPedidos);
         }
 
         // GET: EstadosPedidos/Details/5
