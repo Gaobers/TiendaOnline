@@ -108,23 +108,23 @@
                             </div>
                         </div>
 
-                    <!-- BOTONES -->
-                        <div class="col-12">
-                            <div class="admin-filter-actions">
-                                <button type="submit" class="btn btn-primary shadow-sm">
-                                    <i class="bi bi-search me-2"></i>Buscar
-                                </button>
+                        <!-- BOTONES -->
+                            <div class="col-12">
+                                <div class="admin-filter-actions">
+                                    <button type="submit" class="btn btn-primary shadow-sm">
+                                        <i class="bi bi-search me-2"></i>Buscar
+                                    </button>
 
-                                <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
-                                    <i class="bi bi-arrow-clockwise me-2"></i>Limpiar
-                                </a>
+                                    <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
+                                        <i class="bi bi-arrow-clockwise me-2"></i>Limpiar
+                                    </a>
+                                </div>
                             </div>
-                        </div>
 
-                </div>
-            </form>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
     </div>
 
     <!-- TABLA -->
@@ -221,7 +221,7 @@
         </div>
 
         <div class="admin-card-footer">
-            Total: <strong>(@Model?.Count() ?? 0)</strong> colores
+            Total: <strong>@(Model?.Count() ?? 0)</strong> colores
         </div>
     </div>
 

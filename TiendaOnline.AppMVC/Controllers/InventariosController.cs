@@ -19,6 +19,7 @@ namespace TiendaOnline.AppMVC.Controllers
         }
 
         // GET: Inventarios
+        //Filtros
         public async Task<IActionResult> Index()
         {
             var tiendaOnlineZapContext = _context.Inventarios.Include(i => i.Producto).Include(i => i.Talla);
