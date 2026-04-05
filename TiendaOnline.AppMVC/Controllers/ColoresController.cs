@@ -31,7 +31,7 @@ namespace TiendaOnline.AppMVC.Controllers
             if (estatus.HasValue)
                 query = query.Where(c => c.Estatus == estatus.Value);
             //Top
-            query = query.Take(top);
+            query = query.OrderBy(c => c.Id).Take(top);
 
             var colores = await query.ToListAsync();
             return View(colores);

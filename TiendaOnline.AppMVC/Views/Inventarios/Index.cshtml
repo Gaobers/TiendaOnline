@@ -11,11 +11,20 @@
     {
         top = "10";
     }
+
+    var hayFiltrosActivos =
+       !string.IsNullOrWhiteSpace(filtroProducto) ||
+       !string.IsNullOrWhiteSpace(filtroTalla) ||
+       top != "10";
 }
 
-<div class="container-fluid px-lg-5 admin-index-page">
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin/pages/inventarios/index.css" asp-append-version="true" />
+}
+
 
     <!-- HERO -->
+    <div class="container admin-index-page inventario-index">
     <div class="card admin-hero-card">
         <div class="card-body d-flex justify-content-between align-items-center">
             <div>
@@ -27,97 +36,109 @@
                 </p>
             </div>
 
-            <a asp-action="Create" class="btn btn-light admin-btn-main">
-                <i class="bi bi-plus-lg me-1"></i> Nuevo registro
-            </a>
+            <div class="d-flex gap-2 flex-wrap">
+                <button class="btn btn-outline-light admin-btn-main"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#filtrosBusqueda"
+                        aria-expanded="@(hayFiltrosActivos ? "true" : "false")"
+                        aria-controls="filtrosBusqueda">
+                    <i class="bi bi-funnel me-1"></i> Filtros
+                </button>
+
+                <a asp-action="Create" class="btn btn-light admin-btn-main">
+                    <i class="bi bi-plus-lg me-1"></i> Nuevo registro
+                </a>
+            </div>
         </div>
     </div>
 
     <!-- FILTRO -->
-    <div class="card admin-filter-card">
-        <div class="card-body">
-            <form method="get">
-                <div class="row g-3 align-items-end">
+    <div class="collapse @(hayFiltrosActivos ? "show" : "")" id="filtrosBusqueda">
+        <div class="card admin-filter-card mt-3">
+            <div class="card-body">
+                <form method="get">
+                    <div class="row g-3 align-items-end">
 
-                    <!-- PRODUCTO -->
-                    <div class="col-12 col-md-6 col-xl-4">
-                        <label class="form-label admin-filter-label">Producto</label>
-                        <div class="input-group shadow-sm admin-filter-group">
-                            <span class="input-group-text bg-white">
-                                <i class="bi bi-tag text-primary"></i>
-                            </span>
-                            <input type="text"
-                                   name="producto"
-                                   class="form-control"
-                                   placeholder="Nombre del producto..."
-                                   value="@filtroProducto" />
+                        <!-- PRODUCTO -->
+                        <div class="col-12 col-md-6 col-xl-4">
+                            <label class="form-label admin-filter-label">Producto</label>
+                            <div class="input-group shadow-sm admin-filter-group">
+                                <span class="input-group-text bg-white">
+                                    <i class="bi bi-tag text-primary"></i>
+                                </span>
+                                <input type="text"
+                                       name="producto"
+                                       class="form-control"
+                                       placeholder="Nombre del producto..."
+                                       value="@filtroProducto" />
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- TALLA -->
-                    <div class="col-12 col-md-6 col-xl-3">
-                        <label class="form-label admin-filter-label">Talla</label>
-                        <div class="input-group shadow-sm admin-filter-group">
-                            <span class="input-group-text bg-white">
-                                <i class="bi bi-rulers text-primary"></i>
-                            </span>
-                            <input type="text"
-                                   name="talla"
-                                   class="form-control"
-                                   placeholder="Ej: 42..."
-                                   value="@filtroTalla" />
+                        <!-- TALLA -->
+                        <div class="col-12 col-md-6 col-xl-3">
+                            <label class="form-label admin-filter-label">Talla</label>
+                            <div class="input-group shadow-sm admin-filter-group">
+                                <span class="input-group-text bg-white">
+                                    <i class="bi bi-rulers text-primary"></i>
+                                </span>
+                                <input type="text"
+                                       name="talla"
+                                       class="form-control"
+                                       placeholder="Ej: 42..."
+                                       value="@filtroTalla" />
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- TOP -->
-                    <div class="col-12 col-md-4 col-xl-2">
-                        <label class="form-label admin-filter-label">Top registros</label>
-                        <div class="input-group shadow-sm admin-filter-group">
-                            <span class="input-group-text bg-white">
-                                <i class="bi bi-list-ol text-primary"></i>
-                            </span>
-                            <select name="top" class="form-select">
-                                <option value="10" selected="@(top == "10")">10</option>
-                                <option value="25" selected="@(top == "25")">25</option>
-                                <option value="50" selected="@(top == "50")">50</option>
-                                <option value="100" selected="@(top == "100")">100</option>
-                                <option value="@int.MaxValue">Todos</option>
-                            </select>
+                        <!-- TOP -->
+                        <div class="col-12 col-md-4 col-xl-2">
+                            <label class="form-label admin-filter-label">Top registros</label>
+                            <div class="input-group shadow-sm admin-filter-group">
+                                <span class="input-group-text bg-white">
+                                    <i class="bi bi-list-ol text-primary"></i>
+                                </span>
+                                <select name="top" class="form-select">
+                                    <option value="10" selected="@(top == "10")">10</option>
+                                    <option value="25" selected="@(top == "25")">25</option>
+                                    <option value="50" selected="@(top == "50")">50</option>
+                                    <option value="100" selected="@(top == "100")">100</option>
+                                    <option value="@int.MaxValue" selected="@(top == int.MaxValue.ToString())">Todos</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- BOTONES -->
-                    <div class="col-12">
-                        <div class="admin-filter-actions">
+                        <!-- BOTONES -->
+                        <div class="col-12">
+                            <div class="admin-filter-actions">
 
-                            <button type="submit" class="btn btn-primary shadow-sm">
-                                <i class="bi bi-search me-2"></i>Buscar
-                            </button>
+                                <button type="submit" class="btn btn-primary shadow-sm">
+                                    <i class="bi bi-search me-2"></i>Buscar
+                                </button>
 
-                            <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
-                                <i class="bi bi-arrow-clockwise me-2"></i>Limpiar
-                            </a>
+                                <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
+                                    <i class="bi bi-arrow-clockwise me-2"></i>Limpiar
+                                </a>
 
+                            </div>
                         </div>
-                    </div>
 
-                </div>
-            </form>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
     <!-- TABLA -->
-    <div class="card admin-table-card">
+    <div class="card admin-table-card mt-3">
         <div class="table-responsive">
             <table class="table table-hover align-middle admin-table">
                 <thead>
                     <tr>
-                        <th>Producto</th>
-                        <th>Talla</th>
-                        <th>Stock</th>
-                        <th>Stock mínimo</th>
-                        <th class="text-center">Estado</th>
-                        <th class="text-end">Acciones</th>
+                        <th class="inv-col-producto">Producto</th>
+                        <th class="inv-col-talla">Talla</th>
+                        <th class="inv-col-stock">Stock</th>
+                        <th class="inv-col-stockminimo">Stock mínimo</th>
+                        <th class="inv-col-acciones">Acciones</th>
                     </tr>
                 </thead>
 
@@ -126,63 +147,38 @@
                     {
                         @foreach (var item in Model)
                         {
-                            var bajoStock = item.Stock <= item.StockMinimo;
-                            var agotado = item.Stock == 0;
-
                             <tr>
                                 <!-- PRODUCTO -->
-                                <td class="fw-bold">
-                                    @(item.Producto?.Nombre ?? "Sin producto")
+                                <td class="inv-col-producto">
+                                    @item.Producto
                                 </td>
 
                                 <!-- TALLA -->
-                                <td>
-                                    @(item.Talla?.Numero ?? item.Talla?.Id.ToString() ?? "Sin talla")
+                                <td class="inv-col-talla">
+                                    @item.Talla
                                 </td>
 
                                 <!-- STOCK -->
-                                <td>
+                                <td class="inv-col-stock">
                                     @item.Stock
                                 </td>
 
                                 <!-- STOCK MINIMO -->
-                                <td>
+                                <td class="inv-col-stockminimo">
                                     @item.StockMinimo
                                 </td>
 
-                                <!-- ESTADO -->
-                                <td class="text-center">
-                                    @if (agotado)
-                                    {
-                                        <span class="admin-status-badge admin-status-inactive">
-                                            Agotado
-                                        </span>
-                                    }
-                                    else if (bajoStock)
-                                    {
-                                        <span class="badge bg-warning text-dark">
-                                            Bajo stock
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="admin-status-badge admin-status-active">
-                                            Disponible
-                                        </span>
-                                    }
-                                </td>
-
                                 <!-- ACCIONES -->
-                                <td class="text-end">
+                                <td class="inv-col-acciones">
                                     <div class="btn-group">
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm border">
+                                        <a asp-action="Edit" asp-route-id="@item.Id"
+                                               class="btn admin-action-btn admin-btn-edit">
                                             <i class="bi bi-pencil"></i>
                                         </a>
-                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm border">
+
+                                        <a asp-action="Details" asp-route-id="@item.Id"
+                                               class="btn admin-action-btn admin-btn-view">
                                             <i class="bi bi-eye"></i>
-                                        </a>
-                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm border">
-                                            <i class="bi bi-trash"></i>
                                         </a>
                                     </div>
                                 </td>
