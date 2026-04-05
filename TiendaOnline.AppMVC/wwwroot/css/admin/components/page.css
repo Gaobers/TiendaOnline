@@ -1,0 +1,73 @@
+.admin-index-page {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.admin-hero-card {
+    border: 0;
+    border-radius: var(--admin-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--admin-shadow-sm);
+    background: linear-gradient(135deg, var(--admin-primary) 0%, #3d8bfd 100%);
+    color: #fff;
+    margin-bottom: 1.5rem;
+}
+
+    .admin-hero-card .card-body {
+        padding: 1.5rem;
+    }
+
+.admin-hero-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.admin-hero-subtitle {
+    margin-bottom: 0;
+    opacity: 0.9;
+    font-size: 0.95rem;
+}
+
+@media (max-width: 991.98px) {
+    .admin-hero-card .card-body {
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .admin-hero-title {
+        font-size: 1.45rem;
+    }
+}
+
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    flex-shrink: 0;
+}
+
+.container-fluid.py-3 {
+    flex: 1 0 auto;
+}
+
+main[role="main"] {
+    height: 100%;
+}
+
+footer.footer {
+    position: static !important;
+    bottom: auto !important;
+    width: 100%;
+    margin-top: auto;
+    flex-shrink: 0;
+}

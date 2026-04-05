@@ -1,0 +1,34 @@
+.cupones-index .cup-col-codigo {
+    width: 7%;
+}
+
+.cupones-index .cup-col-tipo {
+    width: 8%;
+}
+
+.cupones-index .cup-col-descuento {
+    width: 8%;
+}
+
+.cupones-index .cup-col-minimo {
+    width: 7%;
+}
+
+.cupones-index .cup-col-vigencia {
+    width: 6%;
+}
+
+.cupones-index .cup-col-uso {
+    width: 6%;
+}
+
+.cupones-index .cup-col-estado {
+    width: 6%;
+    text-align: center;
+}
+
+.cupones-index .cup-col-acciones {
+    width: 5.5%;
+    text-align: center;
+    white-space: nowrap;
+}

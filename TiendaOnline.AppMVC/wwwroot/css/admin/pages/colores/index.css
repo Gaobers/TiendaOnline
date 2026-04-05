@@ -1,0 +1,22 @@
+.colores-index .col-col-nombre {
+    width: 12%;
+}
+
+.colores-index .col-col-codigo {
+    width: 5%;
+}
+
+.colores-index .col-col-estado {
+    width: 16%;
+    text-align: center;
+}
+
+.colores-index .col-col-creacion {
+    width: 8%;
+}
+
+.colores-index .col-col-acciones {
+    width: 4.5%;
+    text-align: center;
+    white-space: nowrap;
+}
