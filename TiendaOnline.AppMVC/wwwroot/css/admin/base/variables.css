@@ -1,0 +1,20 @@
+:root {
+    --admin-primary: #0d6efd;
+    --admin-primary-dark: #0b5ed7;
+    --admin-success: #198754;
+    --admin-success-soft: #d1e7dd;
+    --admin-danger: #dc3545;
+    --admin-danger-soft: #f8d7da;
+    --admin-info: #0dcaf0;
+    --admin-warning: #ffc107;
+    --admin-bg: #f5f7fb;
+    --admin-surface: #ffffff;
+    --admin-border: #e5e7eb;
+    --admin-text: #212529;
+    --admin-text-muted: #6c757d;
+    --admin-radius-sm: 10px;
+    --admin-radius-md: 16px;
+    --admin-radius-lg: 20px;
+    --admin-shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    --admin-shadow-md: 0 0.5rem 1rem rgba(0, 0, 0, 0.10);
+}
