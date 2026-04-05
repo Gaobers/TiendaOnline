@@ -1,0 +1,25 @@
+.productos-index .pro-col-nombre {
+    width: 10%;
+}
+
+.productos-index .pro-col-precio {
+    width: 10%;
+}
+
+.productos-index .pro-col-estado {
+    width: 10%;
+}
+
+.productos-index .pro-col-creacion {
+    width: 10%;
+}
+
+.productos-index .pro-col-actualizacion {
+    width: 10%;
+}
+
+.productos-index .pro-col-acciones {
+    width: 10%;
+    text-align: center;
+    white-space: nowrap;
+}
