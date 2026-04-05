@@ -19,9 +19,21 @@ namespace TiendaOnline.AppMVC.Controllers
         }
 
         // GET: Cupones
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string codigo, byte? estatus, int top = 10)
         {
-            return View(await _context.Cupones.ToListAsync());
+            var query = _context.Cupones.AsQueryable();
+
+            //Codigo
+            if (!string.IsNullOrWhiteSpace(codigo))
+                query = query.Where(c => c.Codigo.Contains(codigo));
+            //Estado
+            if (estatus.HasValue)
+                query = query.Where(c => c.Estatus == estatus.Value);
+            //Top
+            query = query.Take(top);
+
+            var cupones = await query.ToListAsync();
+            return View(cupones);
         }
 
         // GET: Cupones/Details/5
