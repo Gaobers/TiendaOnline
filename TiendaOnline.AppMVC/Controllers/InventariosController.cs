@@ -20,16 +20,19 @@ namespace TiendaOnline.AppMVC.Controllers
 
         // GET: Inventarios
         //Filtros
-        public async Task<IActionResult> Index(string productos, string tallas, int top = 10)
+        public async Task<IActionResult> Index(string producto, string talla, int top = 10)
         {
-            var query = _context.Inventarios.AsQueryable();
+            var query = _context.Inventarios
+            .Include(i => i.Producto)
+            .Include(i => i.Talla)
+            .AsQueryable();
 
             //Producto
-            if (!string.IsNullOrWhiteSpace(productos))
-                query = query.Where(i => i.Producto.Nombre.Contains(productos));
+            if (!string.IsNullOrWhiteSpace(producto))
+                query = query.Where(i => i.Producto.Nombre.Contains(producto));
             //Talla
-            if (!string.IsNullOrWhiteSpace(tallas))
-                query = query.Where(i => i.Talla.Numero.ToString().Contains(tallas));
+            if (!string.IsNullOrWhiteSpace(talla))
+                query = query.Where(i => i.Talla.Numero.Contains(talla));
             //Top
             query = query.Take(top);
 
