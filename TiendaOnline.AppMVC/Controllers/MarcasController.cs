@@ -19,9 +19,22 @@ namespace TiendaOnline.AppMVC.Controllers
         }
 
         // GET: Marcas
-        public async Task<IActionResult> Index()
+        //Filtro
+        public async Task<IActionResult> Index(string nombre, byte? estatus, int top = 10)
         {
-            return View(await _context.Marcas.ToListAsync());
+            var query = _context.Marcas.AsQueryable();
+
+            //Nombre
+            if (!string.IsNullOrWhiteSpace(nombre))
+                query = query.Where(m => m.Nombre.Contains(nombre));
+            //Estado
+            if (estatus.HasValue)
+                query = query.Where(m => m.Estatus == estatus.Value);
+            //Top
+            query = query.OrderBy(m => m.Id).Take(top);
+
+            var marcas = await query.ToListAsync();
+            return View(marcas);
         }
 
         // GET: Marcas/Details/5
@@ -96,7 +109,19 @@ namespace TiendaOnline.AppMVC.Controllers
             {
                 try
                 {
-                    _context.Update(marca);
+                    var marcaDb = await _context.Marcas.FindAsync(id);
+
+                    if (marcaDb == null)
+                    {
+                        return NotFound();
+                    }
+
+                    marcaDb.Nombre = marca.Nombre;
+                    marcaDb.Descripcion = marca.Descripcion;
+                    marcaDb.Estatus = marca.Estatus;
+                    marcaDb.FechaCreacion = marca.FechaCreacion;
+                    marcaDb.FechaActualizacion = DateTime.Now;
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
