@@ -72,16 +72,28 @@ namespace TiendaOnline.AppMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nombre,Precio,Descripcion,Estatus,FechaCreacion,FechaActualizacion,CategoriaId,MarcaId,Sku,Genero,Material,EsDestacado")] Producto producto)
+        public async Task<IActionResult> Create([Bind("Nombre,Precio,Descripcion,CategoriaId,MarcaId,Sku,Genero,Material,EsDestacado")] Producto producto)
         {
+            ModelState.Remove("Categoria");
+            ModelState.Remove("Marca");
+            ModelState.Remove("Inventarios");
+            ModelState.Remove("ProductosColores");
+            ModelState.Remove("ProductosImagenes");
+
             if (ModelState.IsValid)
             {
-                _context.Add(producto);
+                producto.Estatus = 1;
+                producto.FechaCreacion = DateTime.Now;
+                producto.FechaActualizacion = DateTime.Now;
+
+                _context.Productos.Add(producto);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Id", producto.CategoriaId);
-            ViewData["MarcaId"] = new SelectList(_context.Marcas, "Id", "Id", producto.MarcaId);
+
+            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Nombre", producto.CategoriaId);
+            ViewData["MarcaId"] = new SelectList(_context.Marcas, "Id", "Nombre", producto.MarcaId);
             return View(producto);
         }
 

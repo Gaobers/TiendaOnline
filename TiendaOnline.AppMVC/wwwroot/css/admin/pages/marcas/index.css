@@ -1,0 +1,26 @@
+.marcas-index .mar-col-nombre {
+    width: 15%;
+}
+
+.marcas-index .mar-col-descripcion {
+    width: 15%;
+}
+
+.marcas-index .mar-col-actualizacion {
+    width: 10%;
+}
+
+.marcas-index .mar-col-creacion {
+    width: 10%;
+}
+
+.marcas-index .mar-col-estado {
+    width: 20%;
+    text-align: center;
+}
+
+.marcas-index .mar-col-acciones {
+    width: 9%;
+    text-align: center;
+    white-space: nowrap;
+}
