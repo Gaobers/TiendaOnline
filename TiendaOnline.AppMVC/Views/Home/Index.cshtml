@@ -1,130 +1,193 @@
 ﻿@model TiendaOnline.AppMVC.Models.ViewModels.DashboardVM
 
 @{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "";
 }
 
 @section Styles {
-<style>
-    .cardx { border-radius: 16px; }
-    .kpi-title { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: #94a3b8; font-weight: 800; }
-    .kpi-value { font-size: 1.6rem; font-weight: 900; color: #0f172a; }
-    .kpi-icon {
-        width: 44px; height: 44px; border-radius: 14px;
-        display: inline-flex; align-items:center; justify-content:center;
-        background: rgba(13,110,253,.12);
-        color: #0d6efd;
-    }
-    .rowx { padding: 14px 16px; }
-    .rowx + .rowx { border-top: 1px solid rgba(0,0,0,.05); }
-</style>
+    <link rel="stylesheet" href="~/css/admin/pages/home/index.css" asp-append-version="true" />
 }
 
-<div class="d-flex align-items-center justify-content-between mb-3">
-    <div>
-        <h3 class="mb-0">Dashboard</h3>
-        <div class="text-muted">Resumen rápido del sistema</div>
-    </div>
-</div>
+<div class="admin-index-page admin-home-page">
 
-<!-- KPIs -->
-<div class="row g-3">
-    <div class="col-12 col-md-6 col-xl-3">
-        <div class="card shadow-sm cardx">
-            <div class="card-body d-flex align-items-center justify-content-between">
-                <div>
-                    <div class="kpi-title">Productos</div>
-                    <div class="kpi-value">@Model.TotalProductos</div>
-                </div>
-                <div class="kpi-icon"><i class="bi bi-box-seam"></i></div>
+    <!-- HERO -->
+    <div class="admin-home-hero">
+        <div class="admin-home-hero__body">
+            <div>
+                <span class="admin-home-hero__eyebrow">Panel administrativo</span>
+                <h1 class="admin-home-hero__title">Bienvenido al dashboard</h1>
+                <p class="admin-home-hero__subtitle">
+                    Consulta el resumen general de la tienda y accede rápidamente a los módulos principales del sistema.
+                </p>
             </div>
-            <div class="card-footer bg-white">
-                <a class="text-decoration-none" asp-controller="Productos" asp-action="Index">Ver productos →</a>
+
+            <div class="admin-home-hero__actions">
+                <a class="btn btn-primary admin-btn-main"
+                       asp-controller="Productos"
+                       asp-action="Create">
+                    <i class="bi bi-plus-lg me-1"></i>
+                    Nuevo producto
+                </a>
+
+                <a class="btn btn-outline-primary"
+                       asp-controller="Pedidos"
+                       asp-action="Index">
+                    <i class="bi bi-receipt me-1"></i>
+                    Ver pedidos
+                </a>
             </div>
         </div>
     </div>
 
-    <div class="col-12 col-md-6 col-xl-3">
-        <div class="card shadow-sm cardx">
-            <div class="card-body d-flex align-items-center justify-content-between">
-                <div>
-                    <div class="kpi-title">Pedidos</div>
-                    <div class="kpi-value">@Model.TotalPedidos</div>
-                </div>
-                <div class="kpi-icon"><i class="bi bi-receipt"></i></div>
-            </div>
-            <div class="card-footer bg-white">
-                <a class="text-decoration-none" asp-controller="Pedidos" asp-action="Index">Ver pedidos →</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-12 col-md-6 col-xl-3">
-        <div class="card shadow-sm cardx">
-            <div class="card-body d-flex align-items-center justify-content-between">
-                <div>
-                    <div class="kpi-title">Usuarios</div>
-                    <div class="kpi-value">@Model.TotalUsuarios</div>
-                </div>
-                <div class="kpi-icon"><i class="bi bi-people"></i></div>
-            </div>
-            <div class="card-footer bg-white">
-                <a class="text-decoration-none" asp-controller="Usuarios" asp-action="Index">Ver usuarios →</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Productos recientes -->
-<div class="row g-3 mt-1">
-    <div class="col-12 col-lg-8">
-        <div class="card shadow-sm cardx">
-            <div class="card-body p-0">
-                <div class="px-3 py-3 d-flex align-items-center justify-content-between">
-                    <div>
-                        <div class="fw-bold">Productos recientes</div>
-                        <div class="text-muted small">Últimos 5 registrados</div>
+    <!-- KPIs -->
+    <div class="row g-3">
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="admin-home-kpi-card">
+                <div class="card-body">
+                    <div class="admin-home-kpi">
+                        <div>
+                            <div class="admin-home-kpi__label">Productos</div>
+                            <div class="admin-home-kpi__value">@Model.TotalProductos</div>
+                            <p class="admin-home-kpi__meta">Total disponible en catálogo</p>
+                        </div>
+                        <div class="admin-home-kpi__icon admin-home-kpi__icon--primary">
+                            <i class="bi bi-box-seam"></i>
+                        </div>
                     </div>
-                    <a class="btn btn-sm btn-outline-primary" asp-controller="Productos" asp-action="Create">
-                        <i class="bi bi-plus-lg me-1"></i> Nuevo
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="admin-home-kpi-card">
+                <div class="card-body">
+                    <div class="admin-home-kpi">
+                        <div>
+                            <div class="admin-home-kpi__label">Pedidos</div>
+                            <div class="admin-home-kpi__value">@Model.TotalPedidos</div>
+                            <p class="admin-home-kpi__meta">Seguimiento general de ventas</p>
+                        </div>
+                        <div class="admin-home-kpi__icon admin-home-kpi__icon--success">
+                            <i class="bi bi-receipt"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="admin-home-kpi-card">
+                <div class="card-body">
+                    <div class="admin-home-kpi">
+                        <div>
+                            <div class="admin-home-kpi__label">Usuarios</div>
+                            <div class="admin-home-kpi__value">@Model.TotalUsuarios</div>
+                            <p class="admin-home-kpi__meta">Clientes y administradores registrados</p>
+                        </div>
+                        <div class="admin-home-kpi__icon admin-home-kpi__icon--info">
+                            <i class="bi bi-people"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENIDO -->
+    <div class="row g-3">
+        <div class="col-12 col-xl-8">
+            <div class="admin-home-section-card">
+                <div class="admin-home-section-card__header">
+                    <div>
+                        <h2 class="admin-home-section-card__title">Productos recientes</h2>
+                        <p class="admin-home-section-card__subtitle">
+                            Últimos 5 productos registrados en el sistema
+                        </p>
+                    </div>
+
+                    <a class="btn btn-outline-primary btn-sm"
+                           asp-controller="Productos"
+                           asp-action="Index">
+                        <i class="bi bi-box-seam me-1"></i>
+                        Ver todos
                     </a>
                 </div>
 
                 @if (Model.ProductosRecientes == null || !Model.ProductosRecientes.Any())
                 {
-                    <div class="px-3 pb-3 text-muted">No hay productos aún.</div>
+                    <div class="admin-home-empty">
+                        No hay productos registrados todavía.
+                    </div>
                 }
                 else
                 {
-                    foreach (var p in Model.ProductosRecientes)
-                    {
-                        <div class="rowx d-flex align-items-center justify-content-between">
-                            <div>
-                                <div class="fw-semibold">@p.Nombre</div>
+                    <div class="admin-home-products">
+                        @foreach (var p in Model.ProductosRecientes)
+                        {
+                            <div class="admin-home-products__item">
+                                <div>
+                                    <p class="admin-home-products__name">@p.Nombre</p>
+                                    <p class="admin-home-products__desc">
+                                        Producto agregado recientemente al catálogo
+                                    </p>
+                                </div>
+
+                                <div class="admin-home-products__price">
+                                    $@p.Precio.ToString("0.00")
+                                </div>
                             </div>
-                            <div class="fw-bold">$@p.Precio.ToString("0.00")</div>
-                        </div>
-                    }
+                        }
+                    </div>
                 }
             </div>
         </div>
-    </div>
 
-    <!-- Accesos rápidos -->
-    <div class="col-12 col-lg-4">
-        <div class="card shadow-sm cardx">
-            <div class="card-body">
-                <div class="fw-bold mb-2">Accesos rápidos</div>
+        <div class="col-12 col-xl-4">
+            <div class="admin-home-section-card">
+                <div class="admin-home-section-card__header">
+                    <div>
+                        <h2 class="admin-home-section-card__title">Accesos rápidos</h2>
+                        <p class="admin-home-section-card__subtitle">
+                            Módulos principales del sistema
+                        </p>
+                    </div>
+                </div>
 
-                <div class="d-grid gap-2">
-                    <a class="btn btn-outline-primary" asp-controller="Productos" asp-action="Index">
-                        <i class="bi bi-box-seam me-1"></i> Productos
+                <div class="admin-home-links">
+                    <a class="admin-home-link"
+                           asp-controller="Productos"
+                           asp-action="Index">
+                        <span class="admin-home-link__icon">
+                            <i class="bi bi-box-seam"></i>
+                        </span>
+                        <span class="admin-home-link__text">Gestionar productos</span>
                     </a>
-                    <a class="btn btn-outline-primary" asp-controller="Pedidos" asp-action="Index">
-                        <i class="bi bi-receipt me-1"></i> Pedidos
+
+                    <a class="admin-home-link"
+                           asp-controller="Pedidos"
+                           asp-action="Index">
+                        <span class="admin-home-link__icon">
+                            <i class="bi bi-receipt"></i>
+                        </span>
+                        <span class="admin-home-link__text">Gestionar pedidos</span>
                     </a>
-                    <a class="btn btn-outline-primary" asp-controller="Usuarios" asp-action="Index">
-                        <i class="bi bi-people me-1"></i> Usuarios
+
+                    <a class="admin-home-link"
+                           asp-controller="Usuarios"
+                           asp-action="Index">
+                        <span class="admin-home-link__icon">
+                            <i class="bi bi-people"></i>
+                        </span>
+                        <span class="admin-home-link__text">Gestionar usuarios</span>
+                    </a>
+
+                    <a class="admin-home-link"
+                           asp-controller="Cupones"
+                           asp-action="Index">
+                        <span class="admin-home-link__icon">
+                            <i class="bi bi-ticket-perforated"></i>
+                        </span>
+                        <span class="admin-home-link__text">Administrar cupones</span>
                     </a>
                 </div>
             </div>

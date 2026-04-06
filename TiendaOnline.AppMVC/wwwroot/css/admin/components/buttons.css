@@ -1,3 +1,4 @@
+/* BOTÓN PRINCIPAL */
 .admin-btn-main {
     border-radius: 0.75rem;
     font-weight: 600;
@@ -5,6 +6,7 @@
     box-shadow: var(--admin-shadow-sm);
 }
 
+/* ACCIONES GENERALES */
 .admin-actions .btn {
     border-radius: 0.65rem;
 }
@@ -13,6 +15,7 @@
         background-color: #f8f9fa;
     }
 
+/* BOTONES DE ACCIÓN (ICONOS) */
 .admin-action-btn {
     padding: 8px 12px;
     font-size: 16px;
@@ -24,11 +27,10 @@
     min-width: 38px;
 }
 
-.admin-action-btn:not(.admin-btn-edit):not(.admin-btn-view):hover {
-    background: #f3f4f6;
-    transform: translateY(-1px);
-}
-
+    .admin-action-btn:not(.admin-btn-edit):not(.admin-btn-view):hover {
+        background: #f3f4f6;
+        transform: translateY(-1px);
+    }
 
 /* EDITAR */
 .admin-btn-edit {
@@ -55,62 +57,3 @@
         color: #fff;
         transform: translateY(-1px);
     }
-
-.admin-btn-main {
-    border-radius: 0.75rem;
-    font-weight: 600;
-    padding: 0.75rem 1.2rem;
-    box-shadow: var(--admin-shadow-sm);
-}
-
-.admin-actions .btn {
-    border-radius: 0.65rem;
-}
-
-    .admin-actions .btn:hover {
-        background-color: #f8f9fa;
-    }
-
-.admin-action-btn {
-    padding: 8px 12px;
-    font-size: 16px;
-    border-radius: 8px;
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 38px;
-}
-
-.admin-action-btn:not(.admin-btn-edit):not(.admin-btn-view):hover {
-    background: #f3f4f6;
-    transform: translateY(-1px);
-}
-
-
-/* EDITAR */
-.admin-btn-edit {
-    border: none;
-    background-color: rgba(13, 110, 253, 0.12);
-    color: #0d6efd;
-}
-
-    .admin-btn-edit:hover {
-        background-color: #0d6efd;
-        color: #fff;
-        transform: translateY(-1px);
-    }
-
-/* VER */
-.admin-btn-view {
-    border: none;
-    background-color: rgba(108, 117, 125, 0.12);
-    color: #6c757d;
-}
-
-    .admin-btn-view:hover {
-        background-color: #6c757d;
-        color: #fff;
-        transform: translateY(-1px);
-    }
-
