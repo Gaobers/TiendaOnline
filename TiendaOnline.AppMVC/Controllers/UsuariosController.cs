@@ -15,13 +15,21 @@ namespace TiendaOnline.AppMVC.Controllers
         }
 
         // GET: Usuarios
-        public async Task<IActionResult> Index()
+        //Fitlros
+        public async Task<IActionResult> Index(string nombre, byte? estatus, int top = 10)
         {
-            var usuarios = await _context.Usuarios
-                .Include(u => u.Rol)
-                .OrderByDescending(u => u.Id)
-                .ToListAsync();
+            var query = _context.Usuarios.AsQueryable();
 
+            //Nombre
+            if (!string.IsNullOrWhiteSpace(nombre))
+                query = query.Where(u => u.Nombre.Contains(nombre));
+            //Estado
+            if (estatus.HasValue)
+                query = query.Where(u => u.Estatus == estatus.Value);
+            //Top
+            query = query.Take(top);
+
+            var usuarios = await query.ToListAsync();
             return View(usuarios);
         }
 
