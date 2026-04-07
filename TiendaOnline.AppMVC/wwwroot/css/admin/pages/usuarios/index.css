@@ -1,0 +1,29 @@
+.usuarios-index .usu-col-nombre {
+    width: 15%;
+}
+
+.usuarios-index .usu-col-correo {
+    width: 15%;
+}
+
+.usuarios-index .usu-col-clave {
+    width: 15%;
+}
+
+.usuarios-index .usu-col-rol {
+    width: 15%;
+}
+
+.usuarios-index .usu-col-estado {
+    width: 15%;
+}
+
+.usuarios-index .usu-col-creacion {
+    width: 15%;
+}
+
+.usuarios-index .usu-col-acciones {
+    width: 9%;
+    text-align: center;
+    white-space: nowrap;
+}
