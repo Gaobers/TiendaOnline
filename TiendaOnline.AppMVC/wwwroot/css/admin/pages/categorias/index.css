@@ -1,0 +1,29 @@
+.categorias-index .cat-col-nombre {
+    width: 15%;
+}
+
+.categorias-index .cat-col-descripcion {
+    width: 20%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.categorias-index .cat-col-estado {
+    width: 20%;
+    text-align: center;
+}
+
+.categorias-index .cat-col-creacion {
+    width: 13%;
+}
+
+.categorias-index .cat-col-actualizacion {
+    width: 12%;
+}
+
+.categorias-index .cat-col-acciones {
+    width: 9%;
+    text-align: center;
+    white-space: nowrap;
+}

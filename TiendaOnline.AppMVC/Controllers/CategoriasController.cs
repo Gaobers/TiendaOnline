@@ -19,26 +19,25 @@ namespace TiendaOnline.AppMVC.Controllers
         }
 
         // GET: Categorias
+        //Filtros
         public async Task<IActionResult> Index(string nombre, string descripcion, byte? estatus, int top = 10)
         {
             var query = _context.Categorias.AsQueryable();
+
             //Nombre
             if (!string.IsNullOrWhiteSpace(nombre))
                 query = query.Where(c => c.Nombre.Contains(nombre));
-
             //Descripción
-            if (!string.IsNullOrWhiteSpace(descripcion))
-                query = query.Where(c => c.Descripcion != null && c.Descripcion.Contains(descripcion));
+            //if (!string.IsNullOrWhiteSpace(descripcion))
+            //    query = query.Where(c => c.Descripcion != null && c.Descripcion.Contains(descripcion));
 
             //Estado
             if (estatus.HasValue)
                 query = query.Where(c => c.Estatus == estatus.Value);
-
             //Top
             query = query.Take(top);
 
             var categorias = await query.ToListAsync();
-
             return View(categorias); 
         }
 
@@ -103,7 +102,7 @@ namespace TiendaOnline.AppMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,Estatus,FechaCreacion,FechaActualizacion")] Categoria categoria)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,Estatus,FechaCreacion")] Categoria categoria)
         {
             if (id != categoria.Id)
             {
@@ -114,7 +113,19 @@ namespace TiendaOnline.AppMVC.Controllers
             {
                 try
                 {
-                    _context.Update(categoria);
+                    var categoriaDb = await _context.Categorias.FindAsync(id);
+
+                    if (categoriaDb == null)
+                    {
+                        return NotFound();
+                    }
+
+                    categoriaDb.Nombre = categoria.Nombre;
+                    categoriaDb.Descripcion = categoria.Descripcion;
+                    categoriaDb.Estatus = categoria.Estatus;
+                    categoriaDb.FechaCreacion = categoria.FechaCreacion;
+                    categoriaDb.FechaActualizacion = DateTime.Now;
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -128,8 +139,10 @@ namespace TiendaOnline.AppMVC.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(categoria);
         }
 

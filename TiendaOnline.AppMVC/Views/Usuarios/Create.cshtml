@@ -15,8 +15,16 @@
                     <form asp-action="Create" method="post">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                        <input type="hidden" asp-for="Estatus" value="1" />
-                        <input type="hidden" asp-for="FechaCreacion" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+                        <div class="mb-3">
+                            <label asp-for="Estatus" class="form-label fw-bold">Estado</label>
+                            <select asp-for="Estatus" class="form-control">
+                                <option value="1">Activo</option>
+                                <option value="2">Inactivo</option>
+                                <option value="3">Bloqueado</option>
+                                <option value="4">Suspendido</option>
+                            </select>
+                            <span asp-validation-for="Estatus" class="text-danger"></span>
+                        </div>
 
                         <div class="mb-3">
                             <label asp-for="Nombre" class="form-label fw-bold"></label>
@@ -50,14 +58,10 @@
 
                         <div class="mb-3">
                             <label asp-for="RolId" class="form-label fw-bold">Rol</label>
-                            <select asp-for="RolId" class="form-control" asp-items="ViewBag.RolId"></select>
+                            <select asp-for="RolId" class="form-control" asp-items="ViewBag.RolId">
+                                <option value="">-- Seleccione un rol --</option>
+                            </select>
                             <span asp-validation-for="RolId" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="FechaActualizacion" class="form-label fw-bold"></label>
-                            <input asp-for="FechaActualizacion" class="form-control" type="datetime-local" />
-                            <span asp-validation-for="FechaActualizacion" class="text-danger"></span>
                         </div>
 
                         <div class="d-grid gap-2 mt-4">

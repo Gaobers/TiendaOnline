@@ -19,10 +19,25 @@ namespace TiendaOnline.AppMVC.Controllers
         }
 
         // GET: Inventarios
-        public async Task<IActionResult> Index()
+        //Filtros
+        public async Task<IActionResult> Index(string producto, string talla, int top = 10)
         {
-            var tiendaOnlineZapContext = _context.Inventarios.Include(i => i.Producto).Include(i => i.Talla);
-            return View(await tiendaOnlineZapContext.ToListAsync());
+            var query = _context.Inventarios
+            .Include(i => i.Producto)
+            .Include(i => i.Talla)
+            .AsQueryable();
+
+            //Producto
+            if (!string.IsNullOrWhiteSpace(producto))
+                query = query.Where(i => i.Producto.Nombre.Contains(producto));
+            //Talla
+            if (!string.IsNullOrWhiteSpace(talla))
+                query = query.Where(i => i.Talla.Numero.Contains(talla));
+            //Top
+            query = query.Take(top);
+
+            var inventarios = await query.ToListAsync();
+            return View(inventarios);
         }
 
         // GET: Inventarios/Details/5

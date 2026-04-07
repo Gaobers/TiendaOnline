@@ -1,0 +1,22 @@
+.estPedidos-index .est-ped-col-nombre {
+    width: 6%;
+}
+
+/*.estPedidos-index .est-ped-col-descripcion {
+    width: 11%;
+}*/
+
+.estPedidos-index .est-ped-col-creacion {
+    width: 6%;
+}
+
+.estPedidos-index .est-ped-col-estado {
+    width: 15%;
+    text-align: center;
+}
+
+.estPedidos-index .est-ped-col-acciones {
+    width: 10%;
+    text-align: center;
+    white-space: nowrap;
+}

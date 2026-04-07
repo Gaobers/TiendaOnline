@@ -1,0 +1,26 @@
+.admin-filter-card,
+.admin-table-card {
+    border: 0;
+    border-radius: var(--admin-radius-md);
+    overflow: hidden;
+    box-shadow: var(--admin-shadow-sm);
+    background-color: var(--admin-surface);
+}
+
+.admin-filter-card {
+    margin-bottom: 1rem;
+}
+
+    .admin-filter-card .card-body,
+    .admin-table-card .card-body {
+        padding: 1.25rem;
+    }
+
+.admin-card-footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid var(--admin-border);
+    padding: 0.9rem 1rem;
+    text-align: center;
+    color: var(--admin-text-muted);
+    font-size: 0.9rem;
+}

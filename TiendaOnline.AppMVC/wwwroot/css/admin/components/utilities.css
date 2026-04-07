@@ -1,0 +1,36 @@
+.admin-avatar-circle {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(13, 110, 253, 0.10);
+    color: var(--admin-primary);
+    flex-shrink: 0;
+}
+
+.admin-user-name {
+    font-weight: 700;
+    color: var(--admin-text);
+}
+
+.admin-mail-link {
+    text-decoration: none;
+    color: var(--admin-text-muted);
+}
+
+    .admin-mail-link:hover {
+        color: var(--admin-primary);
+    }
+
+.admin-date-text {
+    font-size: 0.9rem;
+    color: var(--admin-text-muted);
+}
+
+.admin-empty-state {
+    padding: 2rem 1rem;
+    text-align: center;
+    color: var(--admin-text-muted);
+}

@@ -15,13 +15,22 @@ namespace TiendaOnline.AppMVC.Controllers
         }
 
         // GET: Usuarios
-        public async Task<IActionResult> Index()
+        //Fitlros
+        public async Task<IActionResult> Index(string nombre, byte? estatus, int top = 10)
         {
-            var usuarios = await _context.Usuarios
+            var query = _context.Usuarios
                 .Include(u => u.Rol)
-                .OrderByDescending(u => u.Id)
-                .ToListAsync();
+                .AsQueryable();
 
+            if (!string.IsNullOrWhiteSpace(nombre))
+                query = query.Where(u => u.Nombre.Contains(nombre));
+
+            if (estatus.HasValue)
+                query = query.Where(u => u.Estatus == estatus.Value);
+
+            query = query.Take(top);
+
+            var usuarios = await query.ToListAsync();
             return View(usuarios);
         }
 
@@ -51,7 +60,7 @@ namespace TiendaOnline.AppMVC.Controllers
         // POST: Usuarios/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nombre,Apellido,Correo,Telefono,PasswordHash,Estatus,FechaCreacion,FechaActualizacion,RolId")] Usuario usuario)
+        public async Task<IActionResult> Create([Bind("Nombre,Apellido,Correo,Telefono,PasswordHash,Estatus,RolId")] Usuario usuario)
         {
             ModelState.Remove("Rol");
             ModelState.Remove("AjustesInventarios");
@@ -258,6 +267,9 @@ namespace TiendaOnline.AppMVC.Controllers
 
             if (usuario.RolId <= 0)
                 ModelState.AddModelError("RolId", "Debe seleccionar un rol.");
+
+            if (!new byte[] { 1, 2, 3, 4 }.Contains(usuario.Estatus))
+                ModelState.AddModelError("Estatus", "Debe seleccionar un estado válido.");
 
             if (!esEdicion && usuario.FechaCreacion == default)
                 usuario.FechaCreacion = DateTime.Now;

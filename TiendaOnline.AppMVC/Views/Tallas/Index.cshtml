@@ -4,15 +4,22 @@
     ViewData["Title"] = "Tallas";
 
     var filtroNumero = Context.Request.Query["numero"].ToString();
-    var top = Context.Request.Query["top"].ToString();
+    var filtroestatus = Context.Request.Query["estatus"].ToString();
+    var filtrotop = Context.Request.Query["top"].ToString();
 
-    if (string.IsNullOrWhiteSpace(top))
+    if (string.IsNullOrWhiteSpace(filtrotop))
     {
-        top = "10";
+        filtrotop = "10";
     }
+
+    var hayFiltrosActivos =
+    !string.IsNullOrWhiteSpace(filtroNumero) ||
+    !string.IsNullOrWhiteSpace(filtroestatus) ||
+    !string.IsNullOrWhiteSpace(filtrotop) ||
+    filtrotop != "10";
 }
 
-<div class="container-fluid px-lg-5 admin-index-page">
+<div class="container admin-index-page">
 
     <!-- HERO -->
     <div class="card admin-hero-card">
@@ -26,15 +33,27 @@
                 </p>
             </div>
 
-            <a asp-action="Create" class="btn btn-light admin-btn-main">
-                <i class="bi bi-plus-lg me-1"></i> Nueva talla
-            </a>
+            <div class="d-flex gap-2 flex-wrap">
+                <button class="btn btn-outline-light admin-btn-main"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#filtrosBusqueda"
+                        aria-expanded="@(hayFiltrosActivos ? "true" : "false")"
+                        aria-controls="filtrosBusqueda">
+                    <i class="bi bi-funnel me-1"></i> Filtros
+                </button>
+
+                <a asp-action="Create" class="btn btn-light admin-btn-main">
+                    <i class="bi bi-plus-lg me-1"></i> Nueva talla
+                </a>
+           </div>
         </div>
     </div>
 
     <!-- FILTRO -->
-    <div class="card admin-filter-card">
-        <div class="card-body">
+    <div class="collapse @(hayFiltrosActivos ? "show" : "")" id="filtrosBusqueda">
+        <div class="card admin-filter-card mt-3">
+            <div class="card-body">
             <form method="get">
                 <div class="row g-3 align-items-end">
 
@@ -53,6 +72,21 @@
                         </div>
                     </div>
 
+                    <!-- ESTATUS -->
+                    <div class="col-12 col-md-4 col-xl-2">
+                        <label class="form-label admin-filter-label">Estado</label>
+                        <div class="input-group shadow-sm admin-filter-group">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-toggle-on text-primary"></i>
+                            </span>
+                            <select name="estatus" class="form-select">
+                                <option value="">Todos</option>
+                                <option value="1" selected="@(filtroestatus == "1")">Activo</option>
+                                <option value="0" selected="@(filtroestatus == "0")">Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <!-- TOP -->
                     <div class="col-12 col-md-4 col-xl-2">
                         <label class="form-label admin-filter-label">Top registros</label>
@@ -61,10 +95,10 @@
                                 <i class="bi bi-list-ol text-primary"></i>
                             </span>
                             <select name="top" class="form-select">
-                                <option value="10" selected="@(top == "10")">10</option>
-                                <option value="25" selected="@(top == "25")">25</option>
-                                <option value="50" selected="@(top == "50")">50</option>
-                                <option value="100" selected="@(top == "100")">100</option>
+                                <option value="10" selected="@(filtrotop == "10")">10</option>
+                                <option value="25" selected="@(filtrotop == "25")">25</option>
+                                <option value="50" selected="@(filtrotop == "50")">50</option>
+                                <option value="100" selected="@(filtrotop == "100")">100</option>
                                 <option value="@int.MaxValue">Todos</option>
                             </select>
                         </div>
@@ -87,11 +121,12 @@
 
                 </div>
             </form>
+           </div>
         </div>
     </div>
 
     <!-- TABLA -->
-    <div class="card admin-table-card">
+    <div class="card admin-table-card mt-3">
         <div class="table-responsive">
             <table class="table table-hover align-middle admin-table">
                 <thead>

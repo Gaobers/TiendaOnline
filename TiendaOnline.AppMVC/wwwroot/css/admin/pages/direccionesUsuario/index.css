@@ -1,0 +1,34 @@
+.dirUsuarios-index .dir-usu-col-direccion {
+    width: 7%;
+}
+
+.dirUsuarios-index .dir-usu-col-ubicacion {
+    width: 7%;
+}
+
+.dirUsuarios-index .dir-usu-col-contacto {
+    width: 7%;
+}
+
+.dirUsuarios-index .dir-usu-col-usuario {
+    width: 7%;
+}
+
+.dirUsuarios-index .dir-usu-col-principal {
+    width: 7%;
+}
+
+.dirUsuarios-index .dir-usu-col-creacion {
+    width: 7%;
+}
+
+.dirUsuarios-index .dir-usu-col-estado {
+    width: 6%;
+    text-align: center;
+}
+
+.dirUsuarios-index .dir-usu-col-acciones {
+    width: 5.5%;
+    text-align: center;
+    white-space: nowrap;
+}

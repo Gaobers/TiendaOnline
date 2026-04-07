@@ -3,21 +3,30 @@
 @{
     ViewData["Title"] = "Pedidos";
 
-    var filtroCliente = Context.Request.Query["cliente"].ToString();
-    var filtroEstado = Context.Request.Query["estado"].ToString();
+    var filtroNombre = Context.Request.Query["nombre"].ToString();
+    var estadoPedidoId = Context.Request.Query["estadoPedidoId"].ToString();
     var top = Context.Request.Query["top"].ToString();
 
     if (string.IsNullOrWhiteSpace(top))
     {
         top = "10";
     }
+
+    var hayFiltrosActivos =
+    !string.IsNullOrWhiteSpace(filtroNombre) ||
+    !string.IsNullOrWhiteSpace(estadoPedidoId) ||
+    top != "10";
 }
 
-<div class="container-fluid px-lg-5 admin-index-page">
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin/pages/pedidos/index.css" asp-append-version="true" />
+}
+
 
     <!-- HERO -->
+<div class="container admin-index-page pedidos-index">
     <div class="card admin-hero-card">
-        <div class="card-body d-flex justify-content-between align-items-center">
+        <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
                 <h1 class="admin-hero-title">
                     <i class="bi bi-cart-check me-2"></i>Pedidos
@@ -27,98 +36,107 @@
                 </p>
             </div>
 
-            <a asp-action="Create" class="btn btn-light admin-btn-main">
-                <i class="bi bi-plus-lg me-1"></i> Nuevo pedido
-            </a>
+            <div class="d-flex gap-2 flex-wrap">
+                <button class="btn btn-outline-light admin-btn-main"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#filtrosBusqueda"
+                        aria-expanded="@(hayFiltrosActivos ? "true" : "false")"
+                        aria-controls="filtrosBusqueda">
+                    <i class="bi bi-funnel me-1"></i> Filtros
+                </button>
+
+                <a asp-action="Create" class="btn btn-light admin-btn-main">
+                    <i class="bi bi-plus-lg me-1"></i> Nuevo pedido
+                </a>
+            </div>
         </div>
     </div>
 
     <!-- FILTRO -->
-    <div class="card admin-filter-card">
-        <div class="card-body">
-            <form method="get">
-                <div class="row g-3 align-items-end">
+    <div class="collapse @(hayFiltrosActivos ? "show" : "")" id="filtrosBusqueda">
+        <div class="card admin-filter-card mt-3">
+            <div class="card-body">
+                <form method="get">
+                    <div class="row g-3 align-items-end">
 
-                    <!-- CLIENTE -->
-                    <div class="col-12 col-md-6 col-xl-4">
-                        <label class="form-label admin-filter-label">Cliente</label>
-                        <div class="input-group shadow-sm admin-filter-group">
-                            <span class="input-group-text bg-white">
-                                <i class="bi bi-person text-primary"></i>
-                            </span>
-                            <input type="text"
-                                   name="cliente"
-                                   class="form-control"
-                                   placeholder="Nombre del cliente..."
-                                   value="@filtroCliente" />
+                        <!-- NOMBRE -->
+                        <div class="col-12 col-md-6 col-xl-3">
+                            <label class="form-label admin-filter-label">Nombre</label>
+                            <div class="input-group shadow-sm admin-filter-group">
+                                <span class="input-group-text bg-white">
+                                    <i class="bi bi-tag text-primary"></i>
+                                </span>
+                                <input type="text"
+                                       name="nombre"
+                                       class="form-control"
+                                       placeholder="Nombre del cliente..."
+                                       value="@filtroNombre" />
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- ESTADO -->
-                    <div class="col-12 col-md-6 col-xl-3">
-                        <label class="form-label admin-filter-label">Estado</label>
-                        <div class="input-group shadow-sm admin-filter-group">
-                            <span class="input-group-text bg-white">
-                                <i class="bi bi-flag text-primary"></i>
-                            </span>
-                            <input type="text"
-                                   name="estado"
-                                   class="form-control"
-                                   placeholder="Ej: Pendiente..."
-                                   value="@filtroEstado" />
+                        <!-- ESTADO -->
+                        <div class="col-12 col-md-6 col-xl-3">
+                            <label class="form-label admin-filter-label">Estado</label>
+                            <div class="input-group shadow-sm admin-filter-group">
+                                <span class="input-group-text bg-white">
+                                    <i class="bi bi-flag text-primary"></i>
+                                </span>
+                                <select name="estadoPedidoId" class="form-select" asp-items="ViewBag.EstadosPedido">
+                                    <option value="">Todos</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- TOP -->
-                    <div class="col-12 col-md-4 col-xl-2">
-                        <label class="form-label admin-filter-label">Top registros</label>
-                        <div class="input-group shadow-sm admin-filter-group">
-                            <span class="input-group-text bg-white">
-                                <i class="bi bi-list-ol text-primary"></i>
-                            </span>
-                            <select name="top" class="form-select">
-                                <option value="10" selected="@(top == "10")">10</option>
-                                <option value="25" selected="@(top == "25")">25</option>
-                                <option value="50" selected="@(top == "50")">50</option>
-                                <option value="100" selected="@(top == "100")">100</option>
-                                <option value="@int.MaxValue">Todos</option>
-                            </select>
+                        <!-- TOP -->
+                        <div class="col-12 col-md-4 col-xl-2">
+                            <label class="form-label admin-filter-label">Top registros</label>
+                            <div class="input-group shadow-sm admin-filter-group">
+                                <span class="input-group-text bg-white">
+                                    <i class="bi bi-list-ol text-primary"></i>
+                                </span>
+                                <select name="top" class="form-select">
+                                    <option value="10" selected="@(top == "10")">10</option>
+                                    <option value="25" selected="@(top == "25")">25</option>
+                                    <option value="50" selected="@(top == "50")">50</option>
+                                    <option value="100" selected="@(top == "100")">100</option>
+                                    <option value="@int.MaxValue" selected="@(top == int.MaxValue.ToString())">Todos</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- BOTONES -->
-                    <div class="col-12">
-                        <div class="admin-filter-actions">
+                        <!-- BOTONES -->
+                        <div class="col-12">
+                            <div class="admin-filter-actions">
 
-                            <button type="submit" class="btn btn-primary shadow-sm">
-                                <i class="bi bi-search me-2"></i>Buscar
-                            </button>
+                                <button type="submit" class="btn btn-primary shadow-sm">
+                                    <i class="bi bi-search me-2"></i>Buscar
+                                </button>
 
-                            <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
-                                <i class="bi bi-arrow-clockwise me-2"></i>Limpiar
-                            </a>
-
+                                <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
+                                    <i class="bi bi-arrow-clockwise me-2"></i>Limpiar
+                                </a>
+                            </div>
                         </div>
-                    </div>
 
-                </div>
-            </form>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
     <!-- TABLA -->
-    <div class="card admin-table-card">
+    <div class="card admin-table-card mt-3">
         <div class="table-responsive">
             <table class="table table-hover align-middle admin-table">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Orden</th>
-                        <th>Cliente</th>
-                        <th>Fecha</th>
-                        <th class="text-center">Estado</th>
-                        <th>Total</th>
-                        <th class="text-center">Acciones</th>
+                        <th class="ped-col-orden">Orden</th>
+                        <th class="ped-col-cliente">Cliente</th>
+                        <th class="ped-col-fecha">Fecha</th>
+                        <th class="ped-col-estado">Estado</th>
+                        <th class="ped-col-total">Total</th>
+                        <th class="ped-col-acciones">Acciones</th>
                     </tr>
                 </thead>
 
@@ -127,25 +145,25 @@
                     {
                         @foreach (var item in Model)
                         {
-                            var estado = item.EstadoPedido?.Nombre ?? "N/A";
-
                             <tr>
-                                <td>#@item.Id</td>
-
-                                <td class="fw-bold">
+                                <td class="ped-col-orden">
                                     ORD-@item.Id.ToString("D3")
                                 </td>
 
-                                <td>
+                                <td class="ped-col-cliente">
                                     <i class="bi bi-person me-1"></i>
                                     @item.NombreCliente
                                 </td>
 
-                                <td>
+                                <td class="ped-col-fecha">
                                     @item.FechaCreacion.ToShortDateString()
                                 </td>
 
-                                <td class="text-center">
+                                <td class="ped-col-estado">
+                                    @{
+                                        var estado = item.EstadoPedido?.Nombre ?? "N/A";
+                                    }
+
                                     @if (estado.ToLower().Contains("entregado"))
                                     {
                                         <span class="admin-status-badge admin-status-active">
@@ -166,20 +184,20 @@
                                     }
                                 </td>
 
-                                <td class="fw-bold">
+                                <td class="ped-col-total">
                                     @item.Total.ToString("C")
                                 </td>
 
-                                <td class="text-center">
+                                <td class="ped-col-acciones">
                                     <div class="btn-group">
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm border">
+                                        <a asp-action="Edit" asp-route-id="@item.Id"
+                                               class="btn admin-action-btn admin-btn-edit">
                                             <i class="bi bi-pencil"></i>
                                         </a>
-                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm border">
+
+                                        <a asp-action="Details" asp-route-id="@item.Id"
+                                               class="btn admin-action-btn admin-btn-view">
                                             <i class="bi bi-eye"></i>
-                                        </a>
-                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm border">
-                                            <i class="bi bi-trash"></i>
                                         </a>
                                     </div>
                                 </td>
@@ -189,7 +207,7 @@
                     else
                     {
                         <tr>
-                            <td colspan="7">
+                            <td colspan="6">
                                 <div class="admin-empty-state">
                                     No se encontraron pedidos.
                                 </div>

@@ -1,134 +1,272 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - TiendaOnline.AppMVC</title>
+    <title>@ViewData["Title"] - TiendaOnline Admin</title>
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/TiendaOnline.AppMVC.styles.css" asp-append-version="true" />
 
+    <!-- CSS existente -->
+    <link rel="stylesheet" href="~/css/admin/base/variables.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin/components/page.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin/components/cards.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin/components/filters.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin/components/tables.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin/components/utilities.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin/components/buttons.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin/components/badges.css" asp-append-version="true" />
 
-    @*Admin*@
+    <!-- Nuevo CSS principal admin -->
     <link rel="stylesheet" href="~/css/admin/admin.css" asp-append-version="true" />
 
-    @*Productos Estilos*@
-    <link rel="stylesheet" href="~/css/Productos/Index.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/Productos/Global.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/Productos/Delete.css" asp-append-version="true" />
-
-    @*Inventarios Estilos*@
-    <link rel="stylesheet" href="~/css/Inventarios/Index.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/Inventarios/Delete.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/Inventarios/Global.css" asp-append-version="true" />
-
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
 
     @RenderSection("Styles", required: false)
 </head>
+<body class="admin-body">
 
-<body>
-<header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom navbar-shadow">
-        <div class="container-fluid">
-            <a class="navbar-brand d-flex align-items-center gap-2"
-               asp-area="" asp-controller="Home" asp-action="Index">
-                <i class="bi bi-bag-heart-fill text-primary"></i>
-                <span>TiendaOnline</span>
-            </a>
+    <div class="admin-shell">
 
-            <button class="navbar-toggler" type="button"
-                    data-bs-toggle="collapse" data-bs-target="#mainNav"
-                    aria-controls="mainNav" aria-expanded="false" aria-label="Menú">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <!-- SIDEBAR -->
+        <aside class="admin-sidebar" id="adminSidebar">
 
-            <div class="collapse navbar-collapse" id="mainNav">
+            <div class="admin-sidebar-top">
+                <a asp-controller="Home" asp-action="Index" class="admin-brand text-decoration-none">
+                    <span class="admin-brand-icon">
+                        <i class="bi bi-bag-heart-fill"></i>
+                    </span>
+                    <div class="admin-brand-text">
+                        <strong>TiendaOnline</strong>
+                        <small>Admin Panel</small>
+                    </div>
+                </a>
 
-                <!-- Menú Izquierda -->
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-lg-1">
-                    <li class="nav-item">
-                        <a class="nav-link"
-                           asp-controller="Home" asp-action="Index"
-                           asp-route-id=""
-                           class-active="true">
-                            <i class="bi bi-house-door me-1"></i> Inicio
-                        </a>
-                    </li>
+                <button class="admin-sidebar-toggle d-none d-lg-inline-flex" type="button" id="sidebarCollapseBtn" title="Contraer menú">
+                    <i class="bi bi-list"></i>
+                </button>
+            </div>
 
-                    <!-- Dropdown Catálogo -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle"
-                           href="#"
-                           role="button"
-                           data-bs-toggle="dropdown"
-                           aria-expanded="false">
-                            <i class="bi bi-grid me-1"></i> Catálogo
-                        </a>
+            <div class="admin-sidebar-scroll">
 
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a class="dropdown-item"
-                                   asp-controller="Productos" asp-action="Index">
-                                    <i class="bi bi-box-seam me-2"></i> Productos
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+                <!-- DASHBOARD -->
+                <div class="admin-menu-group static-group">
+                    <div class="admin-menu-label">General</div>
 
-                    <li class="nav-item">
-                        <a class="nav-link"
-                           asp-controller="Pedidos" asp-action="Index">
-                            <i class="bi bi-receipt me-1"></i> Pedidos
-                        </a>
-                    </li>
+                    <a asp-controller="Home" asp-action="Index"
+                           class="admin-menu-link @(currentController == "Home" ? "active" : "")">
+                        <i class="bi bi-grid-1x2"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
 
-                    <li class="nav-item">
-                        <a class="nav-link"
-                           asp-controller="Usuarios" asp-action="Index">
-                            <i class="bi bi-people me-1"></i> Usuarios
-                        </a>
-                    </li>
-                </ul>
+                <!-- CATALOGO -->
+                <div class="admin-menu-group">
+                    <button class="admin-group-toggle @(currentController == "Productos" || currentController == "Categorias" || currentController == "Marcas" || currentController == "Colores" || currentController == "Tallas" || currentController == "Inventarios" ? "expanded" : "")"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#menuCatalogo"
+                            aria-expanded="@(currentController == "Productos" || currentController == "Categorias" || currentController == "Marcas" || currentController == "Colores" || currentController == "Tallas" || currentController == "Inventarios" ? "true" : "false")">
+                        <span class="admin-group-title">
+                            <i class="bi bi-box-seam"></i>
+                            <span>Catálogo</span>
+                        </span>
+                        <i class="bi bi-chevron-down admin-group-arrow"></i>
+                    </button>
+
+                    <div id="menuCatalogo" class="collapse @(currentController == "Productos" || currentController == "Categorias" || currentController == "Marcas" || currentController == "Colores" || currentController == "Tallas" || currentController == "Inventarios" ? "show" : "")">
+                        <div class="admin-submenu">
+                            <a asp-controller="Productos" asp-action="Index" class="admin-submenu-link @(currentController == "Productos" ? "active" : "")">
+                                <i class="bi bi-dot"></i><span>Productos</span>
+                            </a>
+                            <a asp-controller="Categorias" asp-action="Index" class="admin-submenu-link @(currentController == "Categorias" ? "active" : "")">
+                                <i class="bi bi-dot"></i><span>Categorías</span>
+                            </a>
+                            <a asp-controller="Marcas" asp-action="Index" class="admin-submenu-link @(currentController == "Marcas" ? "active" : "")">
+                                <i class="bi bi-dot"></i><span>Marcas</span>
+                            </a>
+                            <a asp-controller="Colores" asp-action="Index" class="admin-submenu-link @(currentController == "Colores" ? "active" : "")">
+                                <i class="bi bi-dot"></i><span>Colores</span>
+                            </a>
+                            <a asp-controller="Tallas" asp-action="Index" class="admin-submenu-link @(currentController == "Tallas" ? "active" : "")">
+                                <i class="bi bi-dot"></i><span>Tallas</span>
+                            </a>
+                            <a asp-controller="Inventarios" asp-action="Index" class="admin-submenu-link @(currentController == "Inventarios" ? "active" : "")">
+                                <i class="bi bi-dot"></i><span>Inventario</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VENTAS -->
+                <div class="admin-menu-group">
+                    <button class="admin-group-toggle @(currentController == "Pedidos" || currentController == "EstadosPedidos" || currentController == "MetodosPagos" || currentController == "MetodosEnvios" || currentController == "Cupones" ? "expanded" : "")"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#menuVentas"
+                            aria-expanded="@(currentController == "Pedidos" || currentController == "EstadosPedidos" || currentController == "MetodosPagos" || currentController == "MetodosEnvios" || currentController == "Cupones" ? "true" : "false")">
+                        <span class="admin-group-title">
+                            <i class="bi bi-cart3"></i>
+                            <span>Ventas</span>
+                        </span>
+                        <i class="bi bi-chevron-down admin-group-arrow"></i>
+                    </button>
+
+                    <div id="menuVentas" class="collapse @(currentController == "Pedidos" || currentController == "EstadosPedidos" || currentController == "MetodosPagos" || currentController == "MetodosEnvios" || currentController == "Cupones" ? "show" : "")">
+                        <div class="admin-submenu">
+                            <a asp-controller="Pedidos" asp-action="Index" class="admin-submenu-link @(currentController == "Pedidos" ? "active" : "")">
+                                <i class="bi bi-dot"></i><span>Pedidos</span>
+                            </a>
+                            <a asp-controller="EstadosPedidos" asp-action="Index" class="admin-submenu-link @(currentController == "EstadosPedidos" ? "active" : "")">
+                                <i class="bi bi-dot"></i><span>Estados de pedido</span>
+                            </a>
+                            <a asp-controller="MetodosPagos" asp-action="Index" class="admin-submenu-link @(currentController == "MetodosPagos" ? "active" : "")">
+                                <i class="bi bi-dot"></i><span>Métodos de pago</span>
+                            </a>
+                            <a asp-controller="MetodosEnvios" asp-action="Index" class="admin-submenu-link @(currentController == "MetodosEnvios" ? "active" : "")">
+                                <i class="bi bi-dot"></i><span>Métodos de envío</span>
+                            </a>
+                            <a asp-controller="Cupones" asp-action="Index" class="admin-submenu-link @(currentController == "Cupones" ? "active" : "")">
+                                <i class="bi bi-dot"></i><span>Cupones</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- USUARIOS -->
+                <div class="admin-menu-group">
+                    <button class="admin-group-toggle @(currentController == "Usuarios" || currentController == "Roles" || currentController == "DireccionesUsuarios" ? "expanded" : "")"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#menuUsuarios"
+                            aria-expanded="@(currentController == "Usuarios" || currentController == "Roles" || currentController == "DireccionesUsuarios" ? "true" : "false")">
+                        <span class="admin-group-title">
+                            <i class="bi bi-people"></i>
+                            <span>Usuarios</span>
+                        </span>
+                        <i class="bi bi-chevron-down admin-group-arrow"></i>
+                    </button>
+
+                    <div id="menuUsuarios" class="collapse @(currentController == "Usuarios" || currentController == "Roles" || currentController == "DireccionesUsuarios" ? "show" : "")">
+                        <div class="admin-submenu">
+                            <a asp-controller="Usuarios" asp-action="Index" class="admin-submenu-link @(currentController == "Usuarios" ? "active" : "")">
+                                <i class="bi bi-dot"></i><span>Usuarios</span>
+                            </a>
+                            <a asp-controller="Roles" asp-action="Index" class="admin-submenu-link @(currentController == "Roles" ? "active" : "")">
+                                <i class="bi bi-dot"></i><span>Roles</span>
+                            </a>
+                            <a asp-controller="DireccionesUsuarios" asp-action="Index" class="admin-submenu-link @(currentController == "DireccionesUsuarios" ? "active" : "")">
+                                <i class="bi bi-dot"></i><span>Direcciones</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
 
             </div>
-        </div>
-    </nav>
-</header>
 
-<!-- Contenido -->
-<div class="container-fluid py-3">
-    <main role="main" class="pb-3">
-        @RenderBody()
-    </main>
-</div>
+        </aside>
 
-<footer class="border-top footer text-muted bg-white">
-    <div class="container-fluid py-3 d-flex justify-content-between align-items-center">
-        <div>
-            &copy; 2026 - TiendaOnline.AppMVC
-        </div>
-        <div>
-            <a asp-controller="Home" asp-action="Privacy" class="text-muted text-decoration-none">
-                Privacidad
-            </a>
+        <!-- CONTENT AREA -->
+        <div class="admin-main">
+
+            <!-- TOPBAR -->
+            <header class="admin-topbar">
+                <div class="admin-topbar-left">
+                    <button class="admin-mobile-toggle d-inline-flex d-lg-none" type="button" id="mobileSidebarBtn">
+                        <i class="bi bi-list"></i>
+                    </button>
+
+                    <div class="admin-topbar-search">
+                        <i class="bi bi-search"></i>
+                        <input type="text" class="form-control" placeholder="Buscar..." />
+                    </div>
+                </div>
+
+                <div class="admin-topbar-right">
+                    <button class="admin-icon-btn" type="button">
+                        <i class="bi bi-bell"></i>
+                    </button>
+
+                    <button class="admin-icon-btn" type="button">
+                        <i class="bi bi-grid-3x3-gap"></i>
+                    </button>
+
+                    <div class="admin-user-box">
+                        <div class="admin-user-avatar">A</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- PAGE -->
+            <main class="admin-content">
+                <div class="admin-page-head">
+                    <div>
+                        <h1 class="admin-page-title">@ViewData["Title"]</h1>
+                    </div>
+                </div>
+
+                @RenderBody()
+            </main>
+
         </div>
     </div>
-</footer>
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
+    <div class="admin-sidebar-backdrop" id="adminSidebarBackdrop"></div>
 
-<script src="~/js/Producto/Edit.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 
-<script src="~/js/ProductoImagen/Create.js" asp-append-version="true"></script>
-<script src="~/js/ProductoImagen/Edit.js" asp-append-version="true"></script>
+    <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const body = document.body;
+                const sidebar = document.getElementById("adminSidebar");
+                const collapseBtn = document.getElementById("sidebarCollapseBtn");
+                const mobileBtn = document.getElementById("mobileSidebarBtn");
+                const backdrop = document.getElementById("adminSidebarBackdrop");
+
+                if (collapseBtn) {
+                    collapseBtn.addEventListener("click", function () {
+                        body.classList.toggle("admin-sidebar-collapsed");
+                    });
+                }
+
+                if (mobileBtn) {
+                    mobileBtn.addEventListener("click", function () {
+                        body.classList.add("admin-sidebar-mobile-open");
+                    });
+                }
+
+                if (backdrop) {
+                    backdrop.addEventListener("click", function () {
+                        body.classList.remove("admin-sidebar-mobile-open");
+                    });
+                }
+
+                const groupButtons = document.querySelectorAll(".admin-group-toggle");
+                groupButtons.forEach(btn => {
+                    const targetSelector = btn.getAttribute("data-bs-target");
+                    const target = document.querySelector(targetSelector);
+
+                    if (target) {
+                        target.addEventListener("show.bs.collapse", function () {
+                            btn.classList.add("expanded");
+                        });
+
+                        target.addEventListener("hide.bs.collapse", function () {
+                            btn.classList.remove("expanded");
+                        });
+                    }
+                });
+            });
+    </script>
 
     @RenderSection("Scripts", required: false)
 </body>

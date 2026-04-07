@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\css\admin\pages\" />
     <Folder Include="wwwroot\uploads\productos\" />
   </ItemGroup>
 

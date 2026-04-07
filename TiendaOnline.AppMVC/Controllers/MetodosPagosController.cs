@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TiendaOnline.AppMVC.Models;
 
@@ -19,9 +14,22 @@ namespace TiendaOnline.AppMVC.Controllers
         }
 
         // GET: MetodosPagos
-        public async Task<IActionResult> Index()
+        //Filtros
+        public async Task<IActionResult> Index(string nombre, byte? estatus, int top = 10)
         {
-            return View(await _context.MetodosPagos.ToListAsync());
+            var query = _context.MetodosPagos.AsQueryable();
+
+            //Nombre
+            if (!string.IsNullOrWhiteSpace(nombre))
+                query = query.Where(c => c.Nombre.Contains(nombre));
+            //Estado
+            if (estatus.HasValue)
+                query = query.Where(c => c.Estatus == estatus.Value);
+            //Top
+            query = query.Take(top);
+
+            var metodosPagos = await query.ToListAsync();
+            return View(metodosPagos);
         }
 
         // GET: MetodosPagos/Details/5

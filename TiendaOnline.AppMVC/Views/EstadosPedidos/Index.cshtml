@@ -4,17 +4,27 @@
     ViewData["Title"] = "Estados de Pedido";
 
     var filtroNombre = Context.Request.Query["nombre"].ToString();
-    var filtroDescripcion = Context.Request.Query["descripcion"].ToString();
+    var estatus = Context.Request.Query["estatus"].ToString();
     var top = Context.Request.Query["top"].ToString();
 
     if (string.IsNullOrWhiteSpace(top))
     {
         top = "10";
     }
+
+    var hayFiltrosActivos =
+       !string.IsNullOrWhiteSpace(filtroNombre) ||
+       !string.IsNullOrWhiteSpace(estatus) ||
+       top != "10";
 }
 
-<div class="container-fluid px-lg-5 admin-index-page">
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin/pages/estadosPedidos/index.css" asp-append-version="true" />
+}
 
+
+<!--HERO-->
+<div class="container admin-index-page estPedidos-index">
     <div class="card admin-hero-card">
         <div class="card-body d-flex justify-content-between align-items-center">
             <div>
@@ -26,17 +36,32 @@
                 </p>
             </div>
 
-            <a asp-action="Create" class="btn btn-light admin-btn-main">
-                <i class="bi bi-plus-lg me-1"></i> Nuevo estado
-            </a>
+            <div class="d-flex gap-2 flex-wrap">
+                <button class="btn btn-outline-light admin-btn-main"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#filtrosBusqueda"
+                        aria-expanded="@(hayFiltrosActivos ? "true" : "false")"
+                        aria-controls="filtrosBusqueda">
+                    <i class="bi bi-funnel me-1"></i> Filtros
+                </button>
+
+                <a asp-action="Create" class="btn btn-light admin-btn-main">
+                    <i class="bi bi-plus-lg me-1"></i> Nuevo estado
+                </a>
+            </div>
         </div>
     </div>
 
-    <div class="card admin-filter-card">
+
+    <!-- FILTRO -->
+    <div class="collapse @(hayFiltrosActivos ? "show" : "")" id="filtrosBusqueda">
+    <div class="card admin-filter-card mt-3">
         <div class="card-body">
             <form method="get">
                 <div class="row g-3 align-items-end">
 
+                     <!-- NOMBRE -->
                     <div class="col-12 col-md-6 col-xl-3">
                         <label class="form-label admin-filter-label">Nombre</label>
                         <div class="input-group shadow-sm admin-filter-group">
@@ -51,63 +76,68 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-md-6 col-xl-5">
-                        <label class="form-label admin-filter-label">Descripción</label>
-                        <div class="input-group shadow-sm admin-filter-group">
-                            <span class="input-group-text bg-white">
-                                <i class="bi bi-card-text text-primary"></i>
-                            </span>
-                            <input type="text"
-                                   name="descripcion"
-                                   class="form-control"
-                                   placeholder="Buscar en descripción..."
-                                   value="@filtroDescripcion" />
+                        <!-- ESTATUS -->
+                        <div class="col-12 col-md-4 col-xl-2">
+                            <label class="form-label admin-filter-label">Estado</label>
+                            <div class="input-group shadow-sm admin-filter-group">
+                                <span class="input-group-text bg-white">
+                                    <i class="bi bi-toggle-on text-primary"></i>
+                                </span>
+                                <select name="estatus" class="form-select">
+                                    <option value="">Todos</option>
+                                    <option value="1" selected="@(estatus == "1")">Activo</option>
+                                    <option value="0" selected="@(estatus == "0")">Inactivo</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-12 col-md-4 col-xl-2">
-                        <label class="form-label admin-filter-label">Top registros</label>
-                        <div class="input-group shadow-sm admin-filter-group">
-                            <span class="input-group-text bg-white">
-                                <i class="bi bi-list-ol text-primary"></i>
-                            </span>
-                            <select name="top" class="form-select">
-                                <option value="10" selected="@(top == "10")">10</option>
-                                <option value="25" selected="@(top == "25")">25</option>
-                                <option value="50" selected="@(top == "50")">50</option>
-                                <option value="100" selected="@(top == "100")">100</option>
-                                <option value="@int.MaxValue">Todos</option>
-                            </select>
+                        <!-- TOP -->
+                        <div class="col-12 col-md-4 col-xl-2">
+                            <label class="form-label admin-filter-label">Top registros</label>
+                            <div class="input-group shadow-sm admin-filter-group">
+                                <span class="input-group-text bg-white">
+                                    <i class="bi bi-list-ol text-primary"></i>
+                                </span>
+                                <select name="top" class="form-select">
+                                    <option value="10" selected="@(top == "10")">10</option>
+                                    <option value="25" selected="@(top == "25")">25</option>
+                                    <option value="50" selected="@(top == "50")">50</option>
+                                    <option value="100" selected="@(top == "100")">100</option>
+                                    <option value="@int.MaxValue" selected="@(top == int.MaxValue.ToString())">Todos</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-12">
-                        <div class="admin-filter-actions">
-                            <button type="submit" class="btn btn-primary shadow-sm">
-                                <i class="bi bi-search me-2"></i>Buscar
-                            </button>
+                        <!-- BOTONES -->
+                        <div class="col-12">
+                            <div class="admin-filter-actions">
+                                <button type="submit" class="btn btn-primary shadow-sm">
+                                    <i class="bi bi-search me-2"></i>Buscar
+                                </button>
 
-                            <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
-                                <i class="bi bi-arrow-clockwise me-2"></i>Limpiar
-                            </a>
+                                <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
+                                    <i class="bi bi-arrow-clockwise me-2"></i>Limpiar
+                                </a>
+                            </div>
                         </div>
-                    </div>
 
-                </div>
-            </form>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
-    <div class="card admin-table-card">
+     <!-- TABLA -->
+    <div class="card admin-table-card mt-3">
         <div class="table-responsive">
             <table class="table table-hover align-middle admin-table">
                 <thead>
                     <tr>
-                        <th>Nombre</th>
-                        <th>Descripción</th>
-                        <th class="text-center">Estado</th>
-                        <th>Creación</th>
-                        <th class="text-end">Acciones</th>
+                        <th class="est-ped-col-nombre">Nombre</th>
+@*                         <th class="est-ped-col-descripcion">Descripción</th> *@                     
+                        <th class="est-ped-col-estado text-center">Estado</th>
+                        <th class="est-ped-col-creacion">Creación</th>
+                        <th class="est-ped-col-acciones">Acciones</th>
                     </tr>
                 </thead>
 
@@ -117,15 +147,17 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <td class="fw-bold">
+                                <td class="est-ped-col-nombre">
                                     @item.Nombre
                                 </td>
 
-                                <td>
-                                    @item.Descripcion
-                                </td>
+@*                                 <td class="est-ped-col-descripcion">
+                                    @(item.Descripcion != null && item.Descripcion.Length > 30
+                                        ? item.Descripcion.Substring(0, 30) + "..."
+                                        : item.Descripcion)
+                                </td> *@
 
-                                <td class="text-center">
+                                <td class="est-ped-col-estado text-center">
                                     @if (item.Estatus == 1)
                                     {
                                         <span class="admin-status-badge admin-status-active">
@@ -140,20 +172,19 @@
                                     }
                                 </td>
 
-                                <td>
+                                <td class="est-ped-col-creacion">
                                     @item.FechaCreacion.ToShortDateString()
                                 </td>
 
-                                <td class="text-end">
+                                <td class="est-ped-col-acciones">
                                     <div class="btn-group">
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm border">
+                                        <a asp-action="Edit" asp-route-id="@item.Id"
+                                               class="btn admin-action-btn admin-btn-edit">
                                             <i class="bi bi-pencil"></i>
                                         </a>
-                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm border">
+                                        <a asp-action="Details" asp-route-id="@item.Id"
+                                               class="btn admin-action-btn admin-btn-view">
                                             <i class="bi bi-eye"></i>
-                                        </a>
-                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm border">
-                                            <i class="bi bi-trash"></i>
                                         </a>
                                     </div>
                                 </td>

@@ -19,10 +19,26 @@ namespace TiendaOnline.AppMVC.Controllers
         }
 
         // GET: DireccionesUsuarios
-        public async Task<IActionResult> Index()
+        //Filtros
+        public async Task<IActionResult> Index(string alias, byte? estatus, int top = 10)
         {
-            var tiendaOnlineZapContext = _context.DireccionesUsuarios.Include(d => d.Usuario);
-            return View(await tiendaOnlineZapContext.ToListAsync());
+            var query = _context.DireccionesUsuarios
+                .Include(d => d.Usuario)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(alias))
+                query = query.Where(d => d.Alias != null && d.Alias.Contains(alias));
+
+            if (estatus.HasValue)
+                query = query.Where(d => d.Estatus == estatus);
+
+            query = query
+                .OrderByDescending(d => d.Id)
+                .Take(top);
+
+            var direccionesUsuarios = await query.ToListAsync();
+
+            return View(direccionesUsuarios);
         }
 
         // GET: DireccionesUsuarios/Details/5
@@ -56,14 +72,22 @@ namespace TiendaOnline.AppMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UsuarioId,Alias,Departamento,Municipio,DireccionExacta,Referencia,TelefonoContacto,EsPrincipal,Estatus,FechaCreacion,FechaActualizacion")] DireccionesUsuario direccionesUsuario)
+        public async Task<IActionResult> Create([Bind("UsuarioId,Alias,Departamento,Municipio,DireccionExacta,Referencia,TelefonoContacto,EsPrincipal")] DireccionesUsuario direccionesUsuario)
         {
+            ModelState.Remove("Usuario");
+            ModelState.Remove("Pedidos");
+
             if (ModelState.IsValid)
             {
+                direccionesUsuario.Estatus = 1;
+                direccionesUsuario.FechaCreacion = DateTime.Now;
+                direccionesUsuario.FechaActualizacion = null;
+
                 _context.Add(direccionesUsuario);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "Correo", direccionesUsuario.UsuarioId);
             return View(direccionesUsuario);
         }
