@@ -14,9 +14,22 @@ namespace TiendaOnline.AppMVC.Controllers
         }
 
         // GET: MetodosEnvios
-        public async Task<IActionResult> Index()
+        //Filtros
+        public async Task<IActionResult> Index(string nombre, byte? estatus, int top = 10)
         {
-            return View(await _context.MetodosEnvios.ToListAsync());
+            var query = _context.MetodosEnvios.AsQueryable();
+
+            //Nombre
+            if (!string.IsNullOrWhiteSpace(nombre))
+                query = query.Where(c => c.Nombre.Contains(nombre));
+            //Estado
+            if (estatus.HasValue)
+                query = query.Where(c => c.Estatus == estatus.Value);
+            //Top
+            query = query.Take(top);
+
+            var metodosEnvios = await query.ToListAsync();
+            return View(metodosEnvios);
         }
 
         // GET: MetodosEnvios/Details/5
