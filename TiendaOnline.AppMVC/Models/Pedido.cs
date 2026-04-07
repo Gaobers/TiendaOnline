@@ -11,7 +11,7 @@ public partial class Pedido
 
     [Required(ErrorMessage = "El nombre del Cliente es obligatorio")]
     [StringLength(100, MinimumLength = 5)]
-    [Display(Name = "Nombre del Artículo")]
+    [Display(Name = "Nombre del Cliente")]
     public string NombreCliente { get; set; } = null!;
 
 

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -19,10 +17,38 @@ namespace TiendaOnline.AppMVC.Controllers
         }
 
         // GET: Pedidos
-        public async Task<IActionResult> Index()
+        //Filtros
+        public async Task<IActionResult> Index(string nombre, int? estadoPedidoId, int top = 10)
         {
-            var tiendaOnlineZapContext = _context.Pedidos.Include(p => p.Cupon).Include(p => p.DireccionUsuario).Include(p => p.EstadoPedido).Include(p => p.MetodoEnvio).Include(p => p.Usuario);
-            return View(await tiendaOnlineZapContext.ToListAsync());
+            var query = _context.Pedidos.AsQueryable();
+
+            //Nombre
+            if (!string.IsNullOrWhiteSpace(nombre))
+                query = query.Where(p => p.NombreCliente.Contains(nombre));
+            //Estado
+            if (estadoPedidoId.HasValue)
+                query = query.Where(p => p.EstadoPedidoId == estadoPedidoId.Value);
+            //Top
+            query = query.Take(top);
+
+            var pedidos = await query.ToListAsync();
+
+            // Lista de estados para el combo
+            ViewBag.EstadosPedido = await _context.EstadosPedidos
+                .Where(e => e.Estatus == 1) // para estados activos
+                .Select(e => new SelectListItem
+                {
+                    Value = e.Id.ToString(),
+                    Text = e.Nombre,
+                    Selected = estadoPedidoId.HasValue && e.Id == estadoPedidoId.Value
+                })
+                .ToListAsync();
+
+            ViewBag.Nombre = nombre;
+            ViewBag.EstadoPedidoId = estadoPedidoId;
+            ViewBag.Top = top;
+
+            return View(pedidos);
         }
 
         // GET: Pedidos/Details/5
