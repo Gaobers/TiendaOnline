@@ -7,6 +7,7 @@ namespace TiendaOnline.AppMVC.Models;
 public partial class DireccionesUsuario
 {
     public int Id { get; set; }
+    [Required(ErrorMessage = "El usuario es obligatorio")]
     [Display(Name = "Usuario")]
     public int UsuarioId { get; set; }
 
