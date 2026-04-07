@@ -1,0 +1,25 @@
+.pedidos-index .ped-col-orden {
+    width: 15%;
+}
+
+.pedidos-index .ped-col-cliente {
+    width: 15%;
+}
+
+.pedidos-index .ped-col-fecha {
+    width: 15%;
+}
+
+.pedidos-index .ped-col-estado {
+    width: 15%;
+}
+
+.pedidos-index .ped-col-total {
+    width: 15%;
+}
+
+.pedidos-index .ped-col-acciones {
+    width: 9%;
+    text-align: center;
+    white-space: nowrap;
+}
