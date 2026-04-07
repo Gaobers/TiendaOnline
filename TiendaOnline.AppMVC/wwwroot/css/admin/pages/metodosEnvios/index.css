@@ -1,0 +1,21 @@
+.metodosPagos-index .met-env-col-metodo {
+    width: 20%;
+}
+
+.metodosPagos-index .met-env-col-descripcion {
+    width: 20%;
+}
+
+.metodosPagos-index .met-env-col-estado {
+    width: 20%;
+}
+
+.metodosPagos-index .met-env-col-creacion {
+    width: 20%;
+}
+
+.metodosPagos-index .met-env-col-acciones {
+    width: 9%;
+    text-align: center;
+    white-space: nowrap;
+}
