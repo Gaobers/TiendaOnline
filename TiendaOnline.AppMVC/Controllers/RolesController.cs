@@ -19,9 +19,22 @@ namespace TiendaOnline.AppMVC.Controllers
         }
 
         // GET: Roles
-        public async Task<IActionResult> Index()
+        //Filtros
+        public async Task<IActionResult> Index(string nombre, byte? estatus, int top = 10)
         {
-            return View(await _context.Roles.ToListAsync());
+            var query = _context.Roles.AsQueryable();
+
+            //Nombre
+            if (!string.IsNullOrWhiteSpace(nombre))
+                query = query.Where(c => c.Nombre.Contains(nombre));
+            //Estado
+            if (estatus.HasValue)
+                query = query.Where(c => c.Estatus == estatus.Value);
+            //Top
+            query = query.Take(top);
+
+            var roles = await query.ToListAsync();
+            return View(roles);
         }
 
         // GET: Roles/Details/5

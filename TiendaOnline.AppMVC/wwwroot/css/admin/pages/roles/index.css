@@ -1,0 +1,21 @@
+.roles-index .rol-col-nombre {
+    width: 15%;
+}
+
+.roles-index .rol-col-descripcion {
+    width: 15%;
+}
+
+.roles-index .rol-col-estado {
+    width: 15%;
+}
+
+.roles-index .rol-col-creacion {
+    width: 15%;
+}
+
+.roles-index .rol-col-acciones {
+    width: 9%;
+    text-align: center;
+    white-space: nowrap;
+}
