@@ -197,6 +197,10 @@ namespace TiendaOnline.AppMVC.Controllers
         {
             return _context.Productos.Any(e => e.Id == id);
         }
+
+
+
+
     }
 
 
