@@ -85,7 +85,9 @@
                                 <select name="estatus" class="form-select">
                                     <option value="">Todos</option>
                                     <option value="1" selected="@(estatus == "1")">Activo</option>
-                                    <option value="0" selected="@(estatus == "0")">Inactivo</option>
+                                    <option value="2" selected="@(estatus == "2")">Inactivo</option>
+                                    <option value="3" selected="@(estatus == "3")">Bloqueado</option>
+                                    <option value="4" selected="@(estatus == "4")">Suspendido</option>
                                 </select>
                             </div>
                         </div>
@@ -168,23 +170,29 @@
 
 
                                     <td class="usu-col-rol">
-                                            @item.Rol
+                                        @item.Rol?.Nombre
                                     </td>
 
-                                    <td class="usu-col-estado text-center">
-                                    @if (item.Estatus == 1)
+                                <td class="usu-col-estado text-center">
+                                    @switch (item.Estatus)
                                     {
-                                        <span class="admin-status-badge admin-status-active">
-                                            Activo
-                                        </span>
+                                        case 1:
+                                            <span class="admin-status-badge admin-status-active">Activo</span>
+                                            break;
+                                        case 2:
+                                            <span class="admin-status-badge admin-status-inactive">Inactivo</span>
+                                            break;
+                                        case 3:
+                                            <span class="admin-status-badge admin-status-warning">Bloqueado</span>
+                                            break;
+                                        case 4:
+                                            <span class="admin-status-badge admin-status-danger">Suspendido</span>
+                                            break;
+                                        default:
+                                            <span class="admin-status-badge admin-status-inactive">Desconocido</span>
+                                            break;
                                     }
-                                    else
-                                    {
-                                        <span class="admin-status-badge admin-status-inactive">
-                                            Inactivo
-                                        </span>
-                                    }
-                                    </td>
+                                </td>
 
                                     <td class="usu-col-creacion">
                                         @item.FechaCreacion.ToString("dd/MM/yyyy")
