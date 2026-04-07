@@ -1,0 +1,21 @@
+.metodosPagos-index .met-pag-col-nombre {
+    width: 20%;
+}
+
+.metodosPagos-index .met-pag-col-descripcion {
+    width: 15%;
+}
+
+.metodosPagos-index .met-pag-col-estado {
+    width: 20%;
+}
+
+.metodosPagos-index .met-pag-col-creacion {
+    width: 15%;
+}
+
+.metodosPagos-index .met-pag-col-acciones {
+    width: 9%;
+    text-align: center;
+    white-space: nowrap;
+}
