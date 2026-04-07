@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Direcciones de Usuario";
 
-    var filtroTelefono = Context.Request.Query["telefono"].ToString();
+    var filtroAlias = Context.Request.Query["alias"].ToString();
     var estatus = Context.Request.Query["estatus"].ToString();
     var top = Context.Request.Query["top"].ToString();
 
@@ -13,7 +13,7 @@
     }
 
     var hayFiltrosActivos =
-        !string.IsNullOrWhiteSpace(filtroTelefono) ||
+        !string.IsNullOrWhiteSpace(filtroAlias) ||
         !string.IsNullOrWhiteSpace(estatus) ||
         top != "10";
 }
@@ -70,7 +70,7 @@
                                         name="alias"
                                         class="form-control"
                                         placeholder="Ej: Casa, Oficina..."
-                                        value="@filtroTelefono" />
+                                        value="@filtroAlias"/>
                             </div>
                         </div>
 
