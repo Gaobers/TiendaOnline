@@ -1,0 +1,55 @@
+﻿.admin-section {
+    padding: 2rem;
+}
+
+.admin-section--border {
+    border-top: 1px solid #eef2f7;
+}
+
+.admin-section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.admin-section-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0d6efd, #5b8cff);
+    color: #fff;
+    font-size: 1.15rem;
+    box-shadow: 0 12px 24px rgba(13, 110, 253, 0.18);
+    flex-shrink: 0;
+}
+
+.admin-section-title {
+    font-size: 1.12rem;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.admin-section-text {
+    color: #64748b;
+    font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+    .admin-section {
+        padding: 1.25rem;
+    }
+
+    .admin-section-header {
+        align-items: center;
+    }
+
+    .admin-section-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 0.9rem;
+    }
+}
