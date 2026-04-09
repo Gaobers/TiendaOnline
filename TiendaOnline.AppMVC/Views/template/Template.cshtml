@@ -1,0 +1,65 @@
+﻿<div class="admin-create-page">
+
+    <div class="admin-create-hero">
+        <div class="admin-create-hero__content">
+            <div>
+                <div class="admin-create-badge">
+                    <i class="bi bi-icono"></i>
+                    Gestión de [módulo]
+                </div>
+
+                <h1 class="admin-create-title">[Título de la vista]</h1>
+                <p class="admin-create-subtitle mb-0">
+                    [Texto descriptivo]
+                </p>
+            </div>
+
+            <div class="admin-create-hero__actions">
+                <a asp-action="Index" class="btn admin-btn admin-btn-light">
+                    <i class="bi bi-arrow-left-short"></i>
+                    Volver al listado
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card admin-form-card border-0">
+        <div class="card-body p-0">
+
+            <form asp-action="[Acción]" method="post" class="admin-form">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger admin-validation-box m-0"></div>
+
+                <div class="admin-section">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-pencil-square"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">[Nombre de sección]</h5>
+                            <p class="admin-section-text mb-0">
+                                [Texto de ayuda]
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <!-- campos -->
+                    </div>
+                </div>
+
+                <div class="admin-form-actions">
+                    <button type="submit" class="btn admin-btn admin-btn-primary">
+                        <i class="bi bi-check2-circle"></i>
+                        [Texto guardar]
+                    </button>
+
+                    <a asp-action="Index" class="btn admin-btn admin-btn-outline">
+                        <i class="bi bi-x-circle"></i>
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
