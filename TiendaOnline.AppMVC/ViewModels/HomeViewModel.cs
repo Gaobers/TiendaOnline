@@ -2,6 +2,6 @@
 
 internal class HomeViewModel  
 {
-    public List<Producto> ProductosDestacados { get; set; }
+    public List<Producto> ProductosDestacados { get; set; } 
     public object PromocionesActivas { get; set; }
 }
