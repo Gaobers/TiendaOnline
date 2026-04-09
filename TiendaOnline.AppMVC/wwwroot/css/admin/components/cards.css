@@ -18,10 +18,10 @@
     border: 1px solid rgba(15, 23, 42, 0.06);
 }
 
-.admin-filter-card .card-body,
-.admin-table-card .card-body {
-    padding: 1.25rem;
-}
+    .admin-filter-card .card-body,
+    .admin-table-card .card-body {
+        padding: 1.25rem;
+    }
 
 .admin-card-footer {
     background-color: #f8f9fa;
