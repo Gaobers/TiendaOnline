@@ -1,5 +1,6 @@
 .admin-filter-card,
-.admin-table-card {
+.admin-table-card,
+.admin-form-card {
     border: 0;
     border-radius: var(--admin-radius-md);
     overflow: hidden;
@@ -11,10 +12,16 @@
     margin-bottom: 1rem;
 }
 
-    .admin-filter-card .card-body,
-    .admin-table-card .card-body {
-        padding: 1.25rem;
-    }
+.admin-form-card {
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+    border: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.admin-filter-card .card-body,
+.admin-table-card .card-body {
+    padding: 1.25rem;
+}
 
 .admin-card-footer {
     background-color: #f8f9fa;
@@ -23,4 +30,10 @@
     text-align: center;
     color: var(--admin-text-muted);
     font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .admin-form-card {
+        border-radius: 1.2rem;
+    }
 }

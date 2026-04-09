@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TiendaOnline.AppMVC.Models;
@@ -90,19 +88,35 @@ namespace TiendaOnline.AppMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,NombreCliente,EmailCliente,DireccionEntrega,Total,FechaCreacion,FechaActualizacion,UsuarioId,DireccionUsuarioId,MetodoEnvioId,EstadoPedidoId,CuponId,ApellidoCliente,TelefonoCliente,ReferenciaEntrega,SubTotal,DescuentoTotal,CostoEnvio,Observaciones")] Pedido pedido)
+        public async Task<IActionResult> Create([Bind("NombreCliente,EmailCliente,DireccionEntrega,Total,UsuarioId,DireccionUsuarioId,MetodoEnvioId,EstadoPedidoId,CuponId,ApellidoCliente,TelefonoCliente,ReferenciaEntrega,SubTotal,DescuentoTotal,CostoEnvio,Observaciones")] Pedido pedido)
         {
+            ModelState.Remove("Usuario");
+            ModelState.Remove("MetodoEnvio");
+            ModelState.Remove("EstadoPedido");
+            ModelState.Remove("Cupon");
+            ModelState.Remove("DireccionUsuario");
+            ModelState.Remove("DetallesPedidos");
+            ModelState.Remove("HistorialesEstadosPedidos");
+            ModelState.Remove("Notificaciones");
+            ModelState.Remove("Pagos");
+            ModelState.Remove("UsosCupone");
+
+            pedido.FechaCreacion = DateTime.Now;
+            pedido.FechaActualizacion = DateTime.Now;
+
             if (ModelState.IsValid)
             {
                 _context.Add(pedido);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CuponId"] = new SelectList(_context.Cupones, "Id", "Id", pedido.CuponId);
-            ViewData["DireccionUsuarioId"] = new SelectList(_context.DireccionesUsuarios, "Id", "Id", pedido.DireccionUsuarioId);
-            ViewData["EstadoPedidoId"] = new SelectList(_context.EstadosPedidos, "Id", "Id", pedido.EstadoPedidoId);
-            ViewData["MetodoEnvioId"] = new SelectList(_context.MetodosEnvios, "Id", "Id", pedido.MetodoEnvioId);
-            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "Id", pedido.UsuarioId);
+
+            ViewData["CuponId"] = new SelectList(_context.Cupones, "Id", "Codigo", pedido.CuponId);
+            ViewData["DireccionUsuarioId"] = new SelectList(_context.DireccionesUsuarios, "Id", "DireccionExacta", pedido.DireccionUsuarioId);
+            ViewData["EstadoPedidoId"] = new SelectList(_context.EstadosPedidos, "Id", "Nombre", pedido.EstadoPedidoId);
+            ViewData["MetodoEnvioId"] = new SelectList(_context.MetodosEnvios, "Id", "Nombre", pedido.MetodoEnvioId);
+            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "Nombre", pedido.UsuarioId);
+
             return View(pedido);
         }
 
