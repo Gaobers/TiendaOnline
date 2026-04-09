@@ -1,43 +1,100 @@
 ﻿@model Categoria
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Crear categoría";
 }
 
-<h1>Create</h1>
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin/pages/categorias/create.css" asp-append-version="true" />
+}
 
-<h4>Categoria</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
+<div class="admin-create-page">
+
+   @*  <div class="admin-create-hero">
+        <div class="admin-create-hero__content">
+            <div>
+                <div class="admin-create-badge">
+                    <i class="bi bi-tags"></i>
+                    Gestión de categorías
+                </div>
+
+                <h1 class="admin-create-title">Crear categoría</h1>
+                <p class="admin-create-subtitle mb-0">
+                    Completa la información de la nueva categoría de forma clara y ordenada.
+                </p>
             </div>
-            <div class="form-group">
-                <label asp-for="Descripcion" class="control-label"></label>
-                <input asp-for="Descripcion" class="form-control" />
-                <span asp-validation-for="Descripcion" class="text-danger"></span>
+
+            <div class="admin-create-hero__actions">
+                <a asp-action="Index" class="btn admin-btn admin-btn-light">
+                    <i class="bi bi-arrow-left-short"></i>
+                    Volver al listado
+                </a>
             </div>
-            <div class="form-group">
-                <label asp-for="FechaActualizacion" class="control-label"></label>
-                <input asp-for="FechaActualizacion" class="form-control" />
-                <span asp-validation-for="FechaActualizacion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
+    </div> *@
+
+    <div class="card admin-form-card border-0">
+        <div class="card-body p-0">
+
+            <form asp-action="Create" method="post" class="admin-form">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger admin-validation-box m-0"></div>
+
+                <div class="admin-section">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-pencil-square"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">Información general</h5>
+                            <p class="admin-section-text mb-0">
+                                Ingresa los datos principales para registrar la categoría dentro del sistema.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label asp-for="Nombre" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-tag"></i>
+                                <input asp-for="Nombre" class="form-control admin-input" placeholder="Ej. Calzado deportivo" />
+                            </div>
+                            <span asp-validation-for="Nombre" class="text-danger small"></span>
+                        </div>
+
+
+                        <div class="col-12">
+                            <label asp-for="Descripcion" class="form-label admin-label"></label>
+                            <div class="admin-textarea-wrap">
+                                <textarea asp-for="Descripcion"
+                                          class="form-control admin-input admin-textarea"
+                                          rows="4"
+                                          placeholder="Escribe una descripción breve de la categoría..."></textarea>
+                            </div>
+                            <span asp-validation-for="Descripcion" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-form-actions">
+                    <button type="submit" class="btn admin-btn admin-btn-primary">
+                        <i class="bi bi-check2-circle"></i>
+                        Guardar categoría
+                    </button>
+
+                    <a asp-action="Index" class="btn admin-btn admin-btn-outline">
+                        <i class="bi bi-x-circle"></i>
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
