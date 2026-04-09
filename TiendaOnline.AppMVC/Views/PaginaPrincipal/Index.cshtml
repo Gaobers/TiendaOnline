@@ -1,0 +1,159 @@
+﻿@model TiendaOnline.AppMVC.Models.PaginaPrincipalViewModel
+
+@{
+    ViewData["Title"] = "¡Zapatos de Colección!";
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Montserrat:wght@800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+    :root {
+        --azul-admin: #4e73df; /* El azul de tu sidebar */
+        --azul-oscuro: #224abe;
+        --azul-claro: #f8f9fc;
+        --celeste-brillante: #36b9cc;
+        --texto-oscuro: #5a5c69;
+        --fuente-titulos: 'Montserrat', sans-serif;
+    }
+
+    body { 
+        font-family: 'Poppins', sans-serif; 
+        background-color: var(--azul-claro); 
+        color: var(--texto-oscuro);
+        margin: 0;
+    }
+
+    /* === BANNER AZUL LLAMATIVO === */
+    .hero-banner {
+        background: linear-gradient(135deg, var(--azul-admin) 0%, var(--azul-oscuro) 100%);
+        padding: 60px 20px;
+        text-align: center;
+        color: white;
+        border-bottom: 5px solid var(--celeste-brillante);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        margin-bottom: 40px;
+    }
+
+    .hero-banner h1 {
+        font-family: var(--fuente-titulos);
+        font-size: 3rem;
+        text-transform: uppercase;
+        letter-spacing: -1px;
+        margin-bottom: 10px;
+    }
+
+    /* Listado de promos en el banner */
+    .promo-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-top: 25px;
+    }
+
+    .promo-pill {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(5px);
+        padding: 10px 20px;
+        border-radius: 50px;
+        border: 1px solid rgba(255,255,255,0.3);
+        transition: all 0.3s;
+    }
+    .promo-pill:hover { background: var(--celeste-brillante); transform: translateY(-3px); }
+
+    /* === GRID DE ZAPATOS === */
+    .shoe-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 30px;
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* === CARD ESTILO ADMIN CLEAN === */
+    .shoe-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        border: 1px solid #e3e6f0;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+    }
+
+    .shoe-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 1rem 3rem rgba(0,0,0,0.15);
+        border-color: var(--azul-admin);
+    }
+
+    .img-box {
+        width: 100%;
+        height: 250px;
+        background: #f1f1f1;
+        overflow: hidden;
+    }
+    .img-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s;
+    }
+    .shoe-card:hover img { transform: scale(1.08); }
+
+    .shoe-body { padding: 20px; text-align: center; }
+    .shoe-body h3 { font-size: 1.25rem; font-weight: 700; color: #4e73df; }
+    .price-tag { font-size: 1.5rem; color: #1cc88a; font-weight: 800; margin: 10px 0; }
+
+    /* === BOTÓN AZUL === */
+    .btn-action {
+        background-color: var(--azul-admin);
+        color: white;
+        padding: 12px 25px;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-block;
+        font-weight: 600;
+        transition: background 0.3s;
+        width: 80%;
+    }
+    .btn-action:hover { background-color: var(--azul-oscuro); color: white; }
+
+</style>
+
+<div class="hero-banner">
+    <div class="container">
+        <h1>Nueva Colección 2026</h1>
+        <p>Estilo, confort y durabilidad en cada paso.</p>
+        
+        <div class="promo-container">
+            @foreach (var promo in Model.PromocionesActivas)
+            {
+                <div class="promo-pill">
+                    <i class="fas @promo.Icono"></i> @promo.Texto
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <h2 class="text-center mb-5" style="font-weight: 800; color: var(--texto-oscuro);">Productos Destacados</h2>
+
+    <div class="shoe-grid">
+        @foreach (var producto in Model.ProductosDestacados)
+        {
+            <div class="shoe-card">
+                <div class="img-box">
+                    <img src="@producto.ImagenUrl" alt="@producto.Nombre">
+                </div>
+                <div class="shoe-body">
+                    <h3>@producto.Nombre</h3>
+                    <div class="price-tag">$@producto.Precio.ToString("N2")</div>
+                    <a href="#" class="btn-action">Ver Detalles</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
