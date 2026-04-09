@@ -15,15 +15,18 @@
     var hayFiltrosActivos =
     !string.IsNullOrWhiteSpace(filtroNumero) ||
     !string.IsNullOrWhiteSpace(filtroestatus) ||
-    !string.IsNullOrWhiteSpace(filtrotop) ||
     filtrotop != "10";
 }
 
-<div class="container admin-index-page">
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin/pages/tallas/index.css" asp-append-version="true" />
+}
+
 
     <!-- HERO -->
+<div class="container admin-index-page tallas-index">
     <div class="card admin-hero-card">
-        <div class="card-body d-flex justify-content-between align-items-center">
+        <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
                 <h1 class="admin-hero-title">
                     <i class="bi bi-aspect-ratio me-2"></i>Tallas
@@ -99,25 +102,23 @@
                                 <option value="25" selected="@(filtrotop == "25")">25</option>
                                 <option value="50" selected="@(filtrotop == "50")">50</option>
                                 <option value="100" selected="@(filtrotop == "100")">100</option>
-                                <option value="@int.MaxValue">Todos</option>
-                            </select>
+                                    <option value="@int.MaxValue" selected="@(filtrotop == int.MaxValue.ToString())">Todos</option>
+                                </select>
                         </div>
                     </div>
 
                     <!-- BOTONES -->
-                    <div class="col-12">
-                        <div class="admin-filter-actions">
+                        <div class="col-12">
+                            <div class="admin-filter-actions">
+                                <button type="submit" class="btn btn-primary shadow-sm">
+                                    <i class="bi bi-search me-2"></i>Buscar
+                                </button>
 
-                            <button type="submit" class="btn btn-primary shadow-sm">
-                                <i class="bi bi-search me-2"></i>Buscar
-                            </button>
-
-                            <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
-                                <i class="bi bi-arrow-clockwise me-2"></i>Limpiar
-                            </a>
-
+                                <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
+                                    <i class="bi bi-arrow-clockwise me-2"></i>Limpiar
+                                </a>
+                            </div>
                         </div>
-                    </div>
 
                 </div>
             </form>
@@ -131,10 +132,10 @@
             <table class="table table-hover align-middle admin-table">
                 <thead>
                     <tr>
-                        <th>Número</th>
-                        <th class="text-center">Estado</th>
-                        <th>Creación</th>
-                        <th class="text-end">Acciones</th>
+                        <th class="tal-col-numero">Número</th>
+                        <th class="tal-col-estado text-center">Estado</th>
+                        <th class="tal-col-creacion">Creación</th>
+                        <th class="tal-col-acciones">Acciones</th>
                     </tr>
                 </thead>
 
@@ -145,12 +146,12 @@
                         {
                             <tr>
                                 <!-- NUMERO -->
-                                <td class="fw-bold">
+                                <td class="tal-col-numero">
                                     @item.Numero
                                 </td>
 
                                 <!-- ESTADO -->
-                                <td class="text-center">
+                                <td class="tal-col-estado text-center">
                                     @if (item.Estatus == 1)
                                     {
                                         <span class="admin-status-badge admin-status-active">
@@ -166,21 +167,21 @@
                                 </td>
 
                                 <!-- FECHA -->
-                                <td>
+                                <td class="tal-col-creacion">
                                     @item.FechaCreacion.ToShortDateString()
                                 </td>
 
                                 <!-- ACCIONES -->
-                                <td class="text-end">
+                                <td class="tal-col-acciones">
                                     <div class="btn-group">
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm border">
+                                        <a asp-action="Edit" asp-route-id="@item.Id"
+                                               class="btn admin-action-btn admin-btn-edit">
                                             <i class="bi bi-pencil"></i>
                                         </a>
-                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm border">
+
+                                        <a asp-action="Details" asp-route-id="@item.Id"
+                                               class="btn admin-action-btn admin-btn-view">
                                             <i class="bi bi-eye"></i>
-                                        </a>
-                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm border">
-                                            <i class="bi bi-trash"></i>
                                         </a>
                                     </div>
                                 </td>

@@ -1,73 +1,178 @@
-﻿@model TiendaOnline.AppMVC.Models.Cupone
+﻿@model Cupone
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Crear cupón";
 }
 
-<h1>Create</h1>
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin/pages/cupones/create.css" asp-append-version="true" />
+}
 
-<h4>Cupone</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Codigo" class="control-label"></label>
-                <input asp-for="Codigo" class="form-control" />
-                <span asp-validation-for="Codigo" class="text-danger"></span>
+<div class="admin-create-page">
+
+    <div class="admin-create-hero">
+        <div class="admin-create-hero__content">
+            <div>
+                <div class="admin-create-badge">
+                    <i class="bi bi-ticket-perforated"></i>
+                    Gestión de cupones
+                </div>
+
+                <h1 class="admin-create-title">Crear cupón</h1>
+                <p class="admin-create-subtitle mb-0">
+                    Configura un nuevo cupón con sus condiciones, fechas y límites de uso.
+                </p>
             </div>
-            <div class="form-group">
-                <label asp-for="Descripcion" class="control-label"></label>
-                <input asp-for="Descripcion" class="form-control" />
-                <span asp-validation-for="Descripcion" class="text-danger"></span>
+
+            <div class="admin-create-hero__actions">
+                <a asp-action="Index" class="btn admin-btn admin-btn-light">
+                    <i class="bi bi-arrow-left-short"></i>
+                    Volver al listado
+                </a>
             </div>
-            <div class="form-group">
-                <label asp-for="TipoDescuento" class="control-label"></label>
-                <input asp-for="TipoDescuento" class="form-control" />
-                <span asp-validation-for="TipoDescuento" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ValorDescuento" class="control-label"></label>
-                <input asp-for="ValorDescuento" class="form-control" />
-                <span asp-validation-for="ValorDescuento" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MontoMinimoCompra" class="control-label"></label>
-                <input asp-for="MontoMinimoCompra" class="form-control" />
-                <span asp-validation-for="MontoMinimoCompra" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FechaInicio" class="control-label"></label>
-                <input asp-for="FechaInicio" class="form-control" />
-                <span asp-validation-for="FechaInicio" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FechaFin" class="control-label"></label>
-                <input asp-for="FechaFin" class="form-control" />
-                <span asp-validation-for="FechaFin" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UsoMaximo" class="control-label"></label>
-                <input asp-for="UsoMaximo" class="form-control" />
-                <span asp-validation-for="UsoMaximo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UsoPorUsuario" class="control-label"></label>
-                <input asp-for="UsoPorUsuario" class="form-control" />
-                <span asp-validation-for="UsoPorUsuario" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
+    </div>
+
+    <div class="card admin-form-card border-0">
+        <div class="card-body p-0">
+
+            <form asp-action="Create" method="post" class="admin-form">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger admin-validation-box m-0"></div>
+
+                <div class="admin-section">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-pencil-square"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">Información general</h5>
+                            <p class="admin-section-text mb-0">
+                                Define el código, descripción y tipo de descuento del cupón.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label asp-for="Codigo" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-upc-scan"></i>
+                                <input asp-for="Codigo" class="form-control admin-input" placeholder="Ej. DESCUENTO10" />
+                            </div>
+                            <span asp-validation-for="Codigo" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="TipoDescuento" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-percent"></i>
+                                <input asp-for="TipoDescuento" class="form-control admin-input" placeholder="Ej. Porcentaje o monto fijo" />
+                            </div>
+                            <span asp-validation-for="TipoDescuento" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="ValorDescuento" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-cash-coin"></i>
+                                <input asp-for="ValorDescuento" class="form-control admin-input" placeholder="Ej. 10 o 25.00" />
+                            </div>
+                            <span asp-validation-for="ValorDescuento" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="MontoMinimoCompra" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-cart-check"></i>
+                                <input asp-for="MontoMinimoCompra" class="form-control admin-input" placeholder="Ej. 50.00" />
+                            </div>
+                            <span asp-validation-for="MontoMinimoCompra" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <label asp-for="Descripcion" class="form-label admin-label"></label>
+                            <div class="admin-textarea-wrap">
+                                <textarea asp-for="Descripcion"
+                                          class="form-control admin-input admin-textarea"
+                                          rows="4"
+                                          placeholder="Describe brevemente el propósito o condiciones del cupón..."></textarea>
+                            </div>
+                            <span asp-validation-for="Descripcion" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-section admin-section--border">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-calendar-range"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">Vigencia y límites</h5>
+                            <p class="admin-section-text mb-0">
+                                Establece el período de validez y la cantidad máxima de usos permitidos.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label asp-for="FechaInicio" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-calendar-event"></i>
+                                <input asp-for="FechaInicio" class="form-control admin-input" />
+                            </div>
+                            <span asp-validation-for="FechaInicio" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="FechaFin" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-calendar-x"></i>
+                                <input asp-for="FechaFin" class="form-control admin-input" />
+                            </div>
+                            <span asp-validation-for="FechaFin" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="UsoMaximo" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-123"></i>
+                                <input asp-for="UsoMaximo" class="form-control admin-input" placeholder="Ej. 100" />
+                            </div>
+                            <span asp-validation-for="UsoMaximo" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="UsoPorUsuario" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-person-check"></i>
+                                <input asp-for="UsoPorUsuario" class="form-control admin-input" placeholder="Ej. 1" />
+                            </div>
+                            <span asp-validation-for="UsoPorUsuario" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-form-actions">
+                    <button type="submit" class="btn admin-btn admin-btn-primary">
+                        <i class="bi bi-check2-circle"></i>
+                        Guardar cupón
+                    </button>
+
+                    <a asp-action="Index" class="btn admin-btn admin-btn-outline">
+                        <i class="bi bi-x-circle"></i>
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

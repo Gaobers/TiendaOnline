@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TiendaOnline.AppMVC.Models;
@@ -198,29 +194,6 @@ namespace TiendaOnline.AppMVC.Controllers
             return _context.Productos.Any(e => e.Id == id);
         }
 
-
-
-
     }
 
-
-
-
-    //Funcion para mandar a llamar los atributos que necesita que se muestren
-    //en la vista de detalles del producto, para mostrar el nombre, etc.
-    /*public async Task<IActionResult> DetalleProducto(int? id)
-        {
-            if (id == null)
-                return NotFound();
-
-            var producto = await _context.Productos
-                .Include(p => p.Categoria)
-                .Include(p => p.Marca)
-                .FirstOrDefaultAsync(p => p.Id == id);
-
-            if (producto == null)
-                return NotFound();
-
-            return View(producto);
-        }*/
-    }
+}
