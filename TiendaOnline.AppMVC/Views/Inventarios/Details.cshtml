@@ -1,8 +1,6 @@
 ﻿@model Inventario
 
 @{
-    ViewData["Title"] = "Detalle de inventario";
-
     var bajoStock = Model.Stock <= Model.StockMinimo;
     var agotado = Model.Stock == 0;
 

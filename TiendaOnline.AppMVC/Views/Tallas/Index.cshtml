@@ -1,8 +1,6 @@
 ﻿@model IEnumerable<Talla>
 
 @{
-    ViewData["Title"] = "Tallas";
-
     var filtroNumero = Context.Request.Query["numero"].ToString();
     var filtroestatus = Context.Request.Query["estatus"].ToString();
     var filtrotop = Context.Request.Query["top"].ToString();

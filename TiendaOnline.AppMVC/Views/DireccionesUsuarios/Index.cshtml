@@ -1,8 +1,6 @@
 ﻿@model IEnumerable<DireccionesUsuario>
 
 @{
-    ViewData["Title"] = "Direcciones de Usuario";
-
     var filtroAlias = Context.Request.Query["alias"].ToString();
     var estatus = Context.Request.Query["estatus"].ToString();
     var top = Context.Request.Query["top"].ToString();

@@ -1,21 +1,26 @@
-.metodosPagos-index .met-env-col-metodo {
+.metodosEnvios-index .met-env-col-metodo {
     width: 20%;
 }
 
-.metodosPagos-index .met-env-col-descripcion {
+.metodosEnvios-index .met-env-col-descripcion {
     width: 20%;
 }
 
-.metodosPagos-index .met-env-col-estado {
+.metodosEnvios-index .met-env-col-estado {
     width: 20%;
 }
 
-.metodosPagos-index .met-env-col-creacion {
+.metodosEnvios-index .met-env-col-creacion {
     width: 20%;
 }
 
-.metodosPagos-index .met-env-col-acciones {
+.metodosEnvios-index .met-env-col-acciones {
     width: 9%;
     text-align: center;
     white-space: nowrap;
+}
+
+.metodosEnvios-index {
+    margin-top: 0;
+    padding-top: 0;
 }

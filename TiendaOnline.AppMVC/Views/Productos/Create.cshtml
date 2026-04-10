@@ -1,12 +1,4 @@
-﻿@model Producto
-
-@{
-    ViewData["Title"] = "Crear producto";
-}
-
-@section Styles {
-    <link rel="stylesheet" href="~/css/admin/pages/productos/create.css" asp-append-version="true" />
-}
+﻿@model ProductoFormViewModel
 
 <div class="admin-create-page">
 
@@ -84,7 +76,7 @@
                         <div>
                             <h5 class="admin-section-title mb-1">Clasificación</h5>
                             <p class="admin-section-text mb-0">
-                                Relaciona el producto con su categoría, marca y material.
+                                Relaciona el producto con su categoría, marca, material y colores.
                             </p>
                         </div>
                     </div>
@@ -133,6 +125,27 @@
                                 <small class="text-muted d-block mt-2">
                                     Los productos destacados pueden mostrarse con mayor prioridad dentro del sistema.
                                 </small>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label admin-label d-block">Colores</label>
+                            <div class="row g-2">
+                                @foreach (var color in Model.ColoresDisponibles)
+                                {
+                                    <div class="col-md-3 col-sm-4 col-6">
+                                        <div class="form-check admin-check-card p-3">
+                                            <input class="form-check-input"
+                                                   type="checkbox"
+                                                   name="ColoresSeleccionados"
+                                                   value="@color.Value"
+                                                   id="color_@color.Value" />
+                                            <label class="form-check-label ms-2" for="color_@color.Value">
+                                                @color.Text
+                                            </label>
+                                        </div>
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>
