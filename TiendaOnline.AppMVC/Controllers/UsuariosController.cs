@@ -1,10 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using TiendaOnline.AppMVC.Models;
 
 namespace TiendaOnline.AppMVC.Controllers
 {
+    [Authorize]
     public class UsuariosController : Controller
     {
         private readonly TiendaOnlineZapContext _context;
@@ -14,8 +19,105 @@ namespace TiendaOnline.AppMVC.Controllers
             _context = context;
         }
 
-        // GET: Usuarios
-        //Fitlros
+        // =========================
+        // LOGIN
+        // =========================
+
+        [AllowAnonymous]
+        public IActionResult Login(string? returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(string correo, string password, string? returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+
+            if (string.IsNullOrWhiteSpace(correo))
+                ModelState.AddModelError("Correo", "El correo es obligatorio.");
+
+            if (string.IsNullOrWhiteSpace(password))
+                ModelState.AddModelError("Password", "La contraseña es obligatoria.");
+
+            if (!ModelState.IsValid)
+                return View();
+
+            correo = correo.Trim();
+            password = password.Trim();
+
+            var usuarioDB = await _context.Usuarios
+                .Include(u => u.Rol)
+                .FirstOrDefaultAsync(u => u.Correo == correo && u.Estatus == 1);
+
+            if (usuarioDB == null)
+            {
+                ModelState.AddModelError(string.Empty, "Correo o contraseña incorrectos.");
+                return View();
+            }
+
+            bool esValido = BCrypt.Net.BCrypt.Verify(password, usuarioDB.PasswordHash);
+
+            if (!esValido)
+            {
+                ModelState.AddModelError(string.Empty, "Correo o contraseña incorrectos.");
+                return View();
+            }
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, usuarioDB.Id.ToString()),
+                new Claim(ClaimTypes.Name, usuarioDB.Nombre),
+                new Claim(ClaimTypes.Email, usuarioDB.Correo),
+                new Claim(ClaimTypes.Role, usuarioDB.Rol.Nombre),
+                new Claim("Id", usuarioDB.Id.ToString()),
+                new Claim("Correo", usuarioDB.Correo),
+                new Claim("RolId", usuarioDB.RolId.ToString())
+            };
+
+            var claimsIdentity = new ClaimsIdentity(
+                claims,
+                CookieAuthenticationDefaults.AuthenticationScheme
+            );
+
+            var authProperties = new AuthenticationProperties
+            {
+                IsPersistent = true,
+                ExpiresUtc = DateTimeOffset.UtcNow.AddHours(8)
+            };
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                authProperties
+            );
+
+            if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
+                return Redirect(returnUrl);
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction(nameof(Login));
+        }
+
+        [AllowAnonymous]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
+        // =========================
+        // CRUD USUARIOS
+        // =========================
+
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Index(string nombre, byte? estatus, int top = 10)
         {
             var query = _context.Usuarios
@@ -34,7 +136,7 @@ namespace TiendaOnline.AppMVC.Controllers
             return View(usuarios);
         }
 
-        // GET: Usuarios/Details/5
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -50,16 +152,16 @@ namespace TiendaOnline.AppMVC.Controllers
             return View(usuario);
         }
 
-        // GET: Usuarios/Create
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Create()
         {
             await CargarRolesAsync();
             return View();
         }
 
-        // POST: Usuarios/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Create([Bind("Nombre,Apellido,Correo,Telefono,PasswordHash,Estatus,RolId")] Usuario usuario)
         {
             ModelState.Remove("Rol");
@@ -90,6 +192,7 @@ namespace TiendaOnline.AppMVC.Controllers
                 return View(usuario);
             }
 
+            usuario.PasswordHash = BCrypt.Net.BCrypt.HashPassword(usuario.PasswordHash);
             usuario.FechaCreacion = DateTime.Now;
             usuario.FechaActualizacion = null;
 
@@ -99,7 +202,7 @@ namespace TiendaOnline.AppMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Usuarios/Edit/5
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -113,9 +216,9 @@ namespace TiendaOnline.AppMVC.Controllers
             return View(usuario);
         }
 
-        // POST: Usuarios/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Apellido,Correo,Telefono,PasswordHash,Estatus,FechaCreacion,FechaActualizacion,RolId")] Usuario usuario)
         {
             if (id != usuario.Id)
@@ -136,6 +239,12 @@ namespace TiendaOnline.AppMVC.Controllers
             ModelState.Remove("Notificaciones");
             ModelState.Remove("Pedidos");
             ModelState.Remove("UsosCupones");
+
+            // Si en edición dejan vacío PasswordHash, se conserva la anterior
+            if (string.IsNullOrWhiteSpace(usuario.PasswordHash))
+            {
+                usuario.PasswordHash = original.PasswordHash;
+            }
 
             NormalizarYValidarUsuario(usuario, esEdicion: true);
 
@@ -158,6 +267,19 @@ namespace TiendaOnline.AppMVC.Controllers
                 return View(usuario);
             }
 
+            // Solo hashea si la contraseña fue cambiada realmente
+            if (usuario.PasswordHash != original.PasswordHash)
+            {
+                bool pareceHashBCrypt = usuario.PasswordHash.StartsWith("$2a$")
+                                      || usuario.PasswordHash.StartsWith("$2b$")
+                                      || usuario.PasswordHash.StartsWith("$2y$");
+
+                if (!pareceHashBCrypt)
+                {
+                    usuario.PasswordHash = BCrypt.Net.BCrypt.HashPassword(usuario.PasswordHash);
+                }
+            }
+
             usuario.FechaCreacion = original.FechaCreacion;
             usuario.FechaActualizacion = DateTime.Now;
 
@@ -177,7 +299,7 @@ namespace TiendaOnline.AppMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Usuarios/Delete/5
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -193,9 +315,9 @@ namespace TiendaOnline.AppMVC.Controllers
             return View(usuario);
         }
 
-        // POST: Usuarios/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var usuario = await _context.Usuarios
@@ -219,6 +341,65 @@ namespace TiendaOnline.AppMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // =========================
+        // CAMBIO DE CONTRASEÑA
+        // =========================
+
+        public async Task<IActionResult> ChangePassword()
+        {
+            var userIdClaim = User.FindFirst("Id");
+
+            if (userIdClaim == null)
+                return Unauthorized();
+
+            int userId = int.Parse(userIdClaim.Value);
+
+            var usuario = await _context.Usuarios.FindAsync(userId);
+
+            if (usuario == null)
+                return NotFound();
+
+            return View(usuario);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(int id, string passwordNueva, string confirmarPassword)
+        {
+            if (string.IsNullOrWhiteSpace(passwordNueva))
+                ModelState.AddModelError("passwordNueva", "La nueva contraseña es obligatoria.");
+
+            if (string.IsNullOrWhiteSpace(confirmarPassword))
+                ModelState.AddModelError("confirmarPassword", "Debe confirmar la contraseña.");
+
+            if (passwordNueva != confirmarPassword)
+                ModelState.AddModelError("confirmarPassword", "Las contraseñas no coinciden.");
+
+            if (!ModelState.IsValid)
+            {
+                var usuarioError = await _context.Usuarios.FindAsync(id);
+                return View(usuarioError);
+            }
+
+            var usuarioData = await _context.Usuarios.FirstOrDefaultAsync(u => u.Id == id);
+
+            if (usuarioData == null)
+                return NotFound();
+
+            usuarioData.PasswordHash = BCrypt.Net.BCrypt.HashPassword(passwordNueva);
+            usuarioData.FechaActualizacion = DateTime.Now;
+
+            _context.Update(usuarioData);
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Contraseña actualizada correctamente.";
+            return RedirectToAction(nameof(Login));
+        }
+
+        // =========================
+        // MÉTODOS PRIVADOS
+        // =========================
+
         private bool UsuarioExists(int id)
         {
             return _context.Usuarios.Any(e => e.Id == id);
@@ -227,6 +408,7 @@ namespace TiendaOnline.AppMVC.Controllers
         private async Task CargarRolesAsync(int? rolId = null)
         {
             var roles = await _context.Roles
+                .Where(r => r.Estatus == 1)
                 .OrderBy(r => r.Nombre)
                 .ToListAsync();
 
