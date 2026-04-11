@@ -1,38 +1,89 @@
 ﻿@model Colore
 
-@{
-    ViewData["Title"] = "Create";
-}
+<div class="admin-create-page">
 
-<h1>Create</h1>
+    <div class="admin-create-hero">
+        <div class="admin-create-hero__content">
+            <div>
+                <div class="admin-create-badge">
+                    <i class="bi bi-palette"></i>
+                    Gestión de colores
+                </div>
 
-<h4>Colore</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
+                <h1 class="admin-create-title">Crear color</h1>
+                <p class="admin-create-subtitle mb-0">
+                    Registra un nuevo color con su nombre y código hexadecimal.
+                </p>
             </div>
-            <div class="form-group">
-                <label asp-for="CodigoHex" class="control-label"></label>
-                <input asp-for="CodigoHex" class="form-control" />
-                <span asp-validation-for="CodigoHex" class="text-danger"></span>
+
+            <div class="admin-create-hero__actions">
+                <a asp-action="Index" class="btn admin-btn admin-btn-light">
+                    <i class="bi bi-arrow-left-short"></i>
+                    Volver al listado
+                </a>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
+    </div>
+
+    <div class="card admin-form-card border-0">
+        <div class="card-body p-0">
+
+            <form asp-action="Create" method="post" class="admin-form">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger admin-validation-box m-0"></div>
+
+                <div class="admin-section">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-droplet-half"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">Información del color</h5>
+                            <p class="admin-section-text mb-0">
+                                Completa los datos necesarios para registrar un nuevo color en el sistema.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label asp-for="Nombre" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-tag"></i>
+                                <input asp-for="Nombre" class="form-control admin-input" placeholder="Ej. Rojo intenso" />
+                            </div>
+                            <span asp-validation-for="Nombre" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="CodigoHex" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-hash"></i>
+                                <input asp-for="CodigoHex" class="form-control admin-input" placeholder="Ej. #FF0000" />
+                            </div>
+                            <span asp-validation-for="CodigoHex" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-form-actions">
+                    <button type="submit" class="btn admin-btn admin-btn-primary">
+                        <i class="bi bi-check2-circle"></i>
+                        Guardar color
+                    </button>
+
+                    <a asp-action="Index" class="btn admin-btn admin-btn-outline">
+                        <i class="bi bi-x-circle"></i>
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

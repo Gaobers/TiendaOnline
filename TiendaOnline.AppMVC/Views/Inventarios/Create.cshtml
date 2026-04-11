@@ -1,60 +1,114 @@
 ﻿@model Inventario
 
 @{
-    ViewData["Title"] = "Crear";
+    ViewData["Title"] = "Crear registro de inventario";
 }
 
-<div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
-    <div>
-        <h3 class="mb-0">Crear registro de inventario</h3>
-        <div class="text-muted">Completa la información del nuevo registro</div>
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin/pages/inventarios/create.css" asp-append-version="true" />
+}
+
+<div class="admin-create-page">
+
+    <div class="admin-create-hero">
+        <div class="admin-create-hero__content">
+            <div>
+                <div class="admin-create-badge">
+                    <i class="bi bi-boxes"></i>
+                    Gestión de inventario
+                </div>
+
+                <h1 class="admin-create-title">Crear registro de inventario</h1>
+                <p class="admin-create-subtitle mb-0">
+                    Completa la información del nuevo registro para controlar stock, talla y mínimos permitidos.
+                </p>
+            </div>
+
+            <div class="admin-create-hero__actions">
+                <a asp-action="Index" class="btn admin-btn admin-btn-light">
+                    <i class="bi bi-arrow-left-short"></i>
+                    Volver al listado
+                </a>
+            </div>
+        </div>
     </div>
 
-    <a asp-action="Index" class="btn btn-outline-secondary">
-        Volver
-    </a>
-</div>
+    <div class="card admin-form-card border-0">
+        <div class="card-body p-0">
 
-<div class="card shadow-sm inv-card">
-    <div class="card-body p-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="alert alert-danger inv-validation-box mb-4"></div>
+            <form asp-action="Create" method="post" class="admin-form">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger admin-validation-box m-0"></div>
 
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <label asp-for="ProductoId" class="form-label inv-label"></label>
-                    <select asp-for="ProductoId" class="form-select inv-input" asp-items="ViewBag.ProductoId">
-                        <option value="">Seleccione un producto</option>
-                    </select>
-                    <span asp-validation-for="ProductoId" class="text-danger small"></span>
+                <div class="admin-section">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-clipboard-data"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">Información del inventario</h5>
+                            <p class="admin-section-text mb-0">
+                                Selecciona el producto, la talla y define los valores de stock para este registro.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label asp-for="ProductoId" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-box-seam"></i>
+                                <select asp-for="ProductoId" class="form-select admin-input" asp-items="ViewBag.ProductoId">
+                                    <option value="">Seleccione un producto</option>
+                                </select>
+                            </div>
+                            <span asp-validation-for="ProductoId" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="TallaId" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-rulers"></i>
+                                <select asp-for="TallaId" class="form-select admin-input" asp-items="ViewBag.TallaId">
+                                    <option value="">Seleccione una talla</option>
+                                </select>
+                            </div>
+                            <span asp-validation-for="TallaId" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Stock" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-123"></i>
+                                <input asp-for="Stock" type="number" class="form-control admin-input" placeholder="Ej. 25" />
+                            </div>
+                            <span asp-validation-for="Stock" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="StockMinimo" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-exclamation-triangle"></i>
+                                <input asp-for="StockMinimo" type="number" class="form-control admin-input" placeholder="Ej. 5" />
+                            </div>
+                            <span asp-validation-for="StockMinimo" class="text-danger small"></span>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="col-md-6">
-                    <label asp-for="TallaId" class="form-label inv-label"></label>
-                    <select asp-for="TallaId" class="form-select inv-input" asp-items="ViewBag.TallaId">
-                        <option value="">Seleccione una talla</option>
-                    </select>
-                    <span asp-validation-for="TallaId" class="text-danger small"></span>
-                </div>
+                <div class="admin-form-actions">
+                    <button type="submit" class="btn admin-btn admin-btn-primary">
+                        <i class="bi bi-check2-circle"></i>
+                        Guardar registro
+                    </button>
 
-                <div class="col-md-6">
-                    <label asp-for="Stock" class="form-label inv-label"></label>
-                    <input asp-for="Stock" type="number" class="form-control inv-input" />
-                    <span asp-validation-for="Stock" class="text-danger small"></span>
+                    <a asp-action="Index" class="btn admin-btn admin-btn-outline">
+                        <i class="bi bi-x-circle"></i>
+                        Cancelar
+                    </a>
                 </div>
+            </form>
 
-                <div class="col-md-6">
-                    <label asp-for="StockMinimo" class="form-label inv-label"></label>
-                    <input asp-for="StockMinimo" type="number" class="form-control inv-input" />
-                    <span asp-validation-for="StockMinimo" class="text-danger small"></span>
-                </div>
-            </div>
-
-            <div class="mt-4 d-flex gap-2 flex-wrap">
-                <button type="submit" class="btn btn-primary">Guardar</button>
-                <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 

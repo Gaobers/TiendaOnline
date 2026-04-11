@@ -1,48 +1,116 @@
 ﻿@model Categoria
 
-@{
-    ViewData["Title"] = "Details";
-}
+<div class="admin-create-page">
 
-<h1>Details</h1>
+    <div class="admin-create-hero">
+        <div class="admin-create-hero__content">
+            <div>
+                <div class="admin-create-badge">
+                    <i class="bi bi-tags"></i>
+                    Gestión de categorías
+                </div>
 
-<div>
-    <h4>Categoria</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Descripcion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Descripcion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Estatus)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Estatus)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaCreacion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaCreacion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaActualizacion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaActualizacion)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+                <h1 class="admin-create-title">Detalle de categoría</h1>
+                <p class="admin-create-subtitle mb-0">
+                    Consulta la información completa de la categoría seleccionada dentro del sistema.
+                </p>
+            </div>
+
+            <div class="admin-create-hero__actions">
+                <a asp-action="Index" class="btn admin-btn admin-btn-light">
+                    <i class="bi bi-arrow-left-short"></i>
+                    Volver al listado
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card admin-form-card border-0">
+        <div class="card-body p-0">
+
+            <div class="admin-form">
+
+                <div class="admin-section">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-eye"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">Información general</h5>
+                            <p class="admin-section-text mb-0">
+                                Revisa los datos registrados para esta categoría.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Nombre</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-tag"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @Html.DisplayFor(model => model.Nombre)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Estatus</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-check2-circle"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @Html.DisplayFor(model => model.Estatus)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label admin-label">Descripción</label>
+                            <div class="admin-textarea-wrap">
+                                <div class="form-control admin-input admin-textarea">
+                                    @Html.DisplayFor(model => model.Descripcion)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Fecha de creación</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-calendar-event"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @(Model.FechaCreacion.ToString("dd/MM/yyyy HH:mm"))
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Fecha de actualización</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-clock-history"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @(Model.FechaActualizacion?.ToString("dd/MM/yyyy HH:mm"))
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="admin-form-actions">
+                    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn admin-btn admin-btn-primary">
+                        <i class="bi bi-pencil-square"></i>
+                        Editar categoría
+                    </a>
+
+                    <a asp-action="Index" class="btn admin-btn admin-btn-outline">
+                        <i class="bi bi-x-circle"></i>
+                        Volver
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
 </div>
