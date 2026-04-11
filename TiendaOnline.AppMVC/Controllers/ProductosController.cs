@@ -292,5 +292,48 @@ namespace TiendaOnline.AppMVC.Controllers
         {
             return _context.Productos.Any(e => e.Id == id);
         }
+
+        public async Task<IActionResult> DetallePublico(int id)
+        {
+            var producto = await _context.Productos
+                .Include(p => p.Categoria)
+                .Include(p => p.Marca)
+                .Include(p => p.ProductosColores)
+                    .ThenInclude(pc => pc.Color)
+                .Include(p => p.ProductosImagenes)
+                .Include(p => p.Inventarios)
+                .FirstOrDefaultAsync(p => p.Id == id && p.Estatus == 1);
+
+            if (producto == null)
+                return NotFound();
+
+            var vm = new ProductoDetalleViewModel
+            {
+                Id = producto.Id,
+                Nombre = producto.Nombre,
+                Precio = producto.Precio,
+                Descripcion = producto.Descripcion,
+                Categoria = producto.Categoria?.Nombre,
+                Marca = producto.Marca?.Nombre,
+                Sku = producto.Sku,
+                Genero = producto.Genero,
+                Material = producto.Material,
+                EsDestacado = producto.EsDestacado,
+
+                Colores = producto.ProductosColores
+                    .Where(pc => pc.Color != null)
+                    .Select(pc => pc.Color.Nombre)
+                    .Distinct()
+                    .ToList(),
+
+                TallasDisponibles = producto.Inventarios
+                    .Where(i => i.Stock > 0)
+                    .Select(i => i.Talla.Numero)
+                    .Distinct()
+                    .ToList()
+            };
+
+            return View(vm);
+        }
     }
 }
