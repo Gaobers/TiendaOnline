@@ -1,8 +1,6 @@
 ﻿@model Producto
 
 @{
-    ViewData["Title"] = "Detalle de producto";
-
     var activo = Model.Estatus == 1;
 
     var imgUrl = Model.ProductosImagenes?
@@ -114,6 +112,19 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="mb-3">
+                                    <strong>Colores:</strong>
+                                    @if (Model.ProductosColores != null && Model.ProductosColores.Any())
+                                    {
+                                        @string.Join(", ", Model.ProductosColores.Select(pc => pc.Color.Nombre))
+                                    }
+                                    else
+                                    {
+                                        <span>No asignados</span>
+                                    }
+                                </div>
+
                             </div>
                         </div>
                     </div>

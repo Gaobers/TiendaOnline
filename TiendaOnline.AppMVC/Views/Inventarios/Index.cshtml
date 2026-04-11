@@ -1,8 +1,6 @@
 ﻿@model IEnumerable<Inventario>
 
 @{
-    ViewData["Title"] = "Inventario";
-
     var filtroProducto = Context.Request.Query["producto"].ToString();
     var filtroTalla = Context.Request.Query["talla"].ToString();
     var top = Context.Request.Query["top"].ToString();

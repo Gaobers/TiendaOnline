@@ -1,13 +1,5 @@
 ﻿@model Usuario
 
-@{
-    ViewData["Title"] = "Crear usuario";
-}
-
-@section Styles {
-    <link rel="stylesheet" href="~/css/admin/pages/usuarios/create.css" asp-append-version="true" />
-}
-
 <div class="admin-create-page">
 
     <div class="admin-create-hero">
@@ -40,7 +32,6 @@
 
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger admin-validation-box m-0"></div>
 
-                <!-- DATOS DEL USUARIO -->
                 <div class="admin-section">
                     <div class="admin-section-header">
                         <div class="admin-section-icon">
@@ -95,7 +86,6 @@
                     </div>
                 </div>
 
-                <!-- SEGURIDAD -->
                 <div class="admin-section admin-section--border">
                     <div class="admin-section-header">
                         <div class="admin-section-icon">
@@ -121,7 +111,6 @@
                     </div>
                 </div>
 
-                <!-- CONFIGURACIÓN -->
                 <div class="admin-section admin-section--border">
                     <div class="admin-section-header">
                         <div class="admin-section-icon">
@@ -165,7 +154,6 @@
                     </div>
                 </div>
 
-                <!-- BOTONES -->
                 <div class="admin-form-actions">
                     <button type="submit" class="btn admin-btn admin-btn-primary">
                         <i class="bi bi-check2-circle"></i>

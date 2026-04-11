@@ -1,9 +1,5 @@
 ﻿@model Usuario
 
-@{
-    ViewData["Title"] = "Detalle de usuario";
-}
-
 <div class="admin-create-page">
 
     <div class="admin-create-hero">
@@ -54,7 +50,7 @@
                             <div class="admin-input-wrap">
                                 <i class="bi bi-person"></i>
                                 <div class="form-control admin-input d-flex align-items-center">
-                                    @Html.DisplayFor(model => model.Nombre)
+                                    @Model.Nombre
                                 </div>
                             </div>
                         </div>
@@ -64,7 +60,7 @@
                             <div class="admin-input-wrap">
                                 <i class="bi bi-person-vcard"></i>
                                 <div class="form-control admin-input d-flex align-items-center">
-                                    @Html.DisplayFor(model => model.Apellido)
+                                    @(string.IsNullOrWhiteSpace(Model.Apellido) ? "Sin apellido" : Model.Apellido)
                                 </div>
                             </div>
                         </div>
@@ -74,7 +70,7 @@
                             <div class="admin-input-wrap">
                                 <i class="bi bi-envelope"></i>
                                 <div class="form-control admin-input d-flex align-items-center">
-                                    @Html.DisplayFor(model => model.Correo)
+                                    @Model.Correo
                                 </div>
                             </div>
                         </div>
@@ -84,7 +80,7 @@
                             <div class="admin-input-wrap">
                                 <i class="bi bi-telephone"></i>
                                 <div class="form-control admin-input d-flex align-items-center">
-                                    @Html.DisplayFor(model => model.Telefono)
+                                    @(string.IsNullOrWhiteSpace(Model.Telefono) ? "Sin teléfono" : Model.Telefono)
                                 </div>
                             </div>
                         </div>
@@ -94,7 +90,7 @@
                             <div class="admin-input-wrap">
                                 <i class="bi bi-person-badge"></i>
                                 <div class="form-control admin-input d-flex align-items-center">
-                                    @(Model.Rol?.Nombre ?? Model.Rol?.Id.ToString() ?? "Sin rol")
+                                    @(Model.Rol?.Nombre ?? "Sin rol")
                                 </div>
                             </div>
                         </div>
@@ -104,7 +100,24 @@
                             <div class="admin-input-wrap">
                                 <i class="bi bi-check2-circle"></i>
                                 <div class="form-control admin-input d-flex align-items-center">
-                                    @Html.DisplayFor(model => model.Estatus)
+                                    @switch (Model.Estatus)
+                                    {
+                                        case 1:
+                                            @:Activo
+                                            break;
+                                        case 2:
+                                            @:Inactivo
+                                            break;
+                                        case 3:
+                                            @:Bloqueado
+                                            break;
+                                        case 4:
+                                            @:Suspendido
+                                            break;
+                                        default:
+                                            @:Desconocido
+                                            break;
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -114,7 +127,7 @@
                             <div class="admin-input-wrap">
                                 <i class="bi bi-calendar-event"></i>
                                 <div class="form-control admin-input d-flex align-items-center">
-                                    @(Model.FechaCreacion.ToString("dd/MM/yyyy HH:mm"))
+                                    @Model.FechaCreacion.ToString("dd/MM/yyyy HH:mm")
                                 </div>
                             </div>
                         </div>
@@ -143,7 +156,7 @@
                 </div>
 
                 <div class="admin-form-actions">
-                    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn admin-btn admin-btn-primary">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn admin-btn admin-btn-primary">
                         <i class="bi bi-pencil-square"></i>
                         Editar usuario
                     </a>

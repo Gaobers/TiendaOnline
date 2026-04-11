@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TiendaOnline.AppMVC.Models;
-using TiendaOnline.AppMVC.Models.ViewModels;
+using TiendaOnline.AppMVC.ViewModels;
 
 public class HomeController : Controller
 {
@@ -14,7 +14,7 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var vm = new DashboardVM
+        var vm = new DashboardViewModel
         {
             TotalProductos = await _context.Productos.CountAsync(),
             TotalPedidos = await _context.Pedidos.CountAsync(),
