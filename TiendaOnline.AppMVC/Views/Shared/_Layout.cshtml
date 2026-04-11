@@ -1,7 +1,13 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@using System.Security.Claims
 @{
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+
+    var isAuthenticated = User?.Identity?.IsAuthenticated == true;
+    var userName = User?.Identity?.Name ?? "Usuario";
+    var userRole = User?.FindFirst(ClaimTypes.Role)?.Value ?? "";
+    var firstLetter = !string.IsNullOrWhiteSpace(userName) ? userName.Substring(0, 1).ToUpper() : "U";
 }
 <!DOCTYPE html>
 <html lang="es">
@@ -25,6 +31,7 @@
     <link rel="stylesheet" href="~/css/admin/components/forms.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/admin/components/sections.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/admin/components/validation.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin/components/auth-menu.css" asp-append-version="true" />
 
     <!-- Nuevo CSS principal admin -->
     <link rel="stylesheet" href="~/css/admin/admin.css" asp-append-version="true" />
@@ -144,33 +151,42 @@
                 </div>
 
                 <!-- USUARIOS -->
-                <div class="admin-menu-group">
-                    <button class="admin-group-toggle @(currentController == "Usuarios" || currentController == "Roles" || currentController == "DireccionesUsuarios" ? "expanded" : "")"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#menuUsuarios"
-                            aria-expanded="@(currentController == "Usuarios" || currentController == "Roles" || currentController == "DireccionesUsuarios" ? "true" : "false")">
-                        <span class="admin-group-title">
-                            <i class="bi bi-people"></i>
-                            <span>Usuarios</span>
-                        </span>
-                        <i class="bi bi-chevron-down admin-group-arrow"></i>
-                    </button>
+                @if (isAuthenticated)
+                {
+                    <div class="admin-menu-group">
+                        <button class="admin-group-toggle @(currentController == "Usuarios" || currentController == "Roles" || currentController == "DireccionesUsuarios" ? "expanded" : "")"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#menuUsuarios"
+                                aria-expanded="@(currentController == "Usuarios" || currentController == "Roles" || currentController == "DireccionesUsuarios" ? "true" : "false")">
+                            <span class="admin-group-title">
+                                <i class="bi bi-people"></i>
+                                <span>Usuarios</span>
+                            </span>
+                            <i class="bi bi-chevron-down admin-group-arrow"></i>
+                        </button>
 
-                    <div id="menuUsuarios" class="collapse @(currentController == "Usuarios" || currentController == "Roles" || currentController == "DireccionesUsuarios" ? "show" : "")">
-                        <div class="admin-submenu">
-                            <a asp-controller="Usuarios" asp-action="Index" class="admin-submenu-link @(currentController == "Usuarios" ? "active" : "")">
-                                <i class="bi bi-dot"></i><span>Usuarios</span>
-                            </a>
-                            <a asp-controller="Roles" asp-action="Index" class="admin-submenu-link @(currentController == "Roles" ? "active" : "")">
-                                <i class="bi bi-dot"></i><span>Roles</span>
-                            </a>
-                            <a asp-controller="DireccionesUsuarios" asp-action="Index" class="admin-submenu-link @(currentController == "DireccionesUsuarios" ? "active" : "")">
-                                <i class="bi bi-dot"></i><span>Direcciones</span>
-                            </a>
+                        <div id="menuUsuarios" class="collapse @(currentController == "Usuarios" || currentController == "Roles" || currentController == "DireccionesUsuarios" ? "show" : "")">
+                            <div class="admin-submenu">
+                                <a asp-controller="Usuarios" asp-action="Index" class="admin-submenu-link @(currentController == "Usuarios" && currentAction == "Index" ? "active" : "")">
+                                    <i class="bi bi-dot"></i><span>Usuarios</span>
+                                </a>
+
+                                <a asp-controller="Usuarios" asp-action="ChangePassword" class="admin-submenu-link @(currentController == "Usuarios" && currentAction == "ChangePassword" ? "active" : "")">
+                                    <i class="bi bi-dot"></i><span>Cambiar contraseña</span>
+                                </a>
+
+                                <a asp-controller="Roles" asp-action="Index" class="admin-submenu-link @(currentController == "Roles" ? "active" : "")">
+                                    <i class="bi bi-dot"></i><span>Roles</span>
+                                </a>
+
+                                <a asp-controller="DireccionesUsuarios" asp-action="Index" class="admin-submenu-link @(currentController == "DireccionesUsuarios" ? "active" : "")">
+                                    <i class="bi bi-dot"></i><span>Direcciones</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
 
             </div>
 
@@ -193,17 +209,56 @@
                 </div>
 
                 <div class="admin-topbar-right">
-                    <button class="admin-icon-btn" type="button">
-                        <i class="bi bi-bell"></i>
-                    </button>
+                    @if (isAuthenticated)
+                    {
+                        <div class="dropdown admin-user-dropdown">
+                            <button class="dropdown-toggle admin-user-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="admin-user-avatar">@firstLetter</div>
 
-                    <button class="admin-icon-btn" type="button">
-                        <i class="bi bi-grid-3x3-gap"></i>
-                    </button>
+                                <div class="admin-user-meta">
+                                    <span class="admin-user-name">Bienvenido, @userName</span>
+                                    <span class="admin-user-role">@userRole</span>
+                                </div>
+                            </button>
 
-                    <div class="admin-user-box">
-                        <div class="admin-user-avatar">A</div>
-                    </div>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li class="dropdown-header">
+                                    <div class="fw-bold text-dark">@userName</div>
+                                    <small class="text-muted">@userRole</small>
+                                </li>
+
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Usuarios" asp-action="Index">
+                                        <i class="bi bi-people"></i>
+                                        <span>Ir a usuarios</span>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Usuarios" asp-action="ChangePassword">
+                                        <i class="bi bi-key"></i>
+                                        <span>Cambiar contraseña</span>
+                                    </a>
+                                </li>
+
+                                <li><hr class="dropdown-divider" /></li>
+
+                                <li>
+                                    <a class="dropdown-item text-danger" asp-controller="Usuarios" asp-action="Logout">
+                                        <i class="bi bi-box-arrow-right"></i>
+                                        <span>Cerrar sesión</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        <a asp-controller="Usuarios" asp-action="Login" class="admin-auth-link">
+                            <i class="bi bi-box-arrow-in-right"></i>
+                            <span>Iniciar sesión</span>
+                        </a>
+                    }
                 </div>
             </header>
 

@@ -36,18 +36,13 @@ namespace TiendaOnline.AppMVC.Controllers
         public async Task<IActionResult> Login(string correo, string password, string? returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+            ViewBag.Correo = correo;
 
-            if (string.IsNullOrWhiteSpace(correo))
-                ModelState.AddModelError("Correo", "El correo es obligatorio.");
-
-            if (string.IsNullOrWhiteSpace(password))
-                ModelState.AddModelError("Password", "La contraseña es obligatoria.");
-
-            if (!ModelState.IsValid)
+            if (string.IsNullOrWhiteSpace(correo) || string.IsNullOrWhiteSpace(password))
+            {
+                ModelState.AddModelError("", "Correo y contraseña son obligatorios.");
                 return View();
-
-            correo = correo.Trim();
-            password = password.Trim();
+            }
 
             var usuarioDB = await _context.Usuarios
                 .Include(u => u.Rol)
@@ -55,44 +50,56 @@ namespace TiendaOnline.AppMVC.Controllers
 
             if (usuarioDB == null)
             {
-                ModelState.AddModelError(string.Empty, "Correo o contraseña incorrectos.");
+                ModelState.AddModelError("", "Credenciales incorrectas.");
                 return View();
             }
 
-            bool esValido = BCrypt.Net.BCrypt.Verify(password, usuarioDB.PasswordHash);
-
-            if (!esValido)
+            try
             {
-                ModelState.AddModelError(string.Empty, "Correo o contraseña incorrectos.");
+                bool pareceHashBCrypt = !string.IsNullOrWhiteSpace(usuarioDB.PasswordHash) &&
+                                        (usuarioDB.PasswordHash.StartsWith("$2a$") ||
+                                         usuarioDB.PasswordHash.StartsWith("$2b$") ||
+                                         usuarioDB.PasswordHash.StartsWith("$2y$"));
+
+                if (!pareceHashBCrypt)
+                {
+                    ModelState.AddModelError("", "Este usuario tiene una contraseña antigua o inválida. Debe actualizarse.");
+                    return View();
+                }
+
+                bool esValido = BCrypt.Net.BCrypt.Verify(password, usuarioDB.PasswordHash);
+
+                if (!esValido)
+                {
+                    ModelState.AddModelError("", "Credenciales incorrectas.");
+                    return View();
+                }
+            }
+            catch
+            {
+                ModelState.AddModelError("", "No fue posible validar la contraseña del usuario.");
                 return View();
             }
 
             var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, usuarioDB.Id.ToString()),
-                new Claim(ClaimTypes.Name, usuarioDB.Nombre),
-                new Claim(ClaimTypes.Email, usuarioDB.Correo),
-                new Claim(ClaimTypes.Role, usuarioDB.Rol.Nombre),
-                new Claim("Id", usuarioDB.Id.ToString()),
-                new Claim("Correo", usuarioDB.Correo),
-                new Claim("RolId", usuarioDB.RolId.ToString())
-            };
+    {
+        new Claim(ClaimTypes.NameIdentifier, usuarioDB.Id.ToString()),
+        new Claim(ClaimTypes.Name, usuarioDB.Nombre),
+        new Claim(ClaimTypes.Email, usuarioDB.Correo),
+        new Claim(ClaimTypes.Role, usuarioDB.Rol.Nombre),
+        new Claim("Id", usuarioDB.Id.ToString()),
+        new Claim("Correo", usuarioDB.Correo),
+        new Claim("RolId", usuarioDB.RolId.ToString())
+    };
 
             var claimsIdentity = new ClaimsIdentity(
                 claims,
                 CookieAuthenticationDefaults.AuthenticationScheme
             );
 
-            var authProperties = new AuthenticationProperties
-            {
-                IsPersistent = true,
-                ExpiresUtc = DateTimeOffset.UtcNow.AddHours(8)
-            };
-
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity),
-                authProperties
+                new ClaimsPrincipal(claimsIdentity)
             );
 
             if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
@@ -153,6 +160,7 @@ namespace TiendaOnline.AppMVC.Controllers
         }
 
         [Authorize(Roles = "Administrador")]
+        //[AllowAnonymous]
         public async Task<IActionResult> Create()
         {
             await CargarRolesAsync();
@@ -161,6 +169,7 @@ namespace TiendaOnline.AppMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //[AllowAnonymous]
         [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Create([Bind("Nombre,Apellido,Correo,Telefono,PasswordHash,Estatus,RolId")] Usuario usuario)
         {
@@ -215,20 +224,16 @@ namespace TiendaOnline.AppMVC.Controllers
             await CargarRolesAsync(usuario.RolId);
             return View(usuario);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrador")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Apellido,Correo,Telefono,PasswordHash,Estatus,FechaCreacion,FechaActualizacion,RolId")] Usuario usuario)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Apellido,Correo,Telefono,Estatus,RolId")] Usuario usuario)
         {
             if (id != usuario.Id)
                 return NotFound();
 
-            var original = await _context.Usuarios
-                .AsNoTracking()
-                .FirstOrDefaultAsync(u => u.Id == id);
-
-            if (original == null)
+            var usuarioDb = await _context.Usuarios.FirstOrDefaultAsync(u => u.Id == id);
+            if (usuarioDb == null)
                 return NotFound();
 
             ModelState.Remove("Rol");
@@ -239,12 +244,9 @@ namespace TiendaOnline.AppMVC.Controllers
             ModelState.Remove("Notificaciones");
             ModelState.Remove("Pedidos");
             ModelState.Remove("UsosCupones");
-
-            // Si en edición dejan vacío PasswordHash, se conserva la anterior
-            if (string.IsNullOrWhiteSpace(usuario.PasswordHash))
-            {
-                usuario.PasswordHash = original.PasswordHash;
-            }
+            ModelState.Remove("PasswordHash");
+            ModelState.Remove("FechaCreacion");
+            ModelState.Remove("FechaActualizacion");
 
             NormalizarYValidarUsuario(usuario, esEdicion: true);
 
@@ -263,38 +265,23 @@ namespace TiendaOnline.AppMVC.Controllers
 
             if (!ModelState.IsValid)
             {
+                usuario.PasswordHash = usuarioDb.PasswordHash;
+                usuario.FechaCreacion = usuarioDb.FechaCreacion;
+                usuario.FechaActualizacion = usuarioDb.FechaActualizacion;
+
                 await CargarRolesAsync(usuario.RolId);
                 return View(usuario);
             }
 
-            // Solo hashea si la contraseña fue cambiada realmente
-            if (usuario.PasswordHash != original.PasswordHash)
-            {
-                bool pareceHashBCrypt = usuario.PasswordHash.StartsWith("$2a$")
-                                      || usuario.PasswordHash.StartsWith("$2b$")
-                                      || usuario.PasswordHash.StartsWith("$2y$");
+            usuarioDb.Nombre = usuario.Nombre;
+            usuarioDb.Apellido = usuario.Apellido;
+            usuarioDb.Correo = usuario.Correo;
+            usuarioDb.Telefono = usuario.Telefono;
+            usuarioDb.Estatus = usuario.Estatus;
+            usuarioDb.RolId = usuario.RolId;
+            usuarioDb.FechaActualizacion = DateTime.Now;
 
-                if (!pareceHashBCrypt)
-                {
-                    usuario.PasswordHash = BCrypt.Net.BCrypt.HashPassword(usuario.PasswordHash);
-                }
-            }
-
-            usuario.FechaCreacion = original.FechaCreacion;
-            usuario.FechaActualizacion = DateTime.Now;
-
-            try
-            {
-                _context.Update(usuario);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UsuarioExists(usuario.Id))
-                    return NotFound();
-
-                throw;
-            }
+            await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }
@@ -421,31 +408,33 @@ namespace TiendaOnline.AppMVC.Controllers
             usuario.Apellido = usuario.Apellido?.Trim();
             usuario.Correo = usuario.Correo?.Trim() ?? string.Empty;
             usuario.Telefono = usuario.Telefono?.Trim();
-            usuario.PasswordHash = usuario.PasswordHash?.Trim() ?? string.Empty;
 
             if (string.IsNullOrWhiteSpace(usuario.Nombre))
                 ModelState.AddModelError("Nombre", "El nombre es obligatorio.");
 
-            if (usuario.Nombre.Length > 100)
+            if (!string.IsNullOrWhiteSpace(usuario.Nombre) && usuario.Nombre.Length > 100)
                 ModelState.AddModelError("Nombre", "Máximo 100 caracteres.");
 
-            if (usuario.Apellido != null && usuario.Apellido.Length > 100)
+            if (!string.IsNullOrWhiteSpace(usuario.Apellido) && usuario.Apellido.Length > 100)
                 ModelState.AddModelError("Apellido", "Máximo 100 caracteres.");
 
             if (string.IsNullOrWhiteSpace(usuario.Correo))
                 ModelState.AddModelError("Correo", "El correo es obligatorio.");
 
-            if (usuario.Correo.Length > 150)
+            if (!string.IsNullOrWhiteSpace(usuario.Correo) && usuario.Correo.Length > 150)
                 ModelState.AddModelError("Correo", "Máximo 150 caracteres.");
 
-            if (usuario.Telefono != null && usuario.Telefono.Length > 20)
+            if (!string.IsNullOrWhiteSpace(usuario.Telefono) && usuario.Telefono.Length > 20)
                 ModelState.AddModelError("Telefono", "Máximo 20 caracteres.");
 
-            if (string.IsNullOrWhiteSpace(usuario.PasswordHash))
-                ModelState.AddModelError("PasswordHash", "La contraseña es obligatoria.");
+            if (!esEdicion)
+            {
+                if (string.IsNullOrWhiteSpace(usuario.PasswordHash))
+                    ModelState.AddModelError("PasswordHash", "La contraseña es obligatoria.");
 
-            if (usuario.PasswordHash.Length > 300)
-                ModelState.AddModelError("PasswordHash", "Máximo 300 caracteres.");
+                if (!string.IsNullOrWhiteSpace(usuario.PasswordHash) && usuario.PasswordHash.Length > 300)
+                    ModelState.AddModelError("PasswordHash", "Máximo 300 caracteres.");
+            }
 
             if (usuario.RolId <= 0)
                 ModelState.AddModelError("RolId", "Debe seleccionar un rol.");
