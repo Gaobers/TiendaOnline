@@ -1,0 +1,31 @@
+﻿@model ProductoDetalleViewModel
+
+<h2>@Model.Nombre</h2>
+
+<p><strong>Precio:</strong> @Model.Precio.ToString("C")</p>
+<p><strong>Marca:</strong> @Model.Marca</p>
+<p><strong>Categoría:</strong> @Model.Categoria</p>
+<p><strong>SKU:</strong> @Model.Sku</p>
+<p><strong>Género:</strong> @Model.Genero</p>
+<p><strong>Material:</strong> @Model.Material</p>
+<p><strong>Descripción:</strong> @Model.Descripcion</p>
+
+@if (Model.Colores.Any())
+{
+    <p><strong>Colores:</strong> @string.Join(", ", Model.Colores)</p>
+}
+
+@if (Model.TallasDisponibles.Any())
+{
+    <p><strong>Tallas disponibles:</strong> @string.Join(", ", Model.TallasDisponibles)</p>
+}
+
+@if (Model.Imagenes.Any())
+{
+    <div>
+        @foreach (var img in Model.Imagenes)
+        {
+            <img src="@img" alt="@Model.Nombre" style="width:150px; margin:5px;" />
+        }
+    </div>
+}
