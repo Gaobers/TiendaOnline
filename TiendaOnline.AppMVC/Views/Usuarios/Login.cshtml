@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Iniciar Sesión";
+    var returnUrl = ViewData["ReturnUrl"] as string;
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-10 col-md-7 col-lg-5 col-xl-4">
+            <div class="card shadow border-0 rounded-4">
+                <div class="card-header bg-primary text-white text-center py-3 rounded-top-4">
+                    <h4 class="mb-0">Iniciar Sesión</h4>
+                </div>
+
+                <div class="card-body p-4">
+                    <form asp-action="Login" asp-route-returnUrl="@returnUrl" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                        <div class="mb-3">
+                            <label for="correo" class="form-label fw-semibold">Correo electrónico</label>
+                            <input name="correo"
+                                   id="correo"
+                                   type="email"
+                                   class="form-control"
+                                   placeholder="Ingrese su correo" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label fw-semibold">Contraseña</label>
+                            <input name="password"
+                                   id="password"
+                                   type="password"
+                                   class="form-control"
+                                   placeholder="Ingrese su contraseña" />
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary rounded-3">
+                                Entrar al sistema
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card-footer text-center text-muted bg-white border-0 pb-4">
+                    <small>Tienda Online</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

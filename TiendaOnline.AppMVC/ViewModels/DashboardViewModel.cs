@@ -1,6 +1,8 @@
-﻿namespace TiendaOnline.AppMVC.Models.ViewModels
+﻿using TiendaOnline.AppMVC.Models;
+
+namespace TiendaOnline.AppMVC.ViewModels
 {
-    public class DashboardVM
+    public class DashboardViewModel
     {
         public int TotalProductos { get; set; }
         public int TotalImagenes { get; set; }

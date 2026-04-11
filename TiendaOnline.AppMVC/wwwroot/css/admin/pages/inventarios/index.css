@@ -19,3 +19,8 @@
     text-align: center;
     white-space: nowrap;
 }
+
+.inventario-index {
+    margin-top: 0;
+    padding-top: 0;
+}

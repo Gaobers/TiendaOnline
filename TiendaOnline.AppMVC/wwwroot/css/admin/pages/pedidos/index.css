@@ -23,3 +23,8 @@
     text-align: center;
     white-space: nowrap;
 }
+
+.pedidos-index {
+    margin-top: 0;
+    padding-top: 0;
+}

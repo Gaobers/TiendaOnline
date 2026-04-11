@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TiendaOnline.AppMVC.Models;
+using TiendaOnline.AppMVC.ViewModels;
 
 namespace TiendaOnline.AppMVC.Controllers
 {
@@ -15,20 +16,21 @@ namespace TiendaOnline.AppMVC.Controllers
         }
 
         // GET: Productos
-        //Filtros
         public async Task<IActionResult> Index(string nombre, byte? estatus, int top = 10)
         {
-            var query = _context.Productos.AsQueryable();
+            var query = _context.Productos
+                .Include(p => p.Categoria)
+                .Include(p => p.Marca)
+                .Include(p => p.ProductosColores)
+                    .ThenInclude(pc => pc.Color)
+                .AsQueryable();
 
-            //Nombre
             if (!string.IsNullOrWhiteSpace(nombre))
                 query = query.Where(p => p.Nombre.Contains(nombre));
 
-            //Estado
             if (estatus.HasValue)
                 query = query.Where(p => p.Estatus == estatus.Value);
 
-            //Top
             query = query.Take(top);
 
             var productos = await query.ToListAsync();
@@ -38,111 +40,194 @@ namespace TiendaOnline.AppMVC.Controllers
         // GET: Productos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var producto = await _context.Productos
                 .Include(p => p.Categoria)
                 .Include(p => p.Marca)
+                .Include(p => p.ProductosColores)
+                    .ThenInclude(pc => pc.Color)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (producto == null)
-            {
-                return NotFound();
-            }
+
+            if (producto == null) return NotFound();
 
             return View(producto);
         }
 
         // GET: Productos/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var model = new ProductoFormViewModel
+            {
+                ColoresDisponibles = await _context.Colores
+                    .Where(c => c.Estatus == 1)
+                    .Select(c => new SelectListItem
+                    {
+                        Value = c.Id.ToString(),
+                        Text = c.Nombre
+                    })
+                    .ToListAsync()
+            };
+
             ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Nombre");
             ViewData["MarcaId"] = new SelectList(_context.Marcas, "Id", "Nombre");
-            return View();
+
+            return View(model);
         }
 
         // POST: Productos/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Nombre,Precio,Descripcion,CategoriaId,MarcaId,Sku,Genero,Material,EsDestacado")] Producto producto)
+        public async Task<IActionResult> Create(ProductoFormViewModel model)
         {
-            ModelState.Remove("Categoria");
-            ModelState.Remove("Marca");
-            ModelState.Remove("Inventarios");
-            ModelState.Remove("ProductosColores");
-            ModelState.Remove("ProductosImagenes");
-
             if (ModelState.IsValid)
             {
-                producto.Estatus = 1;
-                producto.FechaCreacion = DateTime.Now;
-                producto.FechaActualizacion = DateTime.Now;
+                var producto = new Producto
+                {
+                    Nombre = model.Nombre,
+                    Precio = model.Precio,
+                    Descripcion = model.Descripcion,
+                    CategoriaId = model.CategoriaId,
+                    MarcaId = model.MarcaId,
+                    Sku = model.Sku,
+                    Genero = model.Genero,
+                    Material = model.Material,
+                    EsDestacado = model.EsDestacado,
+                    Estatus = 1,
+                    FechaCreacion = DateTime.Now,
+                    FechaActualizacion = DateTime.Now
+                };
 
                 _context.Productos.Add(producto);
                 await _context.SaveChangesAsync();
 
+                if (model.ColoresSeleccionados != null && model.ColoresSeleccionados.Any())
+                {
+                    foreach (var colorId in model.ColoresSeleccionados.Distinct())
+                    {
+                        _context.ProductosColores.Add(new ProductosColore
+                        {
+                            ProductoId = producto.Id,
+                            ColorId = colorId
+                        });
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
+
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Nombre", producto.CategoriaId);
-            ViewData["MarcaId"] = new SelectList(_context.Marcas, "Id", "Nombre", producto.MarcaId);
-            return View(producto);
+            model.ColoresDisponibles = await _context.Colores
+                .Where(c => c.Estatus == 1)
+                .Select(c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.Nombre
+                })
+                .ToListAsync();
+
+            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Nombre", model.CategoriaId);
+            ViewData["MarcaId"] = new SelectList(_context.Marcas, "Id", "Nombre", model.MarcaId);
+
+            return View(model);
         }
 
         // GET: Productos/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var producto = await _context.Productos.FindAsync(id);
-            if (producto == null)
+            var producto = await _context.Productos
+                .Include(p => p.ProductosColores)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (producto == null) return NotFound();
+
+            var model = new ProductoFormViewModel
             {
-                return NotFound();
-            }
-            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Nombre", producto.CategoriaId);
-            ViewData["MarcaId"] = new SelectList(_context.Marcas, "Id", "Nombre", producto.MarcaId);
-            return View(producto);
+                Id = producto.Id,
+                Nombre = producto.Nombre,
+                Precio = producto.Precio,
+                Descripcion = producto.Descripcion,
+                Estatus = producto.Estatus,
+                FechaCreacion = producto.FechaCreacion,
+                FechaActualizacion = producto.FechaActualizacion,
+                CategoriaId = producto.CategoriaId,
+                MarcaId = producto.MarcaId,
+                Sku = producto.Sku,
+                Genero = producto.Genero,
+                Material = producto.Material,
+                EsDestacado = producto.EsDestacado,
+                ColoresSeleccionados = producto.ProductosColores.Select(pc => pc.ColorId).ToList(),
+                ColoresDisponibles = await _context.Colores
+                    .Where(c => c.Estatus == 1)
+                    .Select(c => new SelectListItem
+                    {
+                        Value = c.Id.ToString(),
+                        Text = c.Nombre
+                    })
+                    .ToListAsync()
+            };
+
+            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Nombre", model.CategoriaId);
+            ViewData["MarcaId"] = new SelectList(_context.Marcas, "Id", "Nombre", model.MarcaId);
+
+            return View(model);
         }
 
         // POST: Productos/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Precio,Descripcion,Estatus,FechaCreacion,FechaActualizacion,CategoriaId,MarcaId,Sku,Genero,Material,EsDestacado")] Producto producto)
+        public async Task<IActionResult> Edit(int id, ProductoFormViewModel model)
         {
-            if (id != producto.Id)
-            {
-                return NotFound();
-            }
-
-            ModelState.Remove("Categoria");
-            ModelState.Remove("Marca");
-            ModelState.Remove("Inventarios");
-            ModelState.Remove("ProductosColores");
-            ModelState.Remove("ProductosImagenes");
+            if (id != model.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var producto = await _context.Productos
+                        .Include(p => p.ProductosColores)
+                        .FirstOrDefaultAsync(p => p.Id == id);
+
+                    if (producto == null) return NotFound();
+
+                    producto.Nombre = model.Nombre;
+                    producto.Precio = model.Precio;
+                    producto.Descripcion = model.Descripcion;
+                    producto.Estatus = model.Estatus;
+                    producto.CategoriaId = model.CategoriaId;
+                    producto.MarcaId = model.MarcaId;
+                    producto.Sku = model.Sku;
+                    producto.Genero = model.Genero;
+                    producto.Material = model.Material;
+                    producto.EsDestacado = model.EsDestacado;
                     producto.FechaActualizacion = DateTime.Now;
-                    _context.Update(producto);
+
+                    if (producto.ProductosColores.Any())
+                    {
+                        _context.ProductosColores.RemoveRange(producto.ProductosColores);
+                    }
+
+                    if (model.ColoresSeleccionados != null && model.ColoresSeleccionados.Any())
+                    {
+                        foreach (var colorId in model.ColoresSeleccionados.Distinct())
+                        {
+                            _context.ProductosColores.Add(new ProductosColore
+                            {
+                                ProductoId = producto.Id,
+                                ColorId = colorId
+                            });
+                        }
+                    }
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductoExists(producto.Id))
-                    {
+                    if (!ProductoExists(model.Id))
                         return NotFound();
-                    }
 
                     throw;
                 }
@@ -150,26 +235,32 @@ namespace TiendaOnline.AppMVC.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Nombre", producto.CategoriaId);
-            ViewData["MarcaId"] = new SelectList(_context.Marcas, "Id", "Nombre", producto.MarcaId);
-            return View(producto);
+            model.ColoresDisponibles = await _context.Colores
+                .Where(c => c.Estatus == 1)
+                .Select(c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.Nombre
+                })
+                .ToListAsync();
+
+            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Nombre", model.CategoriaId);
+            ViewData["MarcaId"] = new SelectList(_context.Marcas, "Id", "Nombre", model.MarcaId);
+
+            return View(model);
         }
+
         // GET: Productos/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var producto = await _context.Productos
                 .Include(p => p.Categoria)
                 .Include(p => p.Marca)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (producto == null)
-            {
-                return NotFound();
-            }
+
+            if (producto == null) return NotFound();
 
             return View(producto);
         }
@@ -179,13 +270,19 @@ namespace TiendaOnline.AppMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var producto = await _context.Productos.FindAsync(id);
+            var producto = await _context.Productos
+                .Include(p => p.ProductosColores)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
             if (producto != null)
             {
+                if (producto.ProductosColores.Any())
+                    _context.ProductosColores.RemoveRange(producto.ProductosColores);
+
                 _context.Productos.Remove(producto);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
@@ -194,22 +291,48 @@ namespace TiendaOnline.AppMVC.Controllers
             return _context.Productos.Any(e => e.Id == id);
         }
 
-        // GET: Productos/Catalogo
-        public async Task<IActionResult> Catalogo()
+        public async Task<IActionResult> DetallePublico(int id)
         {
-            // Traemos la lista completa de productos incluyendo sus relaciones
-            // .Include es vital para que se vean las fotos y la marca en las tarjetas
-            var productos = await _context.Productos
-                .Include(p => p.Marca)
+            var producto = await _context.Productos
                 .Include(p => p.Categoria)
+                .Include(p => p.Marca)
+                .Include(p => p.ProductosColores)
+                    .ThenInclude(pc => pc.Color)
                 .Include(p => p.ProductosImagenes)
-                .ToListAsync();
+                .Include(p => p.Inventarios)
+                    .ThenInclude(i => i.Talla)
+                .FirstOrDefaultAsync(p => p.Id == id && p.Estatus == 1);
 
-            // Enviamos la lista a la vista "Catalogo.cshtml"
-            return View(productos);
+            if (producto == null)
+                return NotFound();
+
+            var vm = new ProductoDetalleViewModel
+            {
+                Id = producto.Id,
+                Nombre = producto.Nombre,
+                Precio = producto.Precio,
+                Descripcion = producto.Descripcion,
+                Categoria = producto.Categoria?.Nombre,
+                Marca = producto.Marca?.Nombre,
+                Sku = producto.Sku,
+                Genero = producto.Genero,
+                Material = producto.Material,
+                EsDestacado = producto.EsDestacado,
+
+                Colores = producto.ProductosColores
+                    .Where(pc => pc.Color != null)
+                    .Select(pc => pc.Color.Nombre)
+                    .Distinct()
+                    .ToList(),
+
+                TallasDisponibles = producto.Inventarios
+                    .Where(i => i.Stock > 0)
+                    .Select(i => i.Talla.Numero.ToString())
+                    .Distinct()
+                    .ToList()
+            };
+
+            return View(vm);
         }
-
-
     }
-
 }
