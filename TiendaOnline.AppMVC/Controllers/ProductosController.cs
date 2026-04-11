@@ -302,6 +302,7 @@ namespace TiendaOnline.AppMVC.Controllers
                     .ThenInclude(pc => pc.Color)
                 .Include(p => p.ProductosImagenes)
                 .Include(p => p.Inventarios)
+                    .ThenInclude(i => i.Talla)
                 .FirstOrDefaultAsync(p => p.Id == id && p.Estatus == 1);
 
             if (producto == null)
@@ -328,7 +329,7 @@ namespace TiendaOnline.AppMVC.Controllers
 
                 TallasDisponibles = producto.Inventarios
                     .Where(i => i.Stock > 0)
-                    .Select(i => i.Talla.Numero)
+                    .Select(i => i.Talla.Numero.ToString())
                     .Distinct()
                     .ToList()
             };
