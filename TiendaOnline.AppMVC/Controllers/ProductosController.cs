@@ -194,6 +194,22 @@ namespace TiendaOnline.AppMVC.Controllers
             return _context.Productos.Any(e => e.Id == id);
         }
 
+        // GET: Productos/Catalogo
+        public async Task<IActionResult> Catalogo()
+        {
+            // Traemos la lista completa de productos incluyendo sus relaciones
+            // .Include es vital para que se vean las fotos y la marca en las tarjetas
+            var productos = await _context.Productos
+                .Include(p => p.Marca)
+                .Include(p => p.Categoria)
+                .Include(p => p.ProductosImagenes)
+                .ToListAsync();
+
+            // Enviamos la lista a la vista "Catalogo.cshtml"
+            return View(productos);
+        }
+
+
     }
 
 }
