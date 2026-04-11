@@ -205,13 +205,11 @@ namespace TiendaOnline.AppMVC.Controllers
                     producto.EsDestacado = model.EsDestacado;
                     producto.FechaActualizacion = DateTime.Now;
 
-                    // Eliminar relaciones actuales
                     if (producto.ProductosColores.Any())
                     {
                         _context.ProductosColores.RemoveRange(producto.ProductosColores);
                     }
 
-                    // Agregar nuevas relaciones
                     if (model.ColoresSeleccionados != null && model.ColoresSeleccionados.Any())
                     {
                         foreach (var colorId in model.ColoresSeleccionados.Distinct())

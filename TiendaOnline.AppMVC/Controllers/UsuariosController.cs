@@ -82,15 +82,15 @@ namespace TiendaOnline.AppMVC.Controllers
             }
 
             var claims = new List<Claim>
-    {
-        new Claim(ClaimTypes.NameIdentifier, usuarioDB.Id.ToString()),
-        new Claim(ClaimTypes.Name, usuarioDB.Nombre),
-        new Claim(ClaimTypes.Email, usuarioDB.Correo),
-        new Claim(ClaimTypes.Role, usuarioDB.Rol.Nombre),
-        new Claim("Id", usuarioDB.Id.ToString()),
-        new Claim("Correo", usuarioDB.Correo),
-        new Claim("RolId", usuarioDB.RolId.ToString())
-    };
+                {
+                    new Claim(ClaimTypes.NameIdentifier, usuarioDB.Id.ToString()),
+                    new Claim(ClaimTypes.Name, usuarioDB.Nombre),
+                    new Claim(ClaimTypes.Email, usuarioDB.Correo),
+                    new Claim(ClaimTypes.Role, usuarioDB.Rol.Nombre),
+                    new Claim("Id", usuarioDB.Id.ToString()),
+                    new Claim("Correo", usuarioDB.Correo),
+                    new Claim("RolId", usuarioDB.RolId.ToString())
+                };
 
             var claimsIdentity = new ClaimsIdentity(
                 claims,
