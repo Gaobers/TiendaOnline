@@ -1,0 +1,17 @@
+.tallas-index .tal-col-numero {
+    width: 5%;
+}
+
+.tallas-index .tal-col-estado {
+    width: 20%;
+}
+
+.tallas-index .tal-col-creacion {
+    width: 15%;
+}
+
+.tallas-index .tal-col-acciones {
+    width: 9%;
+    text-align: center;
+    white-space: nowrap;
+}

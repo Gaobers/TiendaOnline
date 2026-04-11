@@ -361,3 +361,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+*.cs
+*.cs
+*.cs
+/TiendaOnline.AppMVC/Models/TiendaOnlineZapContext.cs
+/TiendaOnline.AppMVC/Views/PaginaPrincipal
+*.cshtml

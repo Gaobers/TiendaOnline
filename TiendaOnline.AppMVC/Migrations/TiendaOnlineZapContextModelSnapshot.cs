@@ -897,6 +897,10 @@ namespace TiendaOnline.AppMVC.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(20)");
 
+                    b.Property<string>("ImagenUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("MarcaId")
                         .HasColumnType("int");
 
@@ -1000,6 +1004,27 @@ namespace TiendaOnline.AppMVC.Migrations
                     b.HasIndex("ProductoId");
 
                     b.ToTable("ProductosImagenes");
+                });
+
+            modelBuilder.Entity("TiendaOnline.AppMVC.Models.Promocion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Icono")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Texto")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Promociones");
                 });
 
             modelBuilder.Entity("TiendaOnline.AppMVC.Models.Role", b =>

@@ -62,6 +62,7 @@ public partial class TiendaOnlineZapContext : DbContext
     public virtual DbSet<UsosCupone> UsosCupones { get; set; }
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
+    public  virtual DbSet<Promocion> Promociones { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

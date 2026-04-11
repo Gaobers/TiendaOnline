@@ -1,7 +1,6 @@
 ﻿@model IEnumerable<Colore>
 
 @{
-    ViewData["Title"] = "Colores";
 
     var filtroNombre = Context.Request.Query["nombre"].ToString();
     var estatus = Context.Request.Query["estatus"].ToString();

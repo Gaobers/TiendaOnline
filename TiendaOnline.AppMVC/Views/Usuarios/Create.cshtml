@@ -1,78 +1,185 @@
 ﻿@model Usuario
 
 @{
-    ViewData["Title"] = "Crear Usuario";
+    ViewData["Title"] = "Crear usuario";
 }
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow border-0">
-                <div class="card-header bg-primary text-white text-center py-3">
-                    <h4 class="mb-0">Crear Nuevo Usuario</h4>
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin/pages/usuarios/create.css" asp-append-version="true" />
+}
+
+<div class="admin-create-page">
+
+    <div class="admin-create-hero">
+        <div class="admin-create-hero__content">
+            <div>
+                <div class="admin-create-badge">
+                    <i class="bi bi-person-plus"></i>
+                    Gestión de usuarios
                 </div>
-                <div class="card-body p-4">
-                    <form asp-action="Create" method="post">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                        <div class="mb-3">
-                            <label asp-for="Estatus" class="form-label fw-bold">Estado</label>
-                            <select asp-for="Estatus" class="form-control">
-                                <option value="1">Activo</option>
-                                <option value="2">Inactivo</option>
-                                <option value="3">Bloqueado</option>
-                                <option value="4">Suspendido</option>
-                            </select>
-                            <span asp-validation-for="Estatus" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="Nombre" class="form-label fw-bold"></label>
-                            <input asp-for="Nombre" class="form-control" placeholder="Ej: Marlon Antonio" />
-                            <span asp-validation-for="Nombre" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="Apellido" class="form-label fw-bold"></label>
-                            <input asp-for="Apellido" class="form-control" placeholder="Ej: Pérez" />
-                            <span asp-validation-for="Apellido" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="Correo" class="form-label fw-bold"></label>
-                            <input asp-for="Correo" class="form-control" placeholder="nombre@correo.com" />
-                            <span asp-validation-for="Correo" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="Telefono" class="form-label fw-bold"></label>
-                            <input asp-for="Telefono" class="form-control" placeholder="Ej: 7000-0000" />
-                            <span asp-validation-for="Telefono" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="PasswordHash" class="form-label fw-bold">Contraseña</label>
-                            <input asp-for="PasswordHash" type="password" class="form-control" />
-                            <span asp-validation-for="PasswordHash" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="RolId" class="form-label fw-bold">Rol</label>
-                            <select asp-for="RolId" class="form-control" asp-items="ViewBag.RolId">
-                                <option value="">-- Seleccione un rol --</option>
-                            </select>
-                            <span asp-validation-for="RolId" class="text-danger"></span>
-                        </div>
-
-                        <div class="d-grid gap-2 mt-4">
-                            <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="bi bi-check-circle me-1"></i> Guardar Usuario
-                            </button>
-                            <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
-                        </div>
-                    </form>
-                </div>
+                <h1 class="admin-create-title">Crear usuario</h1>
+                <p class="admin-create-subtitle mb-0">
+                    Registra un nuevo usuario con sus datos personales, credenciales y rol dentro del sistema.
+                </p>
             </div>
+
+            <div class="admin-create-hero__actions">
+                <a asp-action="Index" class="btn admin-btn admin-btn-light">
+                    <i class="bi bi-arrow-left-short"></i>
+                    Volver al listado
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card admin-form-card border-0">
+        <div class="card-body p-0">
+
+            <form asp-action="Create" method="post" class="admin-form">
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger admin-validation-box m-0"></div>
+
+                <!-- DATOS DEL USUARIO -->
+                <div class="admin-section">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-person"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">Datos personales</h5>
+                            <p class="admin-section-text mb-0">
+                                Información básica del usuario.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+
+                        <div class="col-md-6">
+                            <label asp-for="Nombre" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-person"></i>
+                                <input asp-for="Nombre" class="form-control admin-input" placeholder="Ej. Marlon Antonio" />
+                            </div>
+                            <span asp-validation-for="Nombre" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Apellido" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-person-badge"></i>
+                                <input asp-for="Apellido" class="form-control admin-input" placeholder="Ej. Pérez" />
+                            </div>
+                            <span asp-validation-for="Apellido" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Correo" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-envelope"></i>
+                                <input asp-for="Correo" class="form-control admin-input" placeholder="nombre@correo.com" />
+                            </div>
+                            <span asp-validation-for="Correo" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Telefono" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-phone"></i>
+                                <input asp-for="Telefono" class="form-control admin-input" placeholder="Ej. 7000-0000" />
+                            </div>
+                            <span asp-validation-for="Telefono" class="text-danger small"></span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- SEGURIDAD -->
+                <div class="admin-section admin-section--border">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-shield-lock"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">Seguridad</h5>
+                            <p class="admin-section-text mb-0">
+                                Credenciales de acceso del usuario.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label asp-for="PasswordHash" class="form-label admin-label">Contraseña</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-lock"></i>
+                                <input asp-for="PasswordHash" type="password" class="form-control admin-input" />
+                            </div>
+                            <span asp-validation-for="PasswordHash" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONFIGURACIÓN -->
+                <div class="admin-section admin-section--border">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-gear"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">Configuración</h5>
+                            <p class="admin-section-text mb-0">
+                                Estado del usuario y rol asignado.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+
+                        <div class="col-md-6">
+                            <label asp-for="Estatus" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-activity"></i>
+                                <select asp-for="Estatus" class="form-select admin-input">
+                                    <option value="1">Activo</option>
+                                    <option value="2">Inactivo</option>
+                                    <option value="3">Bloqueado</option>
+                                    <option value="4">Suspendido</option>
+                                </select>
+                            </div>
+                            <span asp-validation-for="Estatus" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="RolId" class="form-label admin-label">Rol</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-person-badge"></i>
+                                <select asp-for="RolId" class="form-select admin-input" asp-items="ViewBag.RolId">
+                                    <option value="">Seleccione un rol</option>
+                                </select>
+                            </div>
+                            <span asp-validation-for="RolId" class="text-danger small"></span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- BOTONES -->
+                <div class="admin-form-actions">
+                    <button type="submit" class="btn admin-btn admin-btn-primary">
+                        <i class="bi bi-check2-circle"></i>
+                        Guardar usuario
+                    </button>
+
+                    <a asp-action="Index" class="btn admin-btn admin-btn-outline">
+                        <i class="bi bi-x-circle"></i>
+                        Cancelar
+                    </a>
+                </div>
+
+            </form>
+
         </div>
     </div>
 </div>
