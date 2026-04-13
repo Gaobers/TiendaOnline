@@ -15,7 +15,7 @@ namespace TiendaOnline.AppMVC.Controllers
 
         // GET: Tallas
         //Filtros
-        public async Task<IActionResult> Index(string numero, byte? estatus, int top = 10)
+        public async Task<IActionResult> Index(string numero, byte? estatus)
         {
             var query = _context.Tallas.AsQueryable();
             //Numero
@@ -26,10 +26,10 @@ namespace TiendaOnline.AppMVC.Controllers
             if (estatus.HasValue)
                 query = query.Where(c => c.Estatus == estatus.Value);
 
-            //Top
-            query = query.Take(top);
 
-            var categorias = await query.ToListAsync();
+            var categorias = await query
+                .OrderByDescending(c => c.Id)
+                .ToListAsync();
 
             return View(categorias);
         }

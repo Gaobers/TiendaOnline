@@ -16,7 +16,7 @@ namespace TiendaOnline.AppMVC.Controllers
 
         // GET: DireccionesUsuarios
         //Filtros
-        public async Task<IActionResult> Index(string alias, byte? estatus, int top = 10)
+        public async Task<IActionResult> Index(string alias, byte? estatus)
         {
             var query = _context.DireccionesUsuarios
                 .Include(d => d.Usuario)
@@ -28,11 +28,9 @@ namespace TiendaOnline.AppMVC.Controllers
             if (estatus.HasValue)
                 query = query.Where(d => d.Estatus == estatus);
 
-            query = query
-                .OrderByDescending(d => d.Id)
-                .Take(top);
-
-            var direccionesUsuarios = await query.ToListAsync();
+            var direccionesUsuarios = await query
+                .OrderByDescending(c => c.Id)
+                .ToListAsync();
 
             return View(direccionesUsuarios);
         }

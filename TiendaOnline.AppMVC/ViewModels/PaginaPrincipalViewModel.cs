@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using TiendaOnline.AppMVC.ViewModels;
 
 namespace TiendaOnline.AppMVC.Models
 {

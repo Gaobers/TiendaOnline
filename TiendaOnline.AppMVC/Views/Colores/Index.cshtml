@@ -4,17 +4,11 @@
 
     var filtroNombre = Context.Request.Query["nombre"].ToString();
     var estatus = Context.Request.Query["estatus"].ToString();
-    var top = Context.Request.Query["top"].ToString();
 
-    if (string.IsNullOrWhiteSpace(top))
-    {
-        top = "10";
-    }
 
     var hayFiltrosActivos =
        !string.IsNullOrWhiteSpace(filtroNombre) ||
-       !string.IsNullOrWhiteSpace(estatus) ||
-       top != "10";
+       !string.IsNullOrWhiteSpace(estatus);
 }
 
 @section Styles {
@@ -89,23 +83,6 @@
                          </div>
                     </div>
 
-
-                    <!-- TOP -->
-                        <div class="col-12 col-md-4 col-xl-2">
-                            <label class="form-label admin-filter-label">Top registros</label>
-                            <div class="input-group shadow-sm admin-filter-group">
-                                <span class="input-group-text bg-white">
-                                    <i class="bi bi-list-ol text-primary"></i>
-                                </span>
-                                <select name="top" class="form-select">
-                                    <option value="10" selected="@(top == "10")">10</option>
-                                    <option value="25" selected="@(top == "25")">25</option>
-                                    <option value="50" selected="@(top == "50")">50</option>
-                                    <option value="100" selected="@(top == "100")">100</option>
-                                    <option value="@int.MaxValue" selected="@(top == int.MaxValue.ToString())">Todos</option>
-                                </select>
-                            </div>
-                        </div>
 
                         <!-- BOTONES -->
                             <div class="col-12">

@@ -3,17 +3,11 @@
 @{
     var filtroNumero = Context.Request.Query["numero"].ToString();
     var filtroestatus = Context.Request.Query["estatus"].ToString();
-    var filtrotop = Context.Request.Query["top"].ToString();
 
-    if (string.IsNullOrWhiteSpace(filtrotop))
-    {
-        filtrotop = "10";
-    }
 
     var hayFiltrosActivos =
     !string.IsNullOrWhiteSpace(filtroNumero) ||
-    !string.IsNullOrWhiteSpace(filtroestatus) ||
-    filtrotop != "10";
+    !string.IsNullOrWhiteSpace(filtroestatus);
 }
 
 @section Styles {
@@ -88,23 +82,6 @@
                         </div>
                     </div>
 
-                    <!-- TOP -->
-                    <div class="col-12 col-md-4 col-xl-2">
-                        <label class="form-label admin-filter-label">Top registros</label>
-                        <div class="input-group shadow-sm admin-filter-group">
-                            <span class="input-group-text bg-white">
-                                <i class="bi bi-list-ol text-primary"></i>
-                            </span>
-                            <select name="top" class="form-select">
-                                <option value="10" selected="@(filtrotop == "10")">10</option>
-                                <option value="25" selected="@(filtrotop == "25")">25</option>
-                                <option value="50" selected="@(filtrotop == "50")">50</option>
-                                <option value="100" selected="@(filtrotop == "100")">100</option>
-                                    <option value="@int.MaxValue" selected="@(filtrotop == int.MaxValue.ToString())">Todos</option>
-                                </select>
-                        </div>
-                    </div>
-
                     <!-- BOTONES -->
                         <div class="col-12">
                             <div class="admin-filter-actions">
@@ -127,7 +104,7 @@
     <!-- TABLA -->
     <div class="card admin-table-card mt-3">
         <div class="table-responsive">
-            <table class="table table-hover align-middle admin-table">
+            <table class="table table-hover align-middle admin-table jspaginacion">
                 <thead>
                     <tr>
                         <th class="tal-col-numero">Número</th>
@@ -206,3 +183,9 @@
     </div>
 
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_Paginacion");
+    }
+}

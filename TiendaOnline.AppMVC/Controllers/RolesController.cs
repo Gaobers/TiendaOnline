@@ -15,7 +15,7 @@ namespace TiendaOnline.AppMVC.Controllers
 
         // GET: Roles
         //Filtros
-        public async Task<IActionResult> Index(string nombre, byte? estatus, int top = 10)
+        public async Task<IActionResult> Index(string nombre, byte? estatus)
         {
             var query = _context.Roles.AsQueryable();
 
@@ -25,10 +25,11 @@ namespace TiendaOnline.AppMVC.Controllers
             //Estado
             if (estatus.HasValue)
                 query = query.Where(c => c.Estatus == estatus.Value);
-            //Top
-            query = query.Take(top);
 
-            var roles = await query.ToListAsync();
+            var roles = await query
+                .OrderByDescending(c => c.Id)
+                .ToListAsync();
+
             return View(roles);
         }
 

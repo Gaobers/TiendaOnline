@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
-using TiendaOnline.AppMVC.Models;
 
 namespace TiendaOnline.AppMVC.ViewModels
 {
