@@ -70,5 +70,5 @@ public partial class Producto
     public virtual ICollection<ProductosColore> ProductosColores { get; set; } = new List<ProductosColore>();
 
     public virtual ICollection<ProductosImagene> ProductosImagenes { get; set; } = new List<ProductosImagene>();
-    public string ImagenUrl { get; internal set; }
+    public string ImagenUrl { get; set; } = null!;
 }

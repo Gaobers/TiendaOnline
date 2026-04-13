@@ -93,6 +93,7 @@ namespace TiendaOnline.AppMVC.Controllers
                     Genero = model.Genero,
                     Material = model.Material,
                     EsDestacado = model.EsDestacado,
+                    ImagenUrl = model.ImagenUrl,
                     Estatus = 1,
                     FechaCreacion = DateTime.Now,
                     FechaActualizacion = DateTime.Now
@@ -159,6 +160,7 @@ namespace TiendaOnline.AppMVC.Controllers
                 Genero = producto.Genero,
                 Material = producto.Material,
                 EsDestacado = producto.EsDestacado,
+                ImagenUrl = producto.ImagenUrl,
                 ColoresSeleccionados = producto.ProductosColores.Select(pc => pc.ColorId).ToList(),
                 ColoresDisponibles = await _context.Colores
                     .Where(c => c.Estatus == 1)
@@ -203,6 +205,7 @@ namespace TiendaOnline.AppMVC.Controllers
                     producto.Genero = model.Genero;
                     producto.Material = model.Material;
                     producto.EsDestacado = model.EsDestacado;
+                    producto.ImagenUrl = model.ImagenUrl;
                     producto.FechaActualizacion = DateTime.Now;
 
                     if (producto.ProductosColores.Any())

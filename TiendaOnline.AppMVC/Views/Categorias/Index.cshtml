@@ -4,18 +4,18 @@
     var filtroNombre = Context.Request.Query["nombre"].ToString();
     var filtroDescripcion = Context.Request.Query["descripcion"].ToString();
     var estatus = Context.Request.Query["estatus"].ToString();
-    var top = Context.Request.Query["top"].ToString();
+    // var top = Context.Request.Query["top"].ToString();
 
-    if (string.IsNullOrWhiteSpace(top))
-    {
-        top = "10";
-    }
+    // if (string.IsNullOrWhiteSpace(top))
+    // {
+    //     top = "10";
+    // }
 
     var hayFiltrosActivos =
         !string.IsNullOrWhiteSpace(filtroNombre) ||
         !string.IsNullOrWhiteSpace(filtroDescripcion) ||
-        !string.IsNullOrWhiteSpace(estatus) ||
-        top != "10";
+        !string.IsNullOrWhiteSpace(estatus);
+    // top != "10";
 }
 
 @section Styles {
@@ -89,7 +89,7 @@
                             </div>
                         </div>
 
-                        <!-- TOP -->
+                       @*  <!-- TOP -->
                         <div class="col-12 col-md-4 col-xl-2">
                             <label class="form-label admin-filter-label">Top registros</label>
                             <div class="input-group shadow-sm admin-filter-group">
@@ -104,7 +104,7 @@
                                     <option value="@int.MaxValue" selected="@(top == int.MaxValue.ToString())">Todos</option>
                                 </select>
                             </div>
-                        </div>
+                        </div> *@
 
 
                         <!-- BOTONES -->
@@ -130,7 +130,7 @@
     <!-- TABLA -->
     <div class="card admin-table-card mt-3">
         <div class="table-responsive">
-            <table class="table table-hover align-middle admin-table">
+            <table class="table table-hover align-middle admin-table jspaginacion">
                 <thead>
                     <tr>
                         <th class="cat-col-nombre">Nombre</th>
@@ -216,3 +216,9 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_Paginacion");
+    }
+}

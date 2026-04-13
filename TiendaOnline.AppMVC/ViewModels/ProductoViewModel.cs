@@ -57,6 +57,10 @@ namespace TiendaOnline.AppMVC.ViewModels
         [Display(Name = "Colores")]
         public List<int> ColoresSeleccionados { get; set; } = new();
 
+        [Required(ErrorMessage = "La imagen es obligatoria.")]
+        [Display(Name = "URL de la Imagen")]
+        [StringLength(255)]
+        public string ImagenUrl { get; set; } = string.Empty;
         // NUEVO: lista para pintar checkboxes
         public List<SelectListItem> ColoresDisponibles { get; set; } = new();
     }

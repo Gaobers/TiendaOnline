@@ -77,4 +77,5 @@ public partial class Pedido
     public virtual ICollection<Notificacione> Notificaciones { get; set; } = new List<Notificacione>();
 
     public virtual ICollection<Pago> Pagos { get; set; } = new List<Pago>();
-    public virtual UsosCupone? UsosCupone { get; set; }    public virtual Usuario Usuario { get; set; } = null!;}
+    public virtual UsosCupone? UsosCupone { get; set; }    
+    public virtual Usuario Usuario { get; set; } = null!;}
