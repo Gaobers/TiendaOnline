@@ -209,7 +209,9 @@
                             <div class="admin-input-wrap">
                                 <i class="bi bi-clock-history"></i>
                                 <div class="form-control admin-input d-flex align-items-center">
-                                    @Model.FechaActualizacion?.ToString("dd/MM/yyyy HH:mm") ?? "Sin actualizar"
+                                    @(
+                                        @Model.FechaActualizacion?.ToString("dd/MM/yyyy HH:mm") ?? "Sin actualizar"
+                                    )
                                 </div>
                             </div>
                         </div>

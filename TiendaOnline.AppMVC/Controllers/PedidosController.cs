@@ -18,22 +18,22 @@ namespace TiendaOnline.AppMVC.Controllers
         //Filtros
         public async Task<IActionResult> Index(string nombre, int? estadoPedidoId, int top = 10)
         {
-            var query = _context.Pedidos.AsQueryable();
+            var query = _context.Pedidos
+                .Include(p => p.EstadoPedido)
+                .AsQueryable();
 
-            //Nombre
             if (!string.IsNullOrWhiteSpace(nombre))
                 query = query.Where(p => p.NombreCliente.Contains(nombre));
-            //Estado
+
             if (estadoPedidoId.HasValue)
                 query = query.Where(p => p.EstadoPedidoId == estadoPedidoId.Value);
-            //Top
+
             query = query.Take(top);
 
             var pedidos = await query.ToListAsync();
 
-            // Lista de estados para el combo
             ViewBag.EstadosPedido = await _context.EstadosPedidos
-                .Where(e => e.Estatus == 1) // para estados activos
+                .Where(e => e.Estatus == 1)
                 .Select(e => new SelectListItem
                 {
                     Value = e.Id.ToString(),
@@ -153,6 +153,19 @@ namespace TiendaOnline.AppMVC.Controllers
                 return NotFound();
             }
 
+            ModelState.Remove("Usuario");
+            ModelState.Remove("MetodoEnvio");
+            ModelState.Remove("EstadoPedido");
+            ModelState.Remove("Cupon");
+            ModelState.Remove("DireccionUsuario");
+            ModelState.Remove("DetallesPedidos");
+            ModelState.Remove("HistorialesEstadosPedidos");
+            ModelState.Remove("Notificaciones");
+            ModelState.Remove("Pagos");
+            ModelState.Remove("UsosCupone");
+
+            pedido.FechaActualizacion = DateTime.Now;
+
             if (ModelState.IsValid)
             {
                 try
@@ -166,18 +179,19 @@ namespace TiendaOnline.AppMVC.Controllers
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+
+                    throw;
                 }
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CuponId"] = new SelectList(_context.Cupones, "Id", "Id", pedido.CuponId);
-            ViewData["DireccionUsuarioId"] = new SelectList(_context.DireccionesUsuarios, "Id", "Id", pedido.DireccionUsuarioId);
-            ViewData["EstadoPedidoId"] = new SelectList(_context.EstadosPedidos, "Id", "Id", pedido.EstadoPedidoId);
-            ViewData["MetodoEnvioId"] = new SelectList(_context.MetodosEnvios, "Id", "Id", pedido.MetodoEnvioId);
-            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "Id", pedido.UsuarioId);
+
+            ViewData["CuponId"] = new SelectList(_context.Cupones, "Id", "Codigo", pedido.CuponId);
+            ViewData["DireccionUsuarioId"] = new SelectList(_context.DireccionesUsuarios, "Id", "DireccionExacta", pedido.DireccionUsuarioId);
+            ViewData["EstadoPedidoId"] = new SelectList(_context.EstadosPedidos, "Id", "Nombre", pedido.EstadoPedidoId);
+            ViewData["MetodoEnvioId"] = new SelectList(_context.MetodosEnvios, "Id", "Nombre", pedido.MetodoEnvioId);
+            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "Nombre", pedido.UsuarioId);
+
             return View(pedido);
         }
 

@@ -28,7 +28,7 @@
     <div class="card admin-form-card border-0">
         <div class="card-body p-0">
 
-            <form asp-action="Edit" method="post" class="admin-form">
+            <form asp-action="Edit" asp-route-id="@Model.Id" method="post" class="admin-form">
                 <input type="hidden" asp-for="Id" />
                 <input type="hidden" asp-for="FechaCreacion" />
 
@@ -134,6 +134,15 @@
                                 <input asp-for="Material" class="form-control admin-input" />
                             </div>
                             <span asp-validation-for="Material" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <label asp-for="ImagenUrl" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-image"></i>
+                                <input asp-for="ImagenUrl" class="form-control admin-input" placeholder="/img/nike.jpg" />
+                            </div>
+                            <span asp-validation-for="ImagenUrl" class="text-danger small"></span>
                         </div>
 
                         <div class="col-md-6">

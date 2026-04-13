@@ -129,7 +129,7 @@
     <!-- TABLA -->
     <div class="card admin-table-card mt-3">
         <div class="table-responsive">
-            <table class="table table-hover align-middle admin-table">
+            <table class="table table-hover align-middle admin-table jspaginacion">
                 <thead>
                     <tr>
                         <th class="col-col-nombre">Color</th>
@@ -225,3 +225,9 @@
     </div>
 
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_Paginacion");
+    }
+}

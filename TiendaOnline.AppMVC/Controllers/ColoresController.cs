@@ -15,7 +15,7 @@ namespace TiendaOnline.AppMVC.Controllers
 
         // GET: Colores
         //Filtros
-        public async Task<IActionResult> Index(string nombre, byte? estatus, int top = 10)
+        public async Task<IActionResult> Index(string nombre, byte? estatus)
         {
             var query = _context.Colores.AsQueryable();
 
@@ -25,10 +25,11 @@ namespace TiendaOnline.AppMVC.Controllers
             //Estado
             if (estatus.HasValue)
                 query = query.Where(c => c.Estatus == estatus.Value);
-            //Top
-            query = query.OrderBy(c => c.Id).Take(top);
 
-            var colores = await query.ToListAsync();
+            var colores = await query
+               .OrderByDescending(c => c.Id)
+               .ToListAsync();
+
             return View(colores);
         }
 
