@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
 using TiendaOnline.AppMVC.Models;
+using TiendaOnline.AppMVC.ViewModels;
 
 namespace TiendaOnline.AppMVC.Controllers
 {

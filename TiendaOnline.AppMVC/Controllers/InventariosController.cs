@@ -16,7 +16,7 @@ namespace TiendaOnline.AppMVC.Controllers
 
         // GET: Inventarios
         //Filtros
-        public async Task<IActionResult> Index(string producto, string talla, int top = 10)
+        public async Task<IActionResult> Index(string producto, string talla)
         {
             var query = _context.Inventarios
             .Include(i => i.Producto)
@@ -29,10 +29,11 @@ namespace TiendaOnline.AppMVC.Controllers
             //Talla
             if (!string.IsNullOrWhiteSpace(talla))
                 query = query.Where(i => i.Talla.Numero.Contains(talla));
-            //Top
-            query = query.Take(top);
 
-            var inventarios = await query.ToListAsync();
+            var inventarios = await query
+                .OrderByDescending(c => c.Id)
+                .ToListAsync();
+
             return View(inventarios);
         }
 

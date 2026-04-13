@@ -15,7 +15,7 @@ namespace TiendaOnline.AppMVC.Controllers
 
         // GET: Marcas
         //Filtro
-        public async Task<IActionResult> Index(string nombre, byte? estatus, int top = 10)
+        public async Task<IActionResult> Index(string nombre, byte? estatus)
         {
             var query = _context.Marcas.AsQueryable();
 
@@ -25,10 +25,11 @@ namespace TiendaOnline.AppMVC.Controllers
             //Estado
             if (estatus.HasValue)
                 query = query.Where(m => m.Estatus == estatus.Value);
-            //Top
-            query = query.OrderBy(m => m.Id).Take(top);
 
-            var marcas = await query.ToListAsync();
+            var marcas = await query
+                .OrderByDescending(c => c.Id)
+                .ToListAsync();
+
             return View(marcas);
         }
 

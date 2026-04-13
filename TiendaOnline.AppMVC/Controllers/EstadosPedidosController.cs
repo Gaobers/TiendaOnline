@@ -15,7 +15,7 @@ namespace TiendaOnline.AppMVC.Controllers
 
         // GET: EstadosPedidos
         //Filtros
-        public async Task<IActionResult> Index(string nombre, byte? estatus, int top = 10)
+        public async Task<IActionResult> Index(string nombre, byte? estatus)
         {
             var query = _context.EstadosPedidos.AsQueryable();
 
@@ -25,10 +25,11 @@ namespace TiendaOnline.AppMVC.Controllers
             //Estado
             if (estatus.HasValue)
                 query = query.Where(c => c.Estatus == estatus);
-            //Top
-            query = query.Take(top);
 
-            var estadosPedidos = await query.ToListAsync();
+            var estadosPedidos = await query
+                .OrderByDescending(c => c.Id)
+                .ToListAsync();
+
             return View(estadosPedidos);
         }
 

@@ -16,7 +16,7 @@ namespace TiendaOnline.AppMVC.Controllers
         }
 
         // GET: Productos
-        public async Task<IActionResult> Index(string nombre, byte? estatus, int top = 10)
+        public async Task<IActionResult> Index(string nombre, byte? estatus)
         {
             var query = _context.Productos
                 .Include(p => p.Categoria)
@@ -31,9 +31,11 @@ namespace TiendaOnline.AppMVC.Controllers
             if (estatus.HasValue)
                 query = query.Where(p => p.Estatus == estatus.Value);
 
-            query = query.Take(top);
 
-            var productos = await query.ToListAsync();
+            var productos = await query
+                .OrderByDescending(c => c.Id)
+                .ToListAsync();
+
             return View(productos);
         }
 

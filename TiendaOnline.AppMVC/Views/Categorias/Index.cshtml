@@ -2,7 +2,6 @@
 
 @{
     var filtroNombre = Context.Request.Query["nombre"].ToString();
-    var filtroDescripcion = Context.Request.Query["descripcion"].ToString();
     var estatus = Context.Request.Query["estatus"].ToString();
     // var top = Context.Request.Query["top"].ToString();
 
@@ -13,7 +12,6 @@
 
     var hayFiltrosActivos =
         !string.IsNullOrWhiteSpace(filtroNombre) ||
-        !string.IsNullOrWhiteSpace(filtroDescripcion) ||
         !string.IsNullOrWhiteSpace(estatus);
     // top != "10";
 }

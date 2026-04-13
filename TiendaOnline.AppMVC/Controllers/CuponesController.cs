@@ -14,7 +14,7 @@ namespace TiendaOnline.AppMVC.Controllers
         }
 
         // GET: Cupones
-        public async Task<IActionResult> Index(string codigo, byte? estatus, int top = 10)
+        public async Task<IActionResult> Index(string codigo, byte? estatus)
         {
             var query = _context.Cupones.AsQueryable();
 
@@ -24,10 +24,11 @@ namespace TiendaOnline.AppMVC.Controllers
             //Estado
             if (estatus.HasValue)
                 query = query.Where(c => c.Estatus == estatus.Value);
-            //Top
-            query = query.Take(top);
 
-            var cupones = await query.ToListAsync();
+            var cupones = await query
+                .OrderByDescending(c => c.Id)
+                .ToListAsync(); 
+
             return View(cupones);
         }
 

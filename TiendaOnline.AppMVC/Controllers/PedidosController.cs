@@ -16,7 +16,7 @@ namespace TiendaOnline.AppMVC.Controllers
 
         // GET: Pedidos
         //Filtros
-        public async Task<IActionResult> Index(string nombre, int? estadoPedidoId, int top = 10)
+        public async Task<IActionResult> Index(string nombre, int? estadoPedidoId)
         {
             var query = _context.Pedidos
                 .Include(p => p.EstadoPedido)
@@ -28,9 +28,10 @@ namespace TiendaOnline.AppMVC.Controllers
             if (estadoPedidoId.HasValue)
                 query = query.Where(p => p.EstadoPedidoId == estadoPedidoId.Value);
 
-            query = query.Take(top);
 
-            var pedidos = await query.ToListAsync();
+            var pedidos = await query
+                .OrderByDescending(c => c.Id)
+                .ToListAsync();
 
             ViewBag.EstadosPedido = await _context.EstadosPedidos
                 .Where(e => e.Estatus == 1)

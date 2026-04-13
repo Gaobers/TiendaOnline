@@ -15,7 +15,7 @@ namespace TiendaOnline.AppMVC.Controllers
 
         // GET: Categorias
         //Filtros
-        public async Task<IActionResult> Index(string nombre, string descripcion, byte? estatus)
+        public async Task<IActionResult> Index(string nombre, byte? estatus)
         {
             var query = _context.Categorias.AsQueryable();
 

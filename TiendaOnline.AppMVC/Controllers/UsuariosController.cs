@@ -125,7 +125,7 @@ namespace TiendaOnline.AppMVC.Controllers
         // =========================
 
         [Authorize(Roles = "Administrador")]
-        public async Task<IActionResult> Index(string nombre, byte? estatus, int top = 10)
+        public async Task<IActionResult> Index(string nombre, byte? estatus)
         {
             var query = _context.Usuarios
                 .Include(u => u.Rol)
@@ -137,9 +137,11 @@ namespace TiendaOnline.AppMVC.Controllers
             if (estatus.HasValue)
                 query = query.Where(u => u.Estatus == estatus.Value);
 
-            query = query.Take(top);
 
-            var usuarios = await query.ToListAsync();
+            var usuarios = await query
+                .OrderByDescending(c => c.Id)
+                .ToListAsync();
+
             return View(usuarios);
         }
 
