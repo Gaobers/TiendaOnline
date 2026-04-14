@@ -1,126 +1,298 @@
 ﻿@model Pedido
 
-@{
-    ViewData["Title"] = "Details";
-}
+<div class="admin-create-page">
 
-<h1>Details</h1>
+    <div class="admin-create-hero">
+        <div class="admin-create-hero__content">
+            <div>
+                <div class="admin-create-badge">
+                    <i class="bi bi-bag-check"></i>
+                    Gestión de pedidos
+                </div>
 
-<div>
-    <h4>Pedido</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NombreCliente)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NombreCliente)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EmailCliente)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EmailCliente)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DireccionEntrega)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DireccionEntrega)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Total)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Total)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaCreacion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaCreacion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaActualizacion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaActualizacion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ApellidoCliente)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ApellidoCliente)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TelefonoCliente)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TelefonoCliente)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ReferenciaEntrega)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ReferenciaEntrega)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SubTotal)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SubTotal)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DescuentoTotal)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DescuentoTotal)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CostoEnvio)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CostoEnvio)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Observaciones)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Observaciones)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Cupon)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Cupon.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DireccionUsuario)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DireccionUsuario.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EstadoPedido)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EstadoPedido.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MetodoEnvio)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MetodoEnvio.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Usuario)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Usuario.Id)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+                <h1 class="admin-create-title">Detalle de pedido</h1>
+                <p class="admin-create-subtitle mb-0">
+                    Consulta la información completa del pedido seleccionado dentro del sistema.
+                </p>
+            </div>
+
+            <div class="admin-create-hero__actions">
+                <a asp-action="Index" class="btn admin-btn admin-btn-light">
+                    <i class="bi bi-arrow-left-short"></i>
+                    Volver al listado
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card admin-form-card border-0">
+        <div class="card-body p-0">
+
+            <div class="admin-form">
+
+                <div class="admin-section">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-eye"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">Información del cliente</h5>
+                            <p class="admin-section-text mb-0">
+                                Revisa los datos principales del cliente asociados al pedido.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Nombre</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-person"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @Html.DisplayFor(model => model.NombreCliente)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Apellido</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-person-vcard"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @Html.DisplayFor(model => model.ApellidoCliente)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Correo electrónico</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-envelope"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @Html.DisplayFor(model => model.EmailCliente)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Teléfono</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-telephone"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @Html.DisplayFor(model => model.TelefonoCliente)
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="admin-section">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-geo-alt"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">Entrega</h5>
+                            <p class="admin-section-text mb-0">
+                                Revisa la dirección y referencias de entrega del pedido.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+
+                        <div class="col-12">
+                            <label class="form-label admin-label">Dirección de entrega</label>
+                            <div class="admin-textarea-wrap">
+                                <div class="form-control admin-input admin-textarea">
+                                    @Html.DisplayFor(model => model.DireccionEntrega)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label admin-label">Referencia de entrega</label>
+                            <div class="admin-textarea-wrap">
+                                <div class="form-control admin-input admin-textarea">
+                                    @Html.DisplayFor(model => model.ReferenciaEntrega)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Dirección registrada</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-house-door"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @(Model.DireccionUsuario?.Id.ToString() ?? "Sin dirección")
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="admin-section">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-receipt"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">Resumen del pedido</h5>
+                            <p class="admin-section-text mb-0">
+                                Revisa los montos, descuentos y costos relacionados al pedido.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Subtotal</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-cash-stack"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @Html.DisplayFor(model => model.SubTotal)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Descuento total</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-percent"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @Html.DisplayFor(model => model.DescuentoTotal)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Costo de envío</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-truck"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @Html.DisplayFor(model => model.CostoEnvio)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Total</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-currency-dollar"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @Html.DisplayFor(model => model.Total)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label admin-label">Observaciones</label>
+                            <div class="admin-textarea-wrap">
+                                <div class="form-control admin-input admin-textarea">
+                                    @Html.DisplayFor(model => model.Observaciones)
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="admin-section">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-diagram-3"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">Relaciones y control</h5>
+                            <p class="admin-section-text mb-0">
+                                Revisa los identificadores y relaciones asociadas al pedido.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Cupón</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-ticket-perforated"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @(Model.Cupon?.Id.ToString() ?? "Sin cupón")
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Estado del pedido</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-clipboard-check"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @(Model.EstadoPedido?.Id.ToString() ?? "Sin estado")
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Método de envío</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-truck-flatbed"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @(Model.MetodoEnvio?.Id.ToString() ?? "Sin método")
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Usuario</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-person-badge"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @(Model.Usuario?.Id.ToString() ?? "Sin usuario")
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Fecha de creación</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-calendar-event"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @(Model.FechaCreacion.ToString("dd/MM/yyyy HH:mm"))
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Fecha de actualización</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-clock-history"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @(Model.FechaActualizacion?.ToString("dd/MM/yyyy HH:mm") ?? "Sin fecha")
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="admin-form-actions">
+                    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn admin-btn admin-btn-primary">
+                        <i class="bi bi-pencil-square"></i>
+                        Editar pedido
+                    </a>
+
+                    <a asp-action="Index" class="btn admin-btn admin-btn-outline">
+                        <i class="bi bi-x-circle"></i>
+                        Volver
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
 </div>

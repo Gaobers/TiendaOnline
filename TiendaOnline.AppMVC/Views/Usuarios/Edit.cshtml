@@ -1,89 +1,158 @@
 ﻿@model Usuario
 
-@{
-    ViewData["Title"] = "Editar Usuario";
-}
+<div class="admin-create-page">
 
-<h1>Editar</h1>
+    <div class="admin-create-hero">
+        <div class="admin-create-hero__content">
+            <div>
+                <div class="admin-create-badge">
+                    <i class="bi bi-people"></i>
+                    Gestión de usuarios
+                </div>
 
-<h4>Usuario</h4>
-<hr />
-
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Edit" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="FechaCreacion" />
-
-            <div class="form-group mb-3">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
+                <h1 class="admin-create-title">Editar usuario</h1>
+                <p class="admin-create-subtitle mb-0">
+                    Modifica la información del usuario seleccionado de forma clara y ordenada.
+                </p>
             </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="Apellido" class="control-label"></label>
-                <input asp-for="Apellido" class="form-control" />
-                <span asp-validation-for="Apellido" class="text-danger"></span>
+            <div class="admin-create-hero__actions">
+                <a asp-action="Index" class="btn admin-btn admin-btn-light">
+                    <i class="bi bi-arrow-left-short"></i>
+                    Volver al listado
+                </a>
             </div>
+        </div>
+    </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="Correo" class="control-label"></label>
-                <input asp-for="Correo" class="form-control" />
-                <span asp-validation-for="Correo" class="text-danger"></span>
-            </div>
+    <div class="card admin-form-card border-0">
+        <div class="card-body p-0">
 
-            <div class="form-group mb-3">
-                <label asp-for="Telefono" class="control-label"></label>
-                <input asp-for="Telefono" class="form-control" />
-                <span asp-validation-for="Telefono" class="text-danger"></span>
-            </div>
+            <form asp-action="Edit" method="post" class="admin-form">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger admin-validation-box m-0"></div>
 
-            <div class="form-group mb-3">
-                <label asp-for="PasswordHash" class="control-label">Contraseña</label>
-                <input asp-for="PasswordHash" type="password" class="form-control" />
-                <span asp-validation-for="PasswordHash" class="text-danger"></span>
-            </div>
+                <input type="hidden" asp-for="Id" />
 
-            <div class="form-group mb-3">
-                <label asp-for="RolId" class="control-label">Rol</label>
-                <select asp-for="RolId" class="form-control" asp-items="ViewBag.RolId">
-                    <option value="">-- Seleccione un rol --</option>
-                </select>
-                <span asp-validation-for="RolId" class="text-danger"></span>
-            </div>
+                <div class="admin-section">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-pencil-square"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">Información general</h5>
+                            <p class="admin-section-text mb-0">
+                                Actualiza los datos principales del usuario dentro del sistema.
+                            </p>
+                        </div>
+                    </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="Estatus" class="control-label">Estado</label>
-                <select asp-for="Estatus" class="form-control">
-                    <option value="">-- Seleccione un estado --</option>
-                    <option value="1">Activo</option>
-                    <option value="2">Inactivo</option>
-                    <option value="3">Bloqueado</option>
-                    <option value="4">Suspendido</option>
-                </select>
-                <span asp-validation-for="Estatus" class="text-danger"></span>
-            </div>
+                    <div class="row g-4">
 
-            <div class="form-group mb-3">
-                <label class="control-label">Fecha de creación</label>
-                <input class="form-control" value="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss")" readonly />
-            </div>
+                        <div class="col-md-6">
+                            <label asp-for="Nombre" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-person"></i>
+                                <input asp-for="Nombre" class="form-control admin-input" placeholder="Ej. Carlos" />
+                            </div>
+                            <span asp-validation-for="Nombre" class="text-danger small"></span>
+                        </div>
 
-            <div class="form-group mb-3">
-                <label class="control-label">Última actualización</label>
-                <input class="form-control"
-                       value="@(Model.FechaActualizacion?.ToString("yyyy-MM-dd HH:mm:ss") ?? "Sin actualizaciones")"
-                       readonly />
-            </div>
+                        <div class="col-md-6">
+                            <label asp-for="Apellido" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-person-vcard"></i>
+                                <input asp-for="Apellido" class="form-control admin-input" placeholder="Ej. Moran" />
+                            </div>
+                            <span asp-validation-for="Apellido" class="text-danger small"></span>
+                        </div>
 
-            <div class="form-group mt-4">
-                <input type="submit" value="Guardar" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-secondary ms-2">Volver</a>
-            </div>
-        </form>
+                        <div class="col-md-6">
+                            <label asp-for="Correo" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-envelope"></i>
+                                <input asp-for="Correo" class="form-control admin-input" placeholder="correo@ejemplo.com" />
+                            </div>
+                            <span asp-validation-for="Correo" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Telefono" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-telephone"></i>
+                                <input asp-for="Telefono" class="form-control admin-input" placeholder="Ej. 7000-0000" />
+                            </div>
+                            <span asp-validation-for="Telefono" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="RolId" class="form-label admin-label">Rol</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-person-badge"></i>
+                                <select asp-for="RolId" class="form-select admin-input" asp-items="ViewBag.RolId">
+                                    <option value="">-- Seleccione un rol --</option>
+                                </select>
+                            </div>
+                            <span asp-validation-for="RolId" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Estatus" class="form-label admin-label">Estado</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-check2-circle"></i>
+                                <select asp-for="Estatus" class="form-select admin-input">
+                                    <option value="1">Activo</option>
+                                    <option value="2">Inactivo</option>
+                                    <option value="3">Bloqueado</option>
+                                    <option value="4">Suspendido</option>
+                                </select>
+                            </div>
+                            <span asp-validation-for="Estatus" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Fecha de creación</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-calendar-event"></i>
+                                <input class="form-control admin-input"
+                                       value="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss")"
+                                       readonly />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Última actualización</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-clock-history"></i>
+                                <input class="form-control admin-input"
+                                       value="@(Model.FechaActualizacion?.ToString("yyyy-MM-dd HH:mm:ss") ?? "Sin actualizaciones")"
+                                       readonly />
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="alert alert-info mb-0">
+                                <i class="bi bi-info-circle me-2"></i>
+                                La contraseña no se edita desde esta pantalla. Cámbiala desde la opción de seguridad o cambio de contraseña.
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="admin-form-actions">
+                    <button type="submit" class="btn admin-btn admin-btn-primary">
+                        <i class="bi bi-check2-circle"></i>
+                        Guardar cambios
+                    </button>
+
+                    <a asp-action="Index" class="btn admin-btn admin-btn-outline">
+                        <i class="bi bi-x-circle"></i>
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+
+        </div>
     </div>
 </div>
 

@@ -1,7 +1,6 @@
 ﻿@model Producto
 
 @{
-    ViewData["Title"] = "Details";
     var activo = Model.Estatus == 1;
 
     var imgUrl = Model.ProductosImagenes?
@@ -11,102 +10,235 @@
         .FirstOrDefault();
 }
 
-<div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
-    <div>
-        <h3 class="mb-0">Detalle del producto</h3>
-        <div class="text-muted">Información general</div>
-    </div>
+<div class="admin-create-page">
 
-    <div class="d-flex gap-2 flex-wrap">
-        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Editar</a>
-        <a asp-action="Index" class="btn btn-outline-secondary">Volver</a>
-    </div>
-</div>
-
-<div class="card shadow-sm prod-card">
-    <div class="card-body p-4">
-
-        <div class="d-flex align-items-center gap-3 mb-4 flex-wrap">
-            @if (!string.IsNullOrWhiteSpace(imgUrl))
-            {
-                <img src="@imgUrl" class="prod-thumb" alt="Imagen @Model.Nombre" />
-            }
-            else
-            {
-                <div class="prod-thumb d-flex align-items-center justify-content-center text-muted small">
-                    IMG
-                </div>
-            }
-
+    <div class="admin-create-hero">
+        <div class="admin-create-hero__content">
             <div>
-                <h4 class="mb-1">@Model.Nombre</h4>
+                <div class="admin-create-badge">
+                    <i class="bi bi-box-seam"></i>
+                    Gestión de productos
+                </div>
 
-                @if (activo)
-                {
-                    <span class="prod-badge prod-badge-success">ACTIVO</span>
-                }
-                else
-                {
-                    <span class="prod-badge prod-badge-danger">INACTIVO</span>
-                }
+                <h1 class="admin-create-title">Detalle de producto</h1>
+                <p class="admin-create-subtitle mb-0">
+                    Consulta la información completa del producto seleccionado dentro del sistema.
+                </p>
+            </div>
+
+            <div class="admin-create-hero__actions">
+                <a asp-action="Index" class="btn admin-btn admin-btn-light">
+                    <i class="bi bi-arrow-left-short"></i>
+                    Volver al listado
+                </a>
             </div>
         </div>
+    </div>
 
-        <div class="row g-4">
-            <div class="col-md-6">
-                <div class="prod-text-label">Precio</div>
-                <div class="prod-text-value">$@Model.Precio.ToString("0.00")</div>
+    <div class="card admin-form-card border-0">
+        <div class="card-body p-0">
+
+            <div class="admin-form">
+
+                <div class="admin-section">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-image"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">Vista general</h5>
+                            <p class="admin-section-text mb-0">
+                                Revisa la imagen principal y el estado actual del producto.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4 align-items-center">
+                        <div class="col-md-3">
+                            @if (!string.IsNullOrWhiteSpace(imgUrl))
+                            {
+                                <img src="@imgUrl"
+                                     alt="Imagen de @Model.Nombre"
+                                     class="img-fluid rounded-4 border w-100"
+                                     style="max-height: 220px; object-fit: cover;" />
+                            }
+                            else
+                            {
+                                <div class="d-flex align-items-center justify-content-center rounded-4 border text-muted small w-100"
+                                     style="height: 220px;">
+                                    Sin imagen
+                                </div>
+                            }
+                        </div>
+
+                        <div class="col-md-9">
+                            <div class="row g-4">
+                                <div class="col-md-8">
+                                    <label class="form-label admin-label">Nombre del producto</label>
+                                    <div class="admin-input-wrap">
+                                        <i class="bi bi-tag"></i>
+                                        <div class="form-control admin-input d-flex align-items-center">
+                                            @Model.Nombre
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label admin-label">Estado</label>
+                                    <div class="admin-input-wrap">
+                                        <i class="bi bi-check2-circle"></i>
+                                        <div class="form-control admin-input d-flex align-items-center">
+                                            @(activo ? "Activo" : "Inactivo")
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label admin-label">Precio</label>
+                                    <div class="admin-input-wrap">
+                                        <i class="bi bi-cash-coin"></i>
+                                        <div class="form-control admin-input d-flex align-items-center">
+                                            $@Model.Precio.ToString("0.00")
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label admin-label">SKU</label>
+                                    <div class="admin-input-wrap">
+                                        <i class="bi bi-upc-scan"></i>
+                                        <div class="form-control admin-input d-flex align-items-center">
+                                            @Model.Sku
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <strong>Colores:</strong>
+                                    @if (Model.ProductosColores != null && Model.ProductosColores.Any())
+                                    {
+                                        @string.Join(", ", Model.ProductosColores.Select(pc => pc.Color.Nombre))
+                                    }
+                                    else
+                                    {
+                                        <span>No asignados</span>
+                                    }
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-section">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-box"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">Información del producto</h5>
+                            <p class="admin-section-text mb-0">
+                                Revisa los datos generales y atributos principales.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Categoría</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-grid"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @(Model.Categoria?.Nombre ?? Model.Categoria?.Id.ToString() ?? "Sin categoría")
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Marca</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-bookmark-star"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @(Model.Marca?.Nombre ?? Model.Marca?.Id.ToString() ?? "Sin marca")
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Género</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-person-badge"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @(string.IsNullOrWhiteSpace(Model.Genero) ? "Sin definir" : Model.Genero)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Material</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-layers"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @(string.IsNullOrWhiteSpace(Model.Material) ? "Sin definir" : Model.Material)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Destacado</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-star"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @(Model.EsDestacado ? "Sí" : "No")
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Fecha de creación</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-calendar-event"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @Model.FechaCreacion.ToString("dd/MM/yyyy HH:mm")
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Última actualización</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-clock-history"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @Model.FechaActualizacion?.ToString("dd/MM/yyyy HH:mm") ?? "Sin actualizar"
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label admin-label">Descripción</label>
+                            <div class="admin-textarea-wrap">
+                                <div class="form-control admin-input admin-textarea">
+                                    @Model.Descripcion
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-form-actions">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn admin-btn admin-btn-primary">
+                        <i class="bi bi-pencil-square"></i>
+                        Editar producto
+                    </a>
+
+                    <a asp-action="Index" class="btn admin-btn admin-btn-outline">
+                        <i class="bi bi-x-circle"></i>
+                        Volver
+                    </a>
+                </div>
+
             </div>
 
-            <div class="col-md-6">
-                <div class="prod-text-label">SKU</div>
-                <div class="prod-text-value">@Model.Sku</div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="prod-text-label">Estado</div>
-                <div class="prod-text-value">@(activo ? "Activo" : "Inactivo")</div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="prod-text-label">Categoría</div>
-                <div class="prod-text-value">@(Model.Categoria?.Nombre ?? Model.Categoria?.Id.ToString())</div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="prod-text-label">Marca</div>
-                <div class="prod-text-value">@(Model.Marca?.Nombre ?? Model.Marca?.Id.ToString())</div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="prod-text-label">Género</div>
-                <div class="prod-text-value">@Model.Genero</div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="prod-text-label">Material</div>
-                <div class="prod-text-value">@Model.Material</div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="prod-text-label">Destacado</div>
-                <div class="prod-text-value">@(Model.EsDestacado ? "Sí" : "No")</div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="prod-text-label">Fecha de creación</div>
-                <div class="prod-text-value">@Model.FechaCreacion</div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="prod-text-label">Última actualización</div>
-                <div class="prod-text-value">@Model.FechaActualizacion</div>
-            </div>
-
-            <div class="col-12">
-                <div class="prod-text-label">Descripción</div>
-                <div class="prod-text-value">@Model.Descripcion</div>
-            </div>
         </div>
     </div>
 </div>

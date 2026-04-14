@@ -1,119 +1,257 @@
 ﻿@model Pedido
 
-@{
-    ViewData["Title"] = "Edit";
-}
+<div class="admin-create-page">
 
-<h1>Edit</h1>
+    <div class="admin-create-hero">
+        <div class="admin-create-hero__content">
+            <div>
+                <div class="admin-create-badge">
+                    <i class="bi bi-bag-check"></i>
+                    Gestión de pedidos
+                </div>
 
-<h4>Pedido</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="NombreCliente" class="control-label"></label>
-                <input asp-for="NombreCliente" class="form-control" />
-                <span asp-validation-for="NombreCliente" class="text-danger"></span>
+                <h1 class="admin-create-title">Editar pedido</h1>
+                <p class="admin-create-subtitle mb-0">
+                    Modifica la información del pedido seleccionado de forma clara y ordenada.
+                </p>
             </div>
-            <div class="form-group">
-                <label asp-for="EmailCliente" class="control-label"></label>
-                <input asp-for="EmailCliente" class="form-control" />
-                <span asp-validation-for="EmailCliente" class="text-danger"></span>
+
+            <div class="admin-create-hero__actions">
+                <a asp-action="Index" class="btn admin-btn admin-btn-light">
+                    <i class="bi bi-arrow-left-short"></i>
+                    Volver al listado
+                </a>
             </div>
-            <div class="form-group">
-                <label asp-for="DireccionEntrega" class="control-label"></label>
-                <input asp-for="DireccionEntrega" class="form-control" />
-                <span asp-validation-for="DireccionEntrega" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Total" class="control-label"></label>
-                <input asp-for="Total" class="form-control" />
-                <span asp-validation-for="Total" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FechaCreacion" class="control-label"></label>
-                <input asp-for="FechaCreacion" class="form-control" />
-                <span asp-validation-for="FechaCreacion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FechaActualizacion" class="control-label"></label>
-                <input asp-for="FechaActualizacion" class="form-control" />
-                <span asp-validation-for="FechaActualizacion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UsuarioId" class="control-label"></label>
-                <select asp-for="UsuarioId" class="form-control" asp-items="ViewBag.UsuarioId"></select>
-                <span asp-validation-for="UsuarioId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DireccionUsuarioId" class="control-label"></label>
-                <select asp-for="DireccionUsuarioId" class="form-control" asp-items="ViewBag.DireccionUsuarioId"></select>
-                <span asp-validation-for="DireccionUsuarioId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MetodoEnvioId" class="control-label"></label>
-                <select asp-for="MetodoEnvioId" class="form-control" asp-items="ViewBag.MetodoEnvioId"></select>
-                <span asp-validation-for="MetodoEnvioId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EstadoPedidoId" class="control-label"></label>
-                <select asp-for="EstadoPedidoId" class="form-control" asp-items="ViewBag.EstadoPedidoId"></select>
-                <span asp-validation-for="EstadoPedidoId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CuponId" class="control-label"></label>
-                <select asp-for="CuponId" class="form-control" asp-items="ViewBag.CuponId"></select>
-                <span asp-validation-for="CuponId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ApellidoCliente" class="control-label"></label>
-                <input asp-for="ApellidoCliente" class="form-control" />
-                <span asp-validation-for="ApellidoCliente" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TelefonoCliente" class="control-label"></label>
-                <input asp-for="TelefonoCliente" class="form-control" />
-                <span asp-validation-for="TelefonoCliente" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ReferenciaEntrega" class="control-label"></label>
-                <input asp-for="ReferenciaEntrega" class="form-control" />
-                <span asp-validation-for="ReferenciaEntrega" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SubTotal" class="control-label"></label>
-                <input asp-for="SubTotal" class="form-control" />
-                <span asp-validation-for="SubTotal" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DescuentoTotal" class="control-label"></label>
-                <input asp-for="DescuentoTotal" class="form-control" />
-                <span asp-validation-for="DescuentoTotal" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CostoEnvio" class="control-label"></label>
-                <input asp-for="CostoEnvio" class="form-control" />
-                <span asp-validation-for="CostoEnvio" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Observaciones" class="control-label"></label>
-                <input asp-for="Observaciones" class="form-control" />
-                <span asp-validation-for="Observaciones" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
+    </div>
+
+    <div class="card admin-form-card border-0">
+        <div class="card-body p-0">
+
+            <form asp-action="Edit" method="post" class="admin-form">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger admin-validation-box m-0"></div>
+
+                <input type="hidden" asp-for="Id" />
+
+                <!-- CLIENTE -->
+                <div class="admin-section">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-person"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">Información del cliente</h5>
+                            <p class="admin-section-text mb-0">Datos básicos del cliente</p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+
+                        <div class="col-md-6">
+                            <label asp-for="NombreCliente" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-person"></i>
+                                <input asp-for="NombreCliente" class="form-control admin-input" />
+                            </div>
+                            <span asp-validation-for="NombreCliente" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="ApellidoCliente" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-person-vcard"></i>
+                                <input asp-for="ApellidoCliente" class="form-control admin-input" />
+                            </div>
+                            <span asp-validation-for="ApellidoCliente" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="EmailCliente" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-envelope"></i>
+                                <input asp-for="EmailCliente" class="form-control admin-input" />
+                            </div>
+                            <span asp-validation-for="EmailCliente" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="TelefonoCliente" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-telephone"></i>
+                                <input asp-for="TelefonoCliente" class="form-control admin-input" />
+                            </div>
+                            <span asp-validation-for="TelefonoCliente" class="text-danger small"></span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ENTREGA -->
+                <div class="admin-section">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-geo-alt"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">Entrega</h5>
+                            <p class="admin-section-text mb-0">Datos de dirección y envío</p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+
+                        <div class="col-12">
+                            <label asp-for="DireccionEntrega" class="form-label admin-label"></label>
+                            <div class="admin-textarea-wrap">
+                                <textarea asp-for="DireccionEntrega" class="form-control admin-input admin-textarea"></textarea>
+                            </div>
+                            <span asp-validation-for="DireccionEntrega" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <label asp-for="ReferenciaEntrega" class="form-label admin-label"></label>
+                            <div class="admin-textarea-wrap">
+                                <textarea asp-for="ReferenciaEntrega" class="form-control admin-input admin-textarea"></textarea>
+                            </div>
+                            <span asp-validation-for="ReferenciaEntrega" class="text-danger small"></span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- RELACIONES -->
+                <div class="admin-section">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-diagram-3"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">Relaciones</h5>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+
+                        <div class="col-md-6">
+                            <label asp-for="UsuarioId" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-person-badge"></i>
+                                <select asp-for="UsuarioId" class="form-select admin-input" asp-items="ViewBag.UsuarioId"></select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="DireccionUsuarioId" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-house"></i>
+                                <select asp-for="DireccionUsuarioId" class="form-select admin-input" asp-items="ViewBag.DireccionUsuarioId"></select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="MetodoEnvioId" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-truck"></i>
+                                <select asp-for="MetodoEnvioId" class="form-select admin-input" asp-items="ViewBag.MetodoEnvioId"></select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="EstadoPedidoId" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-clipboard-check"></i>
+                                <select asp-for="EstadoPedidoId" class="form-select admin-input" asp-items="ViewBag.EstadoPedidoId"></select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="CuponId" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-ticket-perforated"></i>
+                                <select asp-for="CuponId" class="form-select admin-input" asp-items="ViewBag.CuponId"></select>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- MONTOS -->
+                <div class="admin-section">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-cash-stack"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">Montos</h5>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+
+                        <div class="col-md-4">
+                            <label asp-for="SubTotal" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <input asp-for="SubTotal" class="form-control admin-input" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label asp-for="DescuentoTotal" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <input asp-for="DescuentoTotal" class="form-control admin-input" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label asp-for="CostoEnvio" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <input asp-for="CostoEnvio" class="form-control admin-input" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Total" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <input asp-for="Total" class="form-control admin-input" />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- FECHAS -->
+                <div class="admin-section">
+                    <div class="row g-4">
+
+                        <div class="col-md-6">
+                            <label asp-for="FechaCreacion" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <input asp-for="FechaCreacion" class="form-control admin-input" readonly />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="FechaActualizacion" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <input asp-for="FechaActualizacion" class="form-control admin-input" />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="admin-form-actions">
+                    <button type="submit" class="btn admin-btn admin-btn-primary">
+                        Guardar cambios
+                    </button>
+
+                    <a asp-action="Index" class="btn admin-btn admin-btn-outline">
+                        Cancelar
+                    </a>
+                </div>
+
+            </form>
+
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

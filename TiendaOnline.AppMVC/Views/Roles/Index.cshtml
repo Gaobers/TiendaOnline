@@ -1,8 +1,6 @@
 ﻿@model IEnumerable<Role>
 
 @{
-    ViewData["Title"] = "Roles";
-
     var filtroNombre = Context.Request.Query["nombre"].ToString();
     var estatus = Context.Request.Query["estatus"].ToString();
     var top = Context.Request.Query["top"].ToString();

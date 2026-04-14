@@ -1,83 +1,143 @@
 ﻿@model Inventario
 
 @{
-    ViewData["Title"] = "Detalles";
     var bajoStock = Model.Stock <= Model.StockMinimo;
     var agotado = Model.Stock == 0;
+
+    var estadoStock = agotado ? "Agotado"
+                    : bajoStock ? "Bajo stock"
+                    : "Stock disponible";
+
+    var badgeClass = agotado ? "text-bg-danger"
+                    : bajoStock ? "text-bg-warning"
+                    : "text-bg-success";
 }
 
-<div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
-    <div>
-        <h3 class="mb-0">Detalle de inventario</h3>
-        <div class="text-muted">Información completa del registro</div>
+<div class="admin-create-page">
+
+    <div class="admin-create-hero">
+        <div class="admin-create-hero__content">
+            <div>
+                <div class="admin-create-badge">
+                    <i class="bi bi-box-seam"></i>
+                    Gestión de inventario
+                </div>
+
+                <h1 class="admin-create-title">Detalle de inventario</h1>
+                <p class="admin-create-subtitle mb-0">
+                    Consulta la información completa del registro de inventario seleccionado.
+                </p>
+            </div>
+
+            <div class="admin-create-hero__actions">
+                <a asp-action="Index" class="btn admin-btn admin-btn-light">
+                    <i class="bi bi-arrow-left-short"></i>
+                    Volver al listado
+                </a>
+            </div>
+        </div>
     </div>
 
-    <a asp-action="Index" class="btn btn-outline-secondary">
-        Volver
-    </a>
-</div>
+    <div class="card admin-form-card border-0">
+        <div class="card-body p-0">
 
-<div class="card shadow-sm inv-card">
-    <div class="card-body p-4">
+            <div class="admin-form">
 
-        <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
-            <div>
-                <h4 class="mb-1">
-                    @(Model.Producto?.Nombre ?? "Sin producto")
-                </h4>
-                <div class="text-muted">
-                    Talla: @(Model.Talla?.Numero ?? Model.Talla?.Id.ToString() ?? "N/A")
+                <div class="admin-section">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-eye"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">Información general</h5>
+                            <p class="admin-section-text mb-0">
+                                Revisa el estado actual del inventario asociado al producto y talla seleccionados.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+
+                        <div class="col-12">
+                            <label class="form-label admin-label">Estado del inventario</label>
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <div class="admin-input-wrap flex-grow-1">
+                                    <i class="bi bi-activity"></i>
+                                    <div class="form-control admin-input d-flex align-items-center">
+                                        @estadoStock
+                                    </div>
+                                </div>
+                                <span class="badge @badgeClass px-3 py-2 rounded-pill">@estadoStock</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Producto</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-bag"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @(Model.Producto?.Nombre ?? "Sin producto")
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Talla</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-rulers"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @(Model.Talla?.Numero ?? Model.Talla?.Id.ToString() ?? Model.TallaId.ToString())
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Stock actual</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-boxes"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @Model.Stock
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Stock mínimo</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-exclamation-triangle"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @Model.StockMinimo
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Fecha de actualización</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-clock-history"></i>
+                                <div class="form-control admin-input d-flex align-items-center">
+                                    @(Model.FechaActualizacion.ToString("dd/MM/yyyy HH:mm"))
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
+
+                <div class="admin-form-actions">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn admin-btn admin-btn-primary">
+                        <i class="bi bi-pencil-square"></i>
+                        Editar inventario
+                    </a>
+
+                    <a asp-action="Index" class="btn admin-btn admin-btn-outline">
+                        <i class="bi bi-x-circle"></i>
+                        Volver
+                    </a>
+                </div>
+
             </div>
 
-            @if (agotado)
-            {
-                <span class="inv-badge inv-badge-danger">AGOTADO</span>
-            }
-            else if (bajoStock)
-            {
-                <span class="inv-badge inv-badge-warning">BAJO</span>
-            }
-            else
-            {
-                <span class="inv-badge inv-badge-success">OK</span>
-            }
-        </div>
-
-        <div class="row g-4">
-            <div class="col-md-6">
-                <div class="inv-text-label">Stock actual</div>
-                <div class="inv-text-value">@Model.Stock</div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="inv-text-label">Stock mínimo</div>
-                <div class="inv-text-value">@Model.StockMinimo</div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="inv-text-label">Fecha de actualización</div>
-                <div class="inv-text-value">@Model.FechaActualizacion</div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="inv-text-label">Producto</div>
-                <div class="inv-text-value">@(Model.Producto?.Nombre ?? "Sin producto")</div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="inv-text-label">Talla</div>
-                <div class="inv-text-value">@(Model.Talla?.Numero ?? Model.TallaId.ToString())</div>
-            </div>
-        </div>
-
-        <div class="mt-4 d-flex gap-2 flex-wrap">
-            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
-                Editar
-            </a>
-            <a asp-action="Index" class="btn btn-outline-secondary">
-                Volver
-            </a>
         </div>
     </div>
 </div>

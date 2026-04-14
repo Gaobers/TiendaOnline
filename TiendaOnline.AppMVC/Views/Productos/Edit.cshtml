@@ -1,115 +1,214 @@
-﻿@model Producto
+﻿@model ProductoFormViewModel
 
-@{
-    ViewData["Title"] = "Edit";
-}
+<div class="admin-create-page">
 
-<div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
-    <div>
-        <h3 class="mb-0">Editar producto</h3>
-        <div class="text-muted">Actualiza la información del producto</div>
+    <div class="admin-create-hero">
+        <div class="admin-create-hero__content">
+            <div>
+                <div class="admin-create-badge">
+                    <i class="bi bi-box-seam"></i>
+                    Gestión de productos
+                </div>
+
+                <h1 class="admin-create-title">Editar producto</h1>
+                <p class="admin-create-subtitle mb-0">
+                    Actualiza la información del producto seleccionado de forma clara y ordenada.
+                </p>
+            </div>
+
+            <div class="admin-create-hero__actions">
+                <a asp-action="Index" class="btn admin-btn admin-btn-light">
+                    <i class="bi bi-arrow-left-short"></i>
+                    Volver al listado
+                </a>
+            </div>
+        </div>
     </div>
 
-    <a asp-action="Index" class="btn btn-outline-secondary">
-        Volver
-    </a>
-</div>
+    <div class="card admin-form-card border-0">
+        <div class="card-body p-0">
 
-<div class="card shadow-sm prod-card">
-    <div class="card-body p-4">
-        <form asp-action="Edit">
-            <input type="hidden" asp-for="Id" />
+            <form asp-action="Edit" method="post" class="admin-form">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="FechaCreacion" />
 
-            <div asp-validation-summary="ModelOnly" class="alert alert-danger prod-validation-box mb-4"></div>
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger admin-validation-box m-0"></div>
 
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <label asp-for="Nombre" class="form-label prod-label"></label>
-                    <input asp-for="Nombre" class="form-control prod-input" />
-                    <span asp-validation-for="Nombre" class="text-danger small"></span>
-                </div>
+                <div class="admin-section">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-pencil-square"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">Información general</h5>
+                            <p class="admin-section-text mb-0">
+                                Modifica los datos principales del producto.
+                            </p>
+                        </div>
+                    </div>
 
-                <div class="col-md-6">
-                    <label asp-for="Precio" class="form-label prod-label"></label>
-                    <input asp-for="Precio" type="number" step="0.01" class="form-control prod-input" />
-                    <span asp-validation-for="Precio" class="text-danger small"></span>
-                </div>
+                    <div class="row g-4">
 
-                <div class="col-12">
-                    <label asp-for="Descripcion" class="form-label prod-label"></label>
-                    <textarea asp-for="Descripcion" class="form-control prod-input" rows="3"></textarea>
-                    <span asp-validation-for="Descripcion" class="text-danger small"></span>
-                </div>
+                        <div class="col-md-6">
+                            <label asp-for="Nombre" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-tag"></i>
+                                <input asp-for="Nombre" class="form-control admin-input" />
+                            </div>
+                            <span asp-validation-for="Nombre" class="text-danger small"></span>
+                        </div>
 
-                <!--  ESTATUS  -->
-                <div class="col-md-6">
-                    <label class="form-label prod-label">Estado</label>
-                    <select asp-for="Estatus" class="form-select prod-input">
-                        <option value="1">Activo</option>
-                        <option value="0">Inactivo</option>
-                    </select>
-                    <span asp-validation-for="Estatus" class="text-danger small"></span>
-                </div>
+                        <div class="col-md-6">
+                            <label asp-for="Precio" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-cash-coin"></i>
+                                <input asp-for="Precio" type="number" step="0.01" class="form-control admin-input" />
+                            </div>
+                            <span asp-validation-for="Precio" class="text-danger small"></span>
+                        </div>
 
-                <div class="col-md-6">
-                    <label asp-for="Sku" class="form-label prod-label"></label>
-                    <input asp-for="Sku" class="form-control prod-input" />
-                    <span asp-validation-for="Sku" class="text-danger small"></span>
-                </div>
+                        <div class="col-12">
+                            <label asp-for="Descripcion" class="form-label admin-label"></label>
+                            <div class="admin-textarea-wrap">
+                                <textarea asp-for="Descripcion" class="form-control admin-input admin-textarea"></textarea>
+                            </div>
+                            <span asp-validation-for="Descripcion" class="text-danger small"></span>
+                        </div>
 
-                <div class="col-md-6">
-                    <label asp-for="CategoriaId" class="form-label prod-label"></label>
-                    <select asp-for="CategoriaId" class="form-select prod-input" asp-items="ViewBag.CategoriaId">
-                        <option value="">Seleccione una categoría</option>
-                    </select>
-                    <span asp-validation-for="CategoriaId" class="text-danger small"></span>
-                </div>
+                        <div class="col-md-6">
+                            <label class="form-label admin-label">Estado</label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-check2-circle"></i>
+                                <select asp-for="Estatus" class="form-select admin-input">
+                                    <option value="1">Activo</option>
+                                    <option value="0">Inactivo</option>
+                                </select>
+                            </div>
+                            <span asp-validation-for="Estatus" class="text-danger small"></span>
+                        </div>
 
-                <div class="col-md-6">
-                    <label asp-for="MarcaId" class="form-label prod-label"></label>
-                    <select asp-for="MarcaId" class="form-select prod-input" asp-items="ViewBag.MarcaId">
-                        <option value="">Seleccione una marca</option>
-                    </select>
-                    <span asp-validation-for="MarcaId" class="text-danger small"></span>
-                </div>
+                        <div class="col-md-6">
+                            <label asp-for="Sku" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-upc-scan"></i>
+                                <input asp-for="Sku" class="form-control admin-input" />
+                            </div>
+                            <span asp-validation-for="Sku" class="text-danger small"></span>
+                        </div>
 
-                <div class="col-md-6">
-                    <label asp-for="Genero" class="form-label prod-label"></label>
-                    <input asp-for="Genero" class="form-control prod-input" />
-                    <span asp-validation-for="Genero" class="text-danger small"></span>
-                </div>
+                        <div class="col-md-6">
+                            <label asp-for="CategoriaId" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-grid"></i>
+                                <select asp-for="CategoriaId" class="form-select admin-input" asp-items="ViewBag.CategoriaId">
+                                    <option value="">Seleccione una categoría</option>
+                                </select>
+                            </div>
+                            <span asp-validation-for="CategoriaId" class="text-danger small"></span>
+                        </div>
 
-                <div class="col-md-6">
-                    <label asp-for="Material" class="form-label prod-label"></label>
-                    <input asp-for="Material" class="form-control prod-input" />
-                    <span asp-validation-for="Material" class="text-danger small"></span>
-                </div>
+                        <div class="col-md-6">
+                            <label asp-for="MarcaId" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-bookmark-star"></i>
+                                <select asp-for="MarcaId" class="form-select admin-input" asp-items="ViewBag.MarcaId">
+                                    <option value="">Seleccione una marca</option>
+                                </select>
+                            </div>
+                            <span asp-validation-for="MarcaId" class="text-danger small"></span>
+                        </div>
 
-                <div class="col-md-6">
-                    <label asp-for="FechaCreacion" class="form-label prod-label"></label>
-                    <input asp-for="FechaCreacion" type="datetime-local" class="form-control prod-input" />
-                    <span asp-validation-for="FechaCreacion" class="text-danger small"></span>
-                </div>
+                        <div class="col-md-6">
+                            <label asp-for="Genero" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-person-badge"></i>
+                                <input asp-for="Genero" class="form-control admin-input" />
+                            </div>
+                            <span asp-validation-for="Genero" class="text-danger small"></span>
+                        </div>
 
-                <div class="col-md-6">
-                    <label asp-for="FechaActualizacion" class="form-label prod-label"></label>
-                    <input asp-for="FechaActualizacion" type="datetime-local" class="form-control prod-input" />
-                    <span asp-validation-for="FechaActualizacion" class="text-danger small"></span>
-                </div>
+                        <div class="col-md-6">
+                            <label asp-for="Material" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-layers"></i>
+                                <input asp-for="Material" class="form-control admin-input" />
+                            </div>
+                            <span asp-validation-for="Material" class="text-danger small"></span>
+                        </div>
 
-                <div class="col-12">
-                    <div class="form-check prod-featured-check">
-                        <input class="form-check-input" asp-for="EsDestacado" />
-                        <label class="form-check-label prod-label" asp-for="EsDestacado"></label>
+                        <div class="col-md-6">
+                            <label asp-for="FechaCreacion" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-calendar-event"></i>
+                                <input asp-for="FechaCreacion" class="form-control admin-input" readonly />
+                            </div>
+                            <span asp-validation-for="FechaCreacion" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="FechaActualizacion" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-clock-history"></i>
+                                <input asp-for="FechaActualizacion" class="form-control admin-input" readonly />
+                            </div>
+                            <span asp-validation-for="FechaActualizacion" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label admin-label">Destacado</label>
+                            <div class="admin-input-wrap d-flex align-items-center justify-content-between px-3">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-star"></i>
+                                    <span class="small text-muted">Marcar como producto destacado</span>
+                                </div>
+                                <div class="form-check form-switch m-0">
+                                    <input class="form-check-input" asp-for="EsDestacado" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label admin-label d-block">Colores</label>
+                            <div class="row g-2">
+                                @foreach (var color in Model.ColoresDisponibles)
+                                {
+                                    var isChecked = Model.ColoresSeleccionados.Contains(int.Parse(color.Value));
+
+                                    <div class="col-md-3 col-sm-4 col-6">
+                                        <div class="form-check admin-check-card p-3">
+                                            <input class="form-check-input"
+                                                   type="checkbox"
+                                                   name="ColoresSeleccionados"
+                                                   value="@color.Value"
+                                                   id="color_@color.Value"
+                                            @(isChecked ? "checked" : null) />
+                                            <label class="form-check-label ms-2" for="color_@color.Value">
+                                                @color.Text
+                                            </label>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-            </div>
 
-            <div class="d-flex gap-2 mt-4 flex-wrap">
-                <button type="submit" class="btn btn-primary">Guardar cambios</button>
-                <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
-            </div>
-        </form>
+                <div class="admin-form-actions">
+                    <button type="submit" class="btn admin-btn admin-btn-primary">
+                        <i class="bi bi-check2-circle"></i>
+                        Guardar cambios
+                    </button>
+
+                    <a asp-action="Index" class="btn admin-btn admin-btn-outline">
+                        <i class="bi bi-x-circle"></i>
+                        Cancelar
+                    </a>
+                </div>
+
+            </form>
+
+        </div>
     </div>
 </div>
 

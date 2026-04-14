@@ -1,33 +1,80 @@
 ﻿@model Talla
 
-@{
-    ViewData["Title"] = "Create";
-}
+<div class="admin-create-page">
 
-<h1>Create</h1>
+    <div class="admin-create-hero">
+        <div class="admin-create-hero__content">
+            <div>
+                <div class="admin-create-badge">
+                    <i class="bi bi-rulers"></i>
+                    Gestión de tallas
+                </div>
 
-<h4>Talla</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Numero" class="control-label"></label>
-                <input asp-for="Numero" class="form-control" />
-                <span asp-validation-for="Numero" class="text-danger"></span>
+                <h1 class="admin-create-title">Crear talla</h1>
+                <p class="admin-create-subtitle mb-0">
+                    Registra una nueva talla dentro del sistema.
+                </p>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+
+            <div class="admin-create-hero__actions">
+                <a asp-action="Index" class="btn admin-btn admin-btn-light">
+                    <i class="bi bi-arrow-left-short"></i>
+                    Volver al listado
+                </a>
             </div>
-        </form>
+        </div>
+    </div>
+
+    <div class="card admin-form-card border-0">
+        <div class="card-body p-0">
+
+            <form asp-action="Create" method="post" class="admin-form">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger admin-validation-box m-0"></div>
+
+                <div class="admin-section">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-aspect-ratio"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">Información de la talla</h5>
+                            <p class="admin-section-text mb-0">
+                                Ingresa el número correspondiente a la talla que deseas registrar.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label asp-for="Numero" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-123"></i>
+                                <input asp-for="Numero" class="form-control admin-input" placeholder="Ej. 38" />
+                            </div>
+                            <span asp-validation-for="Numero" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-form-actions">
+                    <button type="submit" class="btn admin-btn admin-btn-primary">
+                        <i class="bi bi-check2-circle"></i>
+                        Guardar talla
+                    </button>
+
+                    <a asp-action="Index" class="btn admin-btn admin-btn-outline">
+                        <i class="bi bi-x-circle"></i>
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

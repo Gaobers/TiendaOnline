@@ -1,78 +1,185 @@
 ﻿@model DireccionesUsuario
 
-@{
-    ViewData["Title"] = "Create";
-}
+<div class="admin-create-page">
 
-<h1>Create</h1>
+    <div class="admin-create-hero">
+        <div class="admin-create-hero__content">
+            <div>
+                <div class="admin-create-badge">
+                    <i class="bi bi-geo-alt"></i>
+                    Gestión de direcciones
+                </div>
 
-<h4>DireccionesUsuario</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" method="post">
-            @Html.AntiForgeryToken()
-
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <div class="form-group">
-                <label asp-for="UsuarioId" class="control-label"></label>
-                <select asp-for="UsuarioId" class="form-control" asp-items="ViewBag.UsuarioId"></select>
-                <span asp-validation-for="UsuarioId" class="text-danger"></span>
+                <h1 class="admin-create-title">Crear dirección de usuario</h1>
+                <p class="admin-create-subtitle mb-0">
+                    Registra una nueva dirección asociada a un usuario con sus datos de ubicación y contacto.
+                </p>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Alias" class="control-label"></label>
-                <input asp-for="Alias" class="form-control" />
-                <span asp-validation-for="Alias" class="text-danger"></span>
+            <div class="admin-create-hero__actions">
+                <a asp-action="Index" class="btn admin-btn admin-btn-light">
+                    <i class="bi bi-arrow-left-short"></i>
+                    Volver al listado
+                </a>
             </div>
-
-            <div class="form-group">
-                <label asp-for="Departamento" class="control-label"></label>
-                <input asp-for="Departamento" class="form-control" />
-                <span asp-validation-for="Departamento" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Municipio" class="control-label"></label>
-                <input asp-for="Municipio" class="form-control" />
-                <span asp-validation-for="Municipio" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="DireccionExacta" class="control-label"></label>
-                <input asp-for="DireccionExacta" class="form-control" />
-                <span asp-validation-for="DireccionExacta" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Referencia" class="control-label"></label>
-                <input asp-for="Referencia" class="form-control" />
-                <span asp-validation-for="Referencia" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="TelefonoContacto" class="control-label"></label>
-                <input asp-for="TelefonoContacto" class="form-control" />
-                <span asp-validation-for="TelefonoContacto" class="text-danger"></span>
-            </div>
-
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="EsPrincipal" />
-                    @Html.DisplayNameFor(model => model.EsPrincipal)
-                </label>
-            </div>
-
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+    <div class="card admin-form-card border-0">
+        <div class="card-body p-0">
+
+            <form asp-action="Create" method="post" class="admin-form">
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger admin-validation-box m-0"></div>
+
+                <div class="admin-section">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-person-vcard"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">Usuario y alias</h5>
+                            <p class="admin-section-text mb-0">
+                                Selecciona el usuario y define un alias para identificar esta dirección.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label asp-for="UsuarioId" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-person"></i>
+                                <select asp-for="UsuarioId" class="form-select admin-input" asp-items="ViewBag.UsuarioId">
+                                    <option value="">Seleccione un usuario</option>
+                                </select>
+                            </div>
+                            <span asp-validation-for="UsuarioId" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Alias" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-bookmark"></i>
+                                <input asp-for="Alias" class="form-control admin-input" placeholder="Ej. Casa, Oficina, Apartamento..." />
+                            </div>
+                            <span asp-validation-for="Alias" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-section admin-section--border">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-map"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">Ubicación</h5>
+                            <p class="admin-section-text mb-0">
+                                Completa la información geográfica y la dirección exacta del usuario.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label asp-for="Departamento" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-geo"></i>
+                                <input asp-for="Departamento" class="form-control admin-input" placeholder="Ej. San Salvador" />
+                            </div>
+                            <span asp-validation-for="Departamento" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Municipio" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-pin-map"></i>
+                                <input asp-for="Municipio" class="form-control admin-input" placeholder="Ej. Mejicanos" />
+                            </div>
+                            <span asp-validation-for="Municipio" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label asp-for="DireccionExacta" class="form-label admin-label"></label>
+                            <div class="admin-textarea-wrap">
+                                <textarea asp-for="DireccionExacta"
+                                          class="form-control admin-input admin-textarea"
+                                          rows="4"
+                                          placeholder="Escribe la dirección exacta..."></textarea>
+                            </div>
+                            <span asp-validation-for="DireccionExacta" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label asp-for="Referencia" class="form-label admin-label"></label>
+                            <div class="admin-textarea-wrap">
+                                <textarea asp-for="Referencia"
+                                          class="form-control admin-input admin-textarea"
+                                          rows="3"
+                                          placeholder="Agrega referencias que ayuden a ubicar la dirección..."></textarea>
+                            </div>
+                            <span asp-validation-for="Referencia" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-section admin-section--border">
+                    <div class="admin-section-header">
+                        <div class="admin-section-icon">
+                            <i class="bi bi-telephone"></i>
+                        </div>
+                        <div>
+                            <h5 class="admin-section-title mb-1">Contacto y opciones</h5>
+                            <p class="admin-section-text mb-0">
+                                Define el teléfono de contacto y si esta dirección será la principal.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label asp-for="TelefonoContacto" class="form-label admin-label"></label>
+                            <div class="admin-input-wrap">
+                                <i class="bi bi-phone"></i>
+                                <input asp-for="TelefonoContacto" class="form-control admin-input" placeholder="Ej. 7000-0000" />
+                            </div>
+                            <span asp-validation-for="TelefonoContacto" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label admin-label d-block">Opciones</label>
+                            <div class="admin-check-card">
+                                <div class="form-check form-switch m-0">
+                                    <input class="form-check-input admin-switch" asp-for="EsPrincipal" />
+                                    <label class="form-check-label admin-check-label" asp-for="EsPrincipal">
+                                        @Html.DisplayNameFor(model => model.EsPrincipal)
+                                    </label>
+                                </div>
+                                <small class="text-muted d-block mt-2">
+                                    Marca esta opción si deseas que esta sea la dirección principal del usuario.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-form-actions">
+                    <button type="submit" class="btn admin-btn admin-btn-primary">
+                        <i class="bi bi-check2-circle"></i>
+                        Guardar dirección
+                    </button>
+
+                    <a asp-action="Index" class="btn admin-btn admin-btn-outline">
+                        <i class="bi bi-x-circle"></i>
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+
+        </div>
+    </div>
 </div>
 
 @section Scripts {

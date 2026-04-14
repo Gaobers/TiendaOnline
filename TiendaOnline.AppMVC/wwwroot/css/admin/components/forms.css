@@ -1,0 +1,99 @@
+.admin-form {
+    padding: 0;
+}
+
+.admin-label {
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.55rem;
+    font-size: 0.95rem;
+}
+
+.admin-input-wrap,
+.admin-textarea-wrap {
+    position: relative;
+}
+
+    .admin-input-wrap > i {
+        position: absolute;
+        top: 50%;
+        left: 0.95rem;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        font-size: 0.95rem;
+        pointer-events: none;
+        z-index: 2;
+    }
+
+.admin-input {
+    min-height: 52px;
+    border-radius: 1rem;
+    border: 1px solid #dbe4ee;
+    background: #fff;
+    color: #0f172a;
+    font-size: 0.97rem;
+    box-shadow: none;
+    transition: all 0.2s ease;
+}
+
+    .admin-input.form-control,
+    .admin-input.form-select {
+        padding-left: 2.7rem;
+    }
+
+.admin-textarea {
+    min-height: 130px;
+    resize: vertical;
+    padding-top: 0.9rem;
+    padding-left: 1rem !important;
+}
+
+.admin-input:hover {
+    border-color: #bfd3ea;
+}
+
+.admin-input:focus {
+    border-color: rgba(13, 110, 253, 0.55);
+    box-shadow: 0 0 0 0.22rem rgba(13, 110, 253, 0.12);
+}
+
+.admin-check-card {
+    min-height: 52px;
+    padding: 1rem 1.1rem;
+    border: 1px solid #dbe4ee;
+    border-radius: 1rem;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    transition: all 0.2s ease;
+}
+
+    .admin-check-card:hover {
+        border-color: #bfd3ea;
+        box-shadow: 0 10px 20px rgba(15, 23, 42, 0.05);
+    }
+
+.admin-switch {
+    width: 2.8rem;
+    height: 1.45rem;
+    cursor: pointer;
+}
+
+.admin-check-label {
+    font-weight: 700;
+    color: #1e293b;
+    margin-left: 0.35rem;
+}
+
+.admin-form-actions {
+    display: flex;
+    gap: 0.9rem;
+    flex-wrap: wrap;
+    padding: 1.5rem 2rem 2rem 2rem;
+    border-top: 1px solid #eef2f7;
+    background: #fcfdff;
+}
+
+@media (max-width: 768px) {
+    .admin-form-actions {
+        padding: 1.25rem;
+    }
+}
