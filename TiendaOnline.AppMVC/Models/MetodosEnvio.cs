@@ -10,10 +10,13 @@ public partial class MetodosEnvio
     [Required(ErrorMessage = "El nombre es obligatorio")]
     public string Nombre { get; set; } = null!;
 
+    [Display(Name = "Descripción")]
     public string? Descripcion { get; set; }
     [Required(ErrorMessage = "El costo de envío es obligatorio")]
     public decimal Costo { get; set; }
     [StringLength(50, ErrorMessage = "El tiempo estimado es demasiado largo")]
+
+    [Display(Name = "Tiempo Estimado")]
     public string? TiempoEstimado { get; set; }
 
     public byte Estatus { get; set; }

@@ -24,7 +24,7 @@
                     <i class="bi bi-box-seam me-2"></i>Productos
                 </h1>
                 <p class="admin-hero-subtitle">
-                    Administra el catálogo de productos.
+                    Administra los productos en el sistema.
                 </p>
             </div>
 
@@ -68,7 +68,7 @@
                         </div>
 
                         <!-- ESTATUS -->
-                        <div class="col-12 col-md-4 col-xl-2">
+                        <div class="col-12 col-md-6 col-xl-3">
                             <label class="form-label admin-filter-label">Estado</label>
                             <div class="input-group shadow-sm admin-filter-group">
                                 <span class="input-group-text bg-white">
@@ -111,8 +111,8 @@
                         <tr>
                             <th class="pro-col-nombre">Nombre</th>
                             <th class="pro-col-precio">Precio</th>
-                            <th class="pro-col-estado">Estado</th>
-                            <th class="pro-col-creacion">Creación</th>
+                            <th class="pro-col-sku">Código</th>
+                            <th class="pro-col-estado text-center">Estado</th>
                             <th class="pro-col-actualizacion">Actualización</th>
                             <th class="pro-col-acciones">Acciones</th>
                         </tr>
@@ -135,8 +135,13 @@
                                         $@item.Precio.ToString("0.00")
                                     </td>
 
+                                    <!-- CÓDIGO -->
+                                    <td class="pro-col-sku">
+                                        @item.Sku
+                                    </td>
+
                                     <!-- ESTADO -->
-                                    <td class="pro-col-estado">
+                                    <td class="pro-col-estado text-center">
                                         @if (item.Estatus == 1)
                                         {
                                             <span class="admin-status-badge admin-status-active">
@@ -149,11 +154,6 @@
                                                 Inactivo
                                             </span>
                                         }
-                                    </td>
-
-                                    <!-- FECHA CREACION -->
-                                    <td class="pro-col-creacion">
-                                        @item.FechaCreacion.ToShortDateString()
                                     </td>
 
                                     <!-- FECHA ACTUALIZACION -->
@@ -177,16 +177,6 @@
                                     </td>
                                 </tr>
                             }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="6">
-                                    <div class="admin-empty-state">
-                                        No se encontraron productos.
-                                    </div>
-                                </td>
-                            </tr>
                         }
                     </tbody>
                 </table>

@@ -126,7 +126,7 @@
                             <div class="admin-input-wrap">
                                 <i class="bi bi-house-door"></i>
                                 <div class="form-control admin-input d-flex align-items-center">
-                                    @(Model.DireccionUsuario?.Id.ToString() ?? "Sin dirección")
+                                    @(Model.DireccionUsuario?.DireccionExacta ?? "Sin dirección")
                                 </div>
                             </div>
                         </div>
@@ -221,7 +221,7 @@
                             <div class="admin-input-wrap">
                                 <i class="bi bi-ticket-perforated"></i>
                                 <div class="form-control admin-input d-flex align-items-center">
-                                    @(Model.Cupon?.Id.ToString() ?? "Sin cupón")
+                                    @(Model.Cupon?.Codigo ?? "Sin cupón")
                                 </div>
                             </div>
                         </div>
@@ -231,7 +231,7 @@
                             <div class="admin-input-wrap">
                                 <i class="bi bi-clipboard-check"></i>
                                 <div class="form-control admin-input d-flex align-items-center">
-                                    @(Model.EstadoPedido?.Id.ToString() ?? "Sin estado")
+                                    @(Model.EstadoPedido?.Nombre ?? "Sin estado")
                                 </div>
                             </div>
                         </div>
@@ -241,7 +241,7 @@
                             <div class="admin-input-wrap">
                                 <i class="bi bi-truck-flatbed"></i>
                                 <div class="form-control admin-input d-flex align-items-center">
-                                    @(Model.MetodoEnvio?.Id.ToString() ?? "Sin método")
+                                    @(Model.MetodoEnvio?.Nombre ?? "Sin método")
                                 </div>
                             </div>
                         </div>
@@ -251,7 +251,7 @@
                             <div class="admin-input-wrap">
                                 <i class="bi bi-person-badge"></i>
                                 <div class="form-control admin-input d-flex align-items-center">
-                                    @(Model.Usuario?.Id.ToString() ?? "Sin usuario")
+                                    @(Model.Usuario != null ? Model.Usuario.Nombre + " " + Model.Usuario.Apellido : "Sin usuario")
                                 </div>
                             </div>
                         </div>

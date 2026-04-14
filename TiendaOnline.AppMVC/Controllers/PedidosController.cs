@@ -15,7 +15,6 @@ namespace TiendaOnline.AppMVC.Controllers
         }
 
         // GET: Pedidos
-        //Filtros
         public async Task<IActionResult> Index(string nombre, int? estadoPedidoId)
         {
             var query = _context.Pedidos
@@ -27,7 +26,6 @@ namespace TiendaOnline.AppMVC.Controllers
 
             if (estadoPedidoId.HasValue)
                 query = query.Where(p => p.EstadoPedidoId == estadoPedidoId.Value);
-
 
             var pedidos = await query
                 .OrderByDescending(c => c.Id)
@@ -45,7 +43,6 @@ namespace TiendaOnline.AppMVC.Controllers
 
             ViewBag.Nombre = nombre;
             ViewBag.EstadoPedidoId = estadoPedidoId;
-            ViewBag.Top = top;
 
             return View(pedidos);
         }
@@ -54,9 +51,7 @@ namespace TiendaOnline.AppMVC.Controllers
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var pedido = await _context.Pedidos
                 .Include(p => p.Cupon)
@@ -65,10 +60,9 @@ namespace TiendaOnline.AppMVC.Controllers
                 .Include(p => p.MetodoEnvio)
                 .Include(p => p.Usuario)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (pedido == null)
-            {
                 return NotFound();
-            }
 
             return View(pedido);
         }
@@ -76,17 +70,11 @@ namespace TiendaOnline.AppMVC.Controllers
         // GET: Pedidos/Create
         public IActionResult Create()
         {
-            ViewData["CuponId"] = new SelectList(_context.Cupones, "Id", "Codigo");
-            ViewData["DireccionUsuarioId"] = new SelectList(_context.DireccionesUsuarios, "Id", "DireccionExacta");
-            ViewData["EstadoPedidoId"] = new SelectList(_context.EstadosPedidos, "Id", "Nombre");
-            ViewData["MetodoEnvioId"] = new SelectList(_context.MetodosEnvios, "Id", "Nombre");
-            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "Nombre");
+            CargarCombos();
             return View();
         }
 
         // POST: Pedidos/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("NombreCliente,EmailCliente,DireccionEntrega,Total,UsuarioId,DireccionUsuarioId,MetodoEnvioId,EstadoPedidoId,CuponId,ApellidoCliente,TelefonoCliente,ReferenciaEntrega,SubTotal,DescuentoTotal,CostoEnvio,Observaciones")] Pedido pedido)
@@ -107,17 +95,22 @@ namespace TiendaOnline.AppMVC.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Add(pedido);
+                _context.Pedidos.Add(pedido);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["CuponId"] = new SelectList(_context.Cupones, "Id", "Codigo", pedido.CuponId);
-            ViewData["DireccionUsuarioId"] = new SelectList(_context.DireccionesUsuarios, "Id", "DireccionExacta", pedido.DireccionUsuarioId);
-            ViewData["EstadoPedidoId"] = new SelectList(_context.EstadosPedidos, "Id", "Nombre", pedido.EstadoPedidoId);
-            ViewData["MetodoEnvioId"] = new SelectList(_context.MetodosEnvios, "Id", "Nombre", pedido.MetodoEnvioId);
-            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "Nombre", pedido.UsuarioId);
+            var errores = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .Select(x => $"{x.Key}: {string.Join(" | ", x.Value.Errors.Select(e => e.ErrorMessage))}")
+                .ToList();
 
+            foreach (var error in errores)
+            {
+                Console.WriteLine(error);
+            }
+
+            CargarCombos(pedido);
             return View(pedido);
         }
 
@@ -125,34 +118,23 @@ namespace TiendaOnline.AppMVC.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var pedido = await _context.Pedidos.FindAsync(id);
             if (pedido == null)
-            {
                 return NotFound();
-            }
-            ViewData["CuponId"] = new SelectList(_context.Cupones, "Id", "Id", pedido.CuponId);
-            ViewData["DireccionUsuarioId"] = new SelectList(_context.DireccionesUsuarios, "Id", "Id", pedido.DireccionUsuarioId);
-            ViewData["EstadoPedidoId"] = new SelectList(_context.EstadosPedidos, "Id", "Id", pedido.EstadoPedidoId);
-            ViewData["MetodoEnvioId"] = new SelectList(_context.MetodosEnvios, "Id", "Id", pedido.MetodoEnvioId);
-            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "Id", pedido.UsuarioId);
+
+            CargarCombos(pedido);
             return View(pedido);
         }
 
         // POST: Pedidos/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NombreCliente,EmailCliente,DireccionEntrega,Total,FechaCreacion,FechaActualizacion,UsuarioId,DireccionUsuarioId,MetodoEnvioId,EstadoPedidoId,CuponId,ApellidoCliente,TelefonoCliente,ReferenciaEntrega,SubTotal,DescuentoTotal,CostoEnvio,Observaciones")] Pedido pedido)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,NombreCliente,EmailCliente,DireccionEntrega,Total,UsuarioId,DireccionUsuarioId,MetodoEnvioId,EstadoPedidoId,CuponId,ApellidoCliente,TelefonoCliente,ReferenciaEntrega,SubTotal,DescuentoTotal,CostoEnvio,Observaciones")] Pedido pedido)
         {
             if (id != pedido.Id)
-            {
                 return NotFound();
-            }
 
             ModelState.Remove("Usuario");
             ModelState.Remove("MetodoEnvio");
@@ -165,34 +147,58 @@ namespace TiendaOnline.AppMVC.Controllers
             ModelState.Remove("Pagos");
             ModelState.Remove("UsosCupone");
 
-            pedido.FechaActualizacion = DateTime.Now;
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(pedido);
+                    var pedidoDb = await _context.Pedidos.FindAsync(id);
+
+                    if (pedidoDb == null)
+                        return NotFound();
+
+                    pedidoDb.NombreCliente = pedido.NombreCliente;
+                    pedidoDb.ApellidoCliente = pedido.ApellidoCliente;
+                    pedidoDb.EmailCliente = pedido.EmailCliente;
+                    pedidoDb.TelefonoCliente = pedido.TelefonoCliente;
+                    pedidoDb.DireccionEntrega = pedido.DireccionEntrega;
+                    pedidoDb.ReferenciaEntrega = pedido.ReferenciaEntrega;
+                    pedidoDb.UsuarioId = pedido.UsuarioId;
+                    pedidoDb.DireccionUsuarioId = pedido.DireccionUsuarioId;
+                    pedidoDb.MetodoEnvioId = pedido.MetodoEnvioId;
+                    pedidoDb.EstadoPedidoId = pedido.EstadoPedidoId;
+                    pedidoDb.CuponId = pedido.CuponId;
+                    pedidoDb.SubTotal = pedido.SubTotal;
+                    pedidoDb.DescuentoTotal = pedido.DescuentoTotal;
+                    pedidoDb.CostoEnvio = pedido.CostoEnvio;
+                    pedidoDb.Total = pedido.Total;
+                    pedidoDb.Observaciones = pedido.Observaciones;
+
+                    // NO tocar FechaCreacion
+                    pedidoDb.FechaActualizacion = DateTime.Now;
+
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!PedidoExists(pedido.Id))
-                    {
                         return NotFound();
-                    }
 
                     throw;
                 }
-
-                return RedirectToAction(nameof(Index));
             }
 
-            ViewData["CuponId"] = new SelectList(_context.Cupones, "Id", "Codigo", pedido.CuponId);
-            ViewData["DireccionUsuarioId"] = new SelectList(_context.DireccionesUsuarios, "Id", "DireccionExacta", pedido.DireccionUsuarioId);
-            ViewData["EstadoPedidoId"] = new SelectList(_context.EstadosPedidos, "Id", "Nombre", pedido.EstadoPedidoId);
-            ViewData["MetodoEnvioId"] = new SelectList(_context.MetodosEnvios, "Id", "Nombre", pedido.MetodoEnvioId);
-            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "Nombre", pedido.UsuarioId);
+            var errores = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .Select(x => $"{x.Key}: {string.Join(" | ", x.Value.Errors.Select(e => e.ErrorMessage))}")
+                .ToList();
 
+            foreach (var error in errores)
+            {
+                Console.WriteLine(error);
+            }
+
+            CargarCombos(pedido);
             return View(pedido);
         }
 
@@ -200,9 +206,7 @@ namespace TiendaOnline.AppMVC.Controllers
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var pedido = await _context.Pedidos
                 .Include(p => p.Cupon)
@@ -211,10 +215,9 @@ namespace TiendaOnline.AppMVC.Controllers
                 .Include(p => p.MetodoEnvio)
                 .Include(p => p.Usuario)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (pedido == null)
-            {
                 return NotFound();
-            }
 
             return View(pedido);
         }
@@ -225,13 +228,56 @@ namespace TiendaOnline.AppMVC.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var pedido = await _context.Pedidos.FindAsync(id);
+
             if (pedido != null)
-            {
                 _context.Pedidos.Remove(pedido);
-            }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        private void CargarCombos(Pedido? pedido = null)
+        {
+            ViewData["CuponId"] = new SelectList(
+                _context.Cupones,
+                "Id",
+                "Codigo",
+                pedido?.CuponId
+            );
+
+            ViewData["DireccionUsuarioId"] = new SelectList(
+                _context.DireccionesUsuarios,
+                "Id",
+                "DireccionExacta",
+                pedido?.DireccionUsuarioId
+            );
+
+            ViewData["EstadoPedidoId"] = new SelectList(
+                _context.EstadosPedidos,
+                "Id",
+                "Nombre",
+                pedido?.EstadoPedidoId
+            );
+
+            ViewData["MetodoEnvioId"] = new SelectList(
+                _context.MetodosEnvios,
+                "Id",
+                "Nombre",
+                pedido?.MetodoEnvioId
+            );
+
+            ViewData["UsuarioId"] = new SelectList(
+                _context.Usuarios
+                    .Select(u => new
+                    {
+                        u.Id,
+                        NombreCompleto = u.Nombre + " " + u.Apellido
+                    })
+                    .ToList(),
+                "Id",
+                "NombreCompleto",
+                pedido?.UsuarioId
+            );
         }
 
         private bool PedidoExists(int id)

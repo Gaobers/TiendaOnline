@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace TiendaOnline.AppMVC.Models;
 
@@ -10,8 +8,11 @@ public partial class EstadosPedido
     [Required(ErrorMessage = "El nombre es obligatorio")]
     public string Nombre { get; set; } = null!;
 
+
+    [Display(Name = "Descripción")]
     public string? Descripcion { get; set; }
 
+    [Display(Name = "Estado")]
     public byte Estatus { get; set; }
 
     public DateTime FechaCreacion { get; set; }

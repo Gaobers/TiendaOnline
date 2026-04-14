@@ -68,20 +68,20 @@
                     </div>
 
 
-                    <!-- ESTATUS -->
-                    <div class="col-12 col-md-4 col-xl-2">
-                       <label class="form-label admin-filter-label">Estado</label>
-                         <div class="input-group shadow-sm admin-filter-group">
-                            <span class="input-group-text bg-white">
-                                <i class="bi bi-toggle-on text-primary"></i>
-                            </span>
-                            <select name="estatus" class="form-select">
-                                <option value="">Todos</option>
-                                <option value="1" selected="@(estatus == "1")">Activo</option>
-                                <option value="0" selected="@(estatus == "0")">Inactivo</option>
-                            </select>
-                         </div>
-                    </div>
+                        <!-- ESTATUS -->
+                        <div class="col-12 col-md-6 col-xl-3">
+                           <label class="form-label admin-filter-label">Estado</label>
+                             <div class="input-group shadow-sm admin-filter-group">
+                                <span class="input-group-text bg-white">
+                                    <i class="bi bi-toggle-on text-primary"></i>
+                                </span>
+                                <select name="estatus" class="form-select">
+                                    <option value="">Todos</option>
+                                    <option value="1" selected="@(estatus == "1")">Activo</option>
+                                    <option value="0" selected="@(estatus == "0")">Inactivo</option>
+                                </select>
+                             </div>
+                        </div>
 
 
                         <!-- BOTONES -->
@@ -110,10 +110,10 @@
                 <thead>
                     <tr>
                         <th class="col-col-nombre">Color</th>
-                        <th class="col-col-codigo">Código HEX</th>
+                        <th class="col-col-codigo text-center">Código HEX</th>
                         <th class="text-center col-col-estado">Estado</th>
                         <th class="col-col-creacion">Creación</th>
-                        <th class="col-col-acciones">Acciones</th>
+                        <th class="text-center col-col-acciones">Acciones</th>
                     </tr>
                 </thead>
 
@@ -138,7 +138,7 @@
                                 </td>
 
                                 <!-- HEX -->
-                                <td class="col-col-codigo">
+                                <td class="col-col-codigo text-center">
                                     <span class="badge bg-light text-dark border">
                                         @item.CodigoHex
                                     </span>
@@ -166,7 +166,7 @@
                                 </td>
 
                                 <!-- ACCIONES -->
-                                <td class="text-end cat-col-acciones">
+                                <td class="text-center cot-col-acciones">
                                     <div class="btn-group">
                                         <a asp-action="Edit" asp-route-id="@item.Id"
                                                class="btn admin-action-btn admin-btn-edit">
@@ -182,16 +182,7 @@
                             </tr>
                         }
                     }
-                    else
-                    {
-                        <tr>
-                            <td colspan="5">
-                                <div class="admin-empty-state">
-                                    No hay colores registrados.
-                                </div>
-                            </td>
-                        </tr>
-                    }
+                   
                 </tbody>
             </table>
         </div>

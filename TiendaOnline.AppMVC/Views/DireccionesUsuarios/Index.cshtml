@@ -24,7 +24,7 @@
                     <i class="bi bi-geo-alt me-2"></i>Direcciones
                 </h1>
                 <p class="admin-hero-subtitle">
-                    Administra las direcciones registradas por los usuarios.
+                    Administra las direcciones registradas por los usuarios en el sistema.
                 </p>
             </div>
 
@@ -68,7 +68,7 @@
                         </div>
 
                         <!-- ESTATUS -->
-                        <div class="col-12 col-md-4 col-xl-2">
+                        <div class="col-12 col-md-6 col-xl-3">
                             <label class="form-label admin-filter-label">Estado</label>
                             <div class="input-group shadow-sm admin-filter-group">
                                 <span class="input-group-text bg-white">
@@ -110,11 +110,9 @@
                         <th class="dir-usu-col-direccion">Dirección</th>
                         <th class="dir-usu-col-ubicacion">Ubicación</th>
                         <th class="dir-usu-col-contacto">Contacto</th>
-                        <th class="dir-usu-col-usuario">Usuario</th>
                         <th class="dir-usu-col-principal text-center">Principal</th>
                         <th class="dir-usu-col-estado text-center">Estado</th>
-                        <th class="dir-usu-col-creacion">Creación</th>
-                        <th class="dir-usu-col-acciones">Acciones</th>
+                        <th class="dir-usu-col-acciones text-center">Acciones</th>
                     </tr>
                 </thead>
 
@@ -124,77 +122,61 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <!-- DIRECCION -->
                                 <td class="dir-usu-col-direccion">
-                                    <div class="fw-bold">@item.Alias</div>
-                                    <div class="text-muted small">@item.DireccionExacta</div>
-                                </td>
-
-                                <!-- UBICACION -->
-                                <td class="dir-usu-col-ubicacion">
-                                    <div>@item.Departamento</div>
-                                    <div class="text-muted small">@item.Municipio</div>
-                                </td>
-
-                                <!-- CONTACTO -->
-                                <td class="dir-usu-col-contacto">
-                                    <div>@item.TelefonoContacto</div>
+                                    <div class="fw-bold">
+                                        @(string.IsNullOrWhiteSpace(item.Alias) ? "Sin alias" : item.Alias)
+                                    </div>
                                     <div class="text-muted small">
-                                        @(string.IsNullOrWhiteSpace(item.Referencia) ? "Sin referencia" : item.Referencia)
+                                        @(string.IsNullOrWhiteSpace(item.DireccionExacta) ? "Sin dirección" : item.DireccionExacta)
                                     </div>
                                 </td>
 
-                                <!-- USUARIO -->
-                                <td class="dir-usu-col-usuario">
-                                    @(item.Usuario?.Correo ?? "Sin usuario")
+                                <td class="dir-usu-col-ubicacion">
+                                    <div>
+                                        @(string.IsNullOrWhiteSpace(item.Departamento) ? "Sin departamento" : item.Departamento)
+                                    </div>
+                                    <div class="text-muted small">
+                                        @(string.IsNullOrWhiteSpace(item.Municipio) ? "Sin municipio" : item.Municipio)
+                                    </div>
                                 </td>
 
-                                <!-- PRINCIPAL -->
+                                <td class="dir-usu-col-contacto">
+                                    @(string.IsNullOrWhiteSpace(item.TelefonoContacto) ? "Sin contacto" : item.TelefonoContacto)
+                                </td>
+
                                 <td class="dir-usu-col-principal text-center">
                                     @if (item.EsPrincipal)
                                     {
-                                        <span class="admin-status-badge admin-status-active">
-                                            Sí
-                                        </span>
+                                        <span class="admin-status-badge admin-status-active">Sí</span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-light text-dark border">
-                                            No
-                                        </span>
+                                        <span class="badge bg-light text-dark border">No</span>
                                     }
                                 </td>
 
-                                <!-- ESTADO -->
                                 <td class="dir-usu-col-estado text-center">
                                     @if (item.Estatus == 1)
                                     {
-                                        <span class="admin-status-badge admin-status-active">
-                                            Activo
-                                        </span>
+                                        <span class="admin-status-badge admin-status-active">Activo</span>
                                     }
                                     else
                                     {
-                                        <span class="admin-status-badge admin-status-inactive">
-                                            Inactivo
-                                        </span>
+                                        <span class="admin-status-badge admin-status-inactive">Inactivo</span>
                                     }
                                 </td>
 
-                                <!-- FECHA -->
-                                <td class="dir-usu-col-creacion">
-                                    @item.FechaCreacion.ToShortDateString()
-                                </td>
-
-                                <!-- ACCIONES -->
-                                <td class="dir-usu-col-acciones">
-                                    <div class="btn-group">
-                                        <a asp-action="Edit" asp-route-id="@item.Id" 
-                                            class="btn admin-action-btn admin-btn-edit">
+                                <td class="dir-usu-col-acciones text-center">
+                                    <div class="btn-group" role="group">
+                                        <a asp-action="Edit" asp-route-id="@item.Id"
+                                               class="btn admin-action-btn admin-btn-edit"
+                                               title="Editar">
                                             <i class="bi bi-pencil"></i>
                                         </a>
+
                                         <a asp-action="Details" asp-route-id="@item.Id"
-                                            class="btn admin-action-btn admin-btn-view">
+                                               class="btn admin-action-btn admin-btn-view"
+                                               title="Ver detalle">
                                             <i class="bi bi-eye"></i>
                                         </a>
                                     </div>
@@ -205,10 +187,8 @@
                     else
                     {
                         <tr>
-                            <td colspan="8">
-                                <div class="admin-empty-state">
-                                    No hay direcciones registradas.
-                                </div>
+                            <td colspan="6" class="text-center text-muted py-4">
+                                No hay direcciones registradas.
                             </td>
                         </tr>
                     }

@@ -109,25 +109,6 @@
                             <span asp-validation-for="Estatus" class="text-danger small"></span>
                         </div>
 
-                        <div class="col-md-6">
-                            <label class="form-label admin-label">Fecha de creación</label>
-                            <div class="admin-input-wrap">
-                                <i class="bi bi-calendar-event"></i>
-                                <input class="form-control admin-input"
-                                       value="@Model.FechaCreacion.ToString("yyyy-MM-dd HH:mm:ss")"
-                                       readonly />
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label admin-label">Última actualización</label>
-                            <div class="admin-input-wrap">
-                                <i class="bi bi-clock-history"></i>
-                                <input class="form-control admin-input"
-                                       value="@(Model.FechaActualizacion?.ToString("yyyy-MM-dd HH:mm:ss") ?? "Sin actualizaciones")"
-                                       readonly />
-                            </div>
-                        </div>
 
                         <div class="col-12">
                             <div class="alert alert-info mb-0">

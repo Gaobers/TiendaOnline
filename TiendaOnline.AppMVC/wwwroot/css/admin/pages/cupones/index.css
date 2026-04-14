@@ -7,20 +7,20 @@
 }
 
 .cupones-index .cup-col-descuento {
-    width: 8%;
-}
-
-.cupones-index .cup-col-minimo {
     width: 7%;
 }
+
+/*.cupones-index .cup-col-minimo {
+    width: 7%;
+}*/
 
 .cupones-index .cup-col-vigencia {
     width: 6%;
 }
 
-.cupones-index .cup-col-uso {
+/*.cupones-index .cup-col-uso {
     width: 6%;
-}
+}*/
 
 .cupones-index .cup-col-estado {
     width: 6%;

@@ -12,7 +12,7 @@
 
                 <h1 class="admin-create-title">Crear cupón</h1>
                 <p class="admin-create-subtitle mb-0">
-                    Configura un nuevo cupón con sus condiciones, fechas y límites de uso.
+                    Registra un nuevo cupón en el sistema.
                 </p>
             </div>
 
@@ -58,7 +58,11 @@
                             <label asp-for="TipoDescuento" class="form-label admin-label"></label>
                             <div class="admin-input-wrap">
                                 <i class="bi bi-percent"></i>
-                                <input asp-for="TipoDescuento" class="form-control admin-input" placeholder="Ej. Porcentaje o monto fijo" />
+                                <select asp-for="TipoDescuento" class="form-control admin-input">
+                                    <option value="">Seleccione una opción</option>
+                                    <option value="Porcentaje">Porcentaje</option>
+                                    <option value="Monto">Monto fijo</option>
+                                </select>
                             </div>
                             <span asp-validation-for="TipoDescuento" class="text-danger small"></span>
                         </div>
@@ -112,7 +116,7 @@
                             <label asp-for="FechaInicio" class="form-label admin-label"></label>
                             <div class="admin-input-wrap">
                                 <i class="bi bi-calendar-event"></i>
-                                <input asp-for="FechaInicio" class="form-control admin-input" />
+                                <input asp-for="FechaInicio" type="date" class="form-control admin-input" />
                             </div>
                             <span asp-validation-for="FechaInicio" class="text-danger small"></span>
                         </div>
@@ -121,7 +125,7 @@
                             <label asp-for="FechaFin" class="form-label admin-label"></label>
                             <div class="admin-input-wrap">
                                 <i class="bi bi-calendar-x"></i>
-                                <input asp-for="FechaFin" class="form-control admin-input" />
+                                <input asp-for="FechaFin" type="date" class="form-control admin-input" />
                             </div>
                             <span asp-validation-for="FechaFin" class="text-danger small"></span>
                         </div>

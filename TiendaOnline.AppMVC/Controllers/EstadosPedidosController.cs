@@ -94,34 +94,44 @@ namespace TiendaOnline.AppMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,Estatus,FechaCreacion")] EstadosPedido estadosPedido)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,Estatus")] EstadosPedido estadosPedido)
         {
             if (id != estadosPedido.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(estadosPedido);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!EstadosPedidoExists(estadosPedido.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return View(estadosPedido);
             }
-            return View(estadosPedido);
+
+            try
+            {
+                var estadoDb = await _context.EstadosPedidos.FindAsync(id);
+
+                if (estadoDb == null)
+                {
+                    return NotFound();
+                }
+
+                estadoDb.Nombre = estadosPedido.Nombre;
+                estadoDb.Descripcion = estadosPedido.Descripcion;
+                estadoDb.Estatus = estadosPedido.Estatus;
+
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!EstadosPedidoExists(estadosPedido.Id))
+                {
+                    return NotFound();
+                }
+
+                throw;
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: EstadosPedidos/Delete/5
