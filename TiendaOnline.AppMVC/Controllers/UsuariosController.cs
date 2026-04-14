@@ -161,8 +161,8 @@ namespace TiendaOnline.AppMVC.Controllers
             return View(usuario);
         }
 
-        [Authorize(Roles = "Administrador")]
-        //[AllowAnonymous]
+        //[Authorize(Roles = "Administrador")]
+        [AllowAnonymous]
         public async Task<IActionResult> Create()
         {
             await CargarRolesAsync();
@@ -171,8 +171,8 @@ namespace TiendaOnline.AppMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[AllowAnonymous]
-        [Authorize(Roles = "Administrador")]
+        [AllowAnonymous]
+        //[Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Create([Bind("Nombre,Apellido,Correo,Telefono,PasswordHash,Estatus,RolId")] Usuario usuario)
         {
             ModelState.Remove("Rol");
