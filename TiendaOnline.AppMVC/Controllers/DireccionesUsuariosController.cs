@@ -108,18 +108,38 @@ namespace TiendaOnline.AppMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UsuarioId,Alias,Departamento,Municipio,DireccionExacta,Referencia,TelefonoContacto,EsPrincipal,Estatus,FechaCreacion,FechaActualizacion")] DireccionesUsuario direccionesUsuario)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UsuarioId,Alias,Departamento,Municipio,DireccionExacta,Referencia,TelefonoContacto,EsPrincipal,Estatus")] DireccionesUsuario direccionesUsuario)
         {
             if (id != direccionesUsuario.Id)
             {
                 return NotFound();
             }
 
+            ModelState.Remove("Usuario");
+            ModelState.Remove("Pedidos");
+
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(direccionesUsuario);
+                    var direccionDb = await _context.DireccionesUsuarios.FindAsync(id);
+
+                    if (direccionDb == null)
+                    {
+                        return NotFound();
+                    }
+
+                    direccionDb.UsuarioId = direccionesUsuario.UsuarioId;
+                    direccionDb.Alias = direccionesUsuario.Alias;
+                    direccionDb.Departamento = direccionesUsuario.Departamento;
+                    direccionDb.Municipio = direccionesUsuario.Municipio;
+                    direccionDb.DireccionExacta = direccionesUsuario.DireccionExacta;
+                    direccionDb.Referencia = direccionesUsuario.Referencia;
+                    direccionDb.TelefonoContacto = direccionesUsuario.TelefonoContacto;
+                    direccionDb.EsPrincipal = direccionesUsuario.EsPrincipal;
+                    direccionDb.Estatus = direccionesUsuario.Estatus;
+                    direccionDb.FechaActualizacion = DateTime.Now;
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -133,8 +153,10 @@ namespace TiendaOnline.AppMVC.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "Correo", direccionesUsuario.UsuarioId);
             return View(direccionesUsuario);
         }

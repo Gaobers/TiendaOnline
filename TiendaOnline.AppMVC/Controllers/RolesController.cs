@@ -94,34 +94,45 @@ namespace TiendaOnline.AppMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,Estatus,FechaCreacion")] Role role)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,Estatus")] Role role)
         {
             if (id != role.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(role);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RoleExists(role.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return View(role);
             }
-            return View(role);
+
+            try
+            {
+                var roleDb = await _context.Roles.FindAsync(id);
+
+                if (roleDb == null)
+                {
+                    return NotFound();
+                }
+
+                roleDb.Nombre = role.Nombre;
+                roleDb.Descripcion = role.Descripcion;
+                roleDb.Estatus = role.Estatus;
+
+
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!RoleExists(role.Id))
+                {
+                    return NotFound();
+                }
+
+                throw;
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Roles/Delete/5

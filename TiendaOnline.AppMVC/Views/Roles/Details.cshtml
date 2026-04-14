@@ -56,11 +56,11 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label admin-label">Estatus</label>
+                            <label class="form-label admin-label">Estado</label>
                             <div class="admin-input-wrap">
                                 <i class="bi bi-check2-circle"></i>
                                 <div class="form-control admin-input d-flex align-items-center">
-                                    @Html.DisplayFor(model => model.Estatus)
+                                    @(Model.Estatus == 1 ? "Activo" : "Inactivo")
                                 </div>
                             </div>
                         </div>

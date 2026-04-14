@@ -93,34 +93,53 @@ namespace TiendaOnline.AppMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Codigo,Descripcion,TipoDescuento,ValorDescuento,MontoMinimoCompra,FechaInicio,FechaFin,UsoMaximo,UsoPorUsuario,Estatus,FechaCreacion")] Cupone cupone)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Codigo,Descripcion,TipoDescuento,ValorDescuento,MontoMinimoCompra,FechaInicio,FechaFin,UsoMaximo,UsoPorUsuario,Estatus")] Cupone cupone)
         {
             if (id != cupone.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(cupone);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CuponeExists(cupone.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return View(cupone);
             }
-            return View(cupone);
+
+            try
+            {
+                var cuponeDb = await _context.Cupones.FindAsync(id);
+
+                if (cuponeDb == null)
+                {
+                    return NotFound();
+                }
+
+                cuponeDb.Codigo = cupone.Codigo;
+                cuponeDb.Descripcion = cupone.Descripcion;
+                cuponeDb.TipoDescuento = cupone.TipoDescuento;
+                cuponeDb.ValorDescuento = cupone.ValorDescuento;
+                cuponeDb.MontoMinimoCompra = cupone.MontoMinimoCompra;
+                cuponeDb.FechaInicio = cupone.FechaInicio;
+                cuponeDb.FechaFin = cupone.FechaFin;
+                cuponeDb.UsoMaximo = cupone.UsoMaximo;
+                cuponeDb.UsoPorUsuario = cupone.UsoPorUsuario;
+                cuponeDb.Estatus = cupone.Estatus;
+
+                // NO tocar FechaCreacion
+
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CuponeExists(cupone.Id))
+                {
+                    return NotFound();
+                }
+
+                throw;
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Cupones/Delete/5

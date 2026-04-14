@@ -94,34 +94,48 @@ namespace TiendaOnline.AppMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,Costo,TiempoEstimado,Estatus,FechaCreacion")] MetodosEnvio metodosEnvio)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,Costo,TiempoEstimado,Estatus")] MetodosEnvio metodosEnvio)
         {
             if (id != metodosEnvio.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(metodosEnvio);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!MetodosEnvioExists(metodosEnvio.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return View(metodosEnvio);
             }
-            return View(metodosEnvio);
+
+            try
+            {
+                var metodoDb = await _context.MetodosEnvios.FindAsync(id);
+
+                if (metodoDb == null)
+                {
+                    return NotFound();
+                }
+
+                metodoDb.Nombre = metodosEnvio.Nombre;
+                metodoDb.Descripcion = metodosEnvio.Descripcion;
+                metodoDb.Costo = metodosEnvio.Costo;
+                metodoDb.TiempoEstimado = metodosEnvio.TiempoEstimado;
+                metodoDb.Estatus = metodosEnvio.Estatus;
+
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!MetodosEnvioExists(metodosEnvio.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: MetodosEnvios/Delete/5

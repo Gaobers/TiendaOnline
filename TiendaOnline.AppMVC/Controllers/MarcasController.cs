@@ -94,46 +94,47 @@ namespace TiendaOnline.AppMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,Estatus,FechaCreacion,FechaActualizacion")] Marca marca)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,Estatus")] Marca marca)
         {
             if (id != marca.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    var marcaDb = await _context.Marcas.FindAsync(id);
-
-                    if (marcaDb == null)
-                    {
-                        return NotFound();
-                    }
-
-                    marcaDb.Nombre = marca.Nombre;
-                    marcaDb.Descripcion = marca.Descripcion;
-                    marcaDb.Estatus = marca.Estatus;
-                    marcaDb.FechaCreacion = marca.FechaCreacion;
-                    marcaDb.FechaActualizacion = DateTime.Now;
-
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!MarcaExists(marca.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return View(marca);
             }
-            return View(marca);
+
+            try
+            {
+                var marcaDb = await _context.Marcas.FindAsync(id);
+
+                if (marcaDb == null)
+                {
+                    return NotFound();
+                }
+
+                marcaDb.Nombre = marca.Nombre;
+                marcaDb.Descripcion = marca.Descripcion;
+                marcaDb.Estatus = marca.Estatus;
+                marcaDb.FechaActualizacion = DateTime.Now;
+
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!MarcaExists(marca.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Marcas/Delete/5

@@ -93,48 +93,45 @@ namespace TiendaOnline.AppMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,Estatus,FechaCreacion")] Categoria categoria)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,Estatus")] Categoria categoria)
         {
             if (id != categoria.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    var categoriaDb = await _context.Categorias.FindAsync(id);
-
-                    if (categoriaDb == null)
-                    {
-                        return NotFound();
-                    }
-
-                    categoriaDb.Nombre = categoria.Nombre;
-                    categoriaDb.Descripcion = categoria.Descripcion;
-                    categoriaDb.Estatus = categoria.Estatus;
-                    categoriaDb.FechaCreacion = categoria.FechaCreacion;
-                    categoriaDb.FechaActualizacion = DateTime.Now;
-
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CategoriaExists(categoria.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-
-                return RedirectToAction(nameof(Index));
+                return View(categoria);
             }
 
-            return View(categoria);
+            try
+            {
+                var categoriaDb = await _context.Categorias.FindAsync(id);
+
+                if (categoriaDb == null)
+                {
+                    return NotFound();
+                }
+
+                categoriaDb.Nombre = categoria.Nombre;
+                categoriaDb.Descripcion = categoria.Descripcion;
+                categoriaDb.Estatus = categoria.Estatus;
+                categoriaDb.FechaActualizacion = DateTime.Now;
+
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CategoriaExists(categoria.Id))
+                {
+                    return NotFound();
+                }
+
+                throw;
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Categorias/Delete/5

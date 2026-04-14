@@ -94,34 +94,46 @@ namespace TiendaOnline.AppMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,Estatus,FechaCreacion")] MetodosPago metodosPago)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,Estatus")] MetodosPago metodosPago)
         {
             if (id != metodosPago.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(metodosPago);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!MetodosPagoExists(metodosPago.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return View(metodosPago);
             }
-            return View(metodosPago);
+
+            try
+            {
+                var metodoPagoDb = await _context.MetodosPagos.FindAsync(id);
+
+                if (metodoPagoDb == null)
+                {
+                    return NotFound();
+                }
+
+                metodoPagoDb.Nombre = metodosPago.Nombre;
+                metodoPagoDb.Descripcion = metodosPago.Descripcion;
+                metodoPagoDb.Estatus = metodosPago.Estatus;
+
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!MetodosPagoExists(metodosPago.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: MetodosPagos/Delete/5

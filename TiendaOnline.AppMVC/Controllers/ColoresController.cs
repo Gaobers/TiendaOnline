@@ -94,34 +94,46 @@ namespace TiendaOnline.AppMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,CodigoHex,Estatus,FechaCreacion")] Colore colore)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,CodigoHex,Estatus")] Colore colore)
         {
             if (id != colore.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(colore);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ColoreExists(colore.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return View(colore);
             }
-            return View(colore);
+
+            try
+            {
+                var coloreDb = await _context.Colores.FindAsync(id);
+
+                if (coloreDb == null)
+                {
+                    return NotFound();
+                }
+
+                coloreDb.Nombre = colore.Nombre;
+                coloreDb.CodigoHex = colore.CodigoHex;
+                coloreDb.Estatus = colore.Estatus;
+
+                // NO tocar FechaCreacion
+
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ColoreExists(colore.Id))
+                {
+                    return NotFound();
+                }
+
+                throw;
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Colores/Delete/5

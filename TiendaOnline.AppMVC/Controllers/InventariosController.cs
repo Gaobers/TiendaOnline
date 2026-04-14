@@ -118,11 +118,26 @@ namespace TiendaOnline.AppMVC.Controllers
                 return NotFound();
             }
 
+            ModelState.Remove("Producto");
+            ModelState.Remove("Talla");
+
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(inventario);
+                    var inventarioDb = await _context.Inventarios.FindAsync(id);
+
+                    if (inventarioDb == null)
+                    {
+                        return NotFound();
+                    }
+
+                    inventarioDb.ProductoId = inventario.ProductoId;
+                    inventarioDb.TallaId = inventario.TallaId;
+                    inventarioDb.Stock = inventario.Stock;
+                    inventarioDb.StockMinimo = inventario.StockMinimo;
+                    inventarioDb.FechaActualizacion = DateTime.Now;
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -136,8 +151,10 @@ namespace TiendaOnline.AppMVC.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["ProductoId"] = new SelectList(_context.Productos, "Id", "Nombre", inventario.ProductoId);
             ViewData["TallaId"] = new SelectList(_context.Tallas, "Id", "Numero", inventario.TallaId);
             return View(inventario);

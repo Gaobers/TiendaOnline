@@ -18,8 +18,8 @@ public partial class Usuario
     public string Correo { get; set; } = null!;
 
 
-    [Required]
-    [StringLength(255)]
+    [Required(ErrorMessage = "La contraseña es obligatoria")]
+    [StringLength(255, ErrorMessage = "La contraseña no puede superar los 255 caracteres")]
     public string PasswordHash { get; set; } = null!;
 
 
