@@ -324,20 +324,29 @@ namespace TiendaOnline.AppMVC.Controllers
                 Material = producto.Material,
                 EsDestacado = producto.EsDestacado,
 
+                Imagenes = producto.ProductosImagenes.Any()
+                ? producto.ProductosImagenes
+                    .OrderByDescending(pi => pi.EsPrincipal)
+                    .ThenBy(pi => pi.Orden)
+                    .Select(pi => pi.Url)
+                    .ToList()
+                : new List<string> { producto.ImagenUrl },
+
                 Colores = producto.ProductosColores
-                    .Where(pc => pc.Color != null)
-                    .Select(pc => pc.Color.Nombre)
-                    .Distinct()
-                    .ToList(),
+                .Where(pc => pc.Color != null)
+                .Select(pc => pc.Color.Nombre)
+                .Distinct()
+                .ToList(),
 
                 TallasDisponibles = producto.Inventarios
-                    .Where(i => i.Stock > 0)
-                    .Select(i => i.Talla.Numero.ToString())
-                    .Distinct()
-                    .ToList()
+                .Where(i => i.Stock > 0)
+                .Select(i => i.Talla.Numero.ToString())
+                .Distinct()
+                .ToList()
             };
 
-            return View(vm);
+            return View("DetalleProducto", vm);
         }
+
     }
 }
