@@ -1,0 +1,127 @@
+﻿@model TiendaOnline.AppMVC.ViewModels.ProductoDetalleViewModel
+@{
+    ViewData["Title"] = Model.Nombre;
+    Layout = "_PublicLayout";
+}
+
+<style>
+    .detalle-producto {
+        padding: 80px 0;
+    }
+
+    .detalle-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+    }
+
+    .detalle-img {
+        background: #fff;
+        text-align: center;
+    }
+
+        .detalle-img img {
+            width: 100%;
+            max-height: 430px;
+            object-fit: contain;
+        }
+
+    .detalle-info h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 48px;
+        margin-bottom: 15px;
+    }
+
+    .detalle-precio {
+        color: #37b59c;
+        font-size: 26px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .detalle-descripcion {
+        color: #777;
+        line-height: 1.8;
+        margin-bottom: 28px;
+    }
+
+    .tallas {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+    }
+
+    .talla {
+        border: 1px solid #ddd;
+        padding: 10px 16px;
+        background: #fff;
+        font-weight: 600;
+    }
+
+    .btn-comprar {
+        background: #37b59c;
+        color: #fff;
+        padding: 14px 34px;
+        text-decoration: none;
+        display: inline-block;
+        font-weight: 700;
+    }
+
+        .btn-comprar:hover {
+            background: #239982;
+            color: #fff;
+        }
+
+    @@media(max-width: 768px) {
+        .detalle-grid {
+            grid-template-columns: 1fr;
+            text-align: center;
+        }
+
+        .detalle-info h1 {
+            font-size: 36px;
+        }
+
+        .tallas {
+            justify-content: center;
+        }
+    }
+</style>
+
+<section class="detalle-producto">
+    <div class="container detalle-grid">
+
+        <div class="detalle-img">
+            <img src="@(Model.Imagenes.FirstOrDefault() ?? "/img/no-image.png")" alt="@Model.Nombre" />
+        </div>
+
+        <div class="detalle-info">
+            <h1>@Model.Nombre</h1>
+
+            <div class="detalle-precio">
+                $@Model.Precio.ToString("N2")
+            </div>
+
+            <p class="detalle-descripcion">
+                @Model.Descripcion
+            </p>
+
+            <h5>Tallas disponibles</h5>
+
+            <div class="tallas">
+                <button class="talla">38</button>
+                <button class="talla">39</button>
+                <button class="talla">40</button>
+                <button class="talla">41</button>
+                <button class="talla">42</button>
+            </div>
+
+            <a href="#" class="btn-comprar">
+                Comprar ahora
+            </a>
+        </div>
+
+    </div>
+</section>

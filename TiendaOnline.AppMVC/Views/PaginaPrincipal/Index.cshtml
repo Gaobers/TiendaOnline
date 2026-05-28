@@ -9,137 +9,270 @@
 
 <style>
     :root {
-        --azul-admin: #4e73df; /* El azul de tu sidebar */
-        --azul-oscuro: #224abe;
-        --azul-claro: #f8f9fc;
-        --celeste-brillante: #36b9cc;
-        --texto-oscuro: #5a5c69;
-        --fuente-titulos: 'Montserrat', sans-serif;
+        --public-primary: #37b59c;
+        --public-primary-dark: #239982;
+        --public-dark: #222;
+        --public-muted: #777;
+        --public-light: #eef3f8;
+        --public-border: #e8e8e8;
+        --public-title: 'Playfair Display', serif;
+        --public-font: 'Inter', sans-serif;
     }
 
-    body { 
-        font-family: 'Poppins', sans-serif; 
-        background-color: var(--azul-claro); 
-        color: var(--texto-oscuro);
-        margin: 0;
+    body {
+        background: #fff;
+        color: var(--public-dark);
+        font-family: var(--public-font);
     }
 
-    /* === BANNER AZUL LLAMATIVO === */
     .hero-banner {
-        background: linear-gradient(135deg, var(--azul-admin) 0%, var(--azul-oscuro) 100%);
-        padding: 60px 20px;
+        background: var(--public-light);
+        padding: 90px 20px;
+        margin-bottom: 70px;
+    }
+
+    .hero-content {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        align-items: center;
+        gap: 40px;
+    }
+
+    .hero-text h1 {
+        font-family: var(--public-title);
+        font-size: 58px;
+        color: var(--public-primary);
+        margin-bottom: 15px;
+    }
+
+    .hero-text p {
+        color: var(--public-muted);
+        max-width: 480px;
+        line-height: 1.8;
+    }
+
+    .hero-link {
+        display: inline-block;
+        margin-top: 10px;
+        color: var(--public-primary);
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .hero-image {
         text-align: center;
-        color: white;
-        border-bottom: 5px solid var(--celeste-brillante);
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        margin-bottom: 40px;
     }
 
-    .hero-banner h1 {
-        font-family: var(--fuente-titulos);
-        font-size: 3rem;
-        text-transform: uppercase;
-        letter-spacing: -1px;
-        margin-bottom: 10px;
+        .hero-image img {
+            width: 100%;
+            max-width: 560px;
+            height: 330px;
+            object-fit: contain;
+            filter: drop-shadow(0 25px 25px rgba(0,0,0,.18));
+        }
+
+    @@media (max-width: 768px) {
+        .hero-content {
+            grid-template-columns: 1fr;
+            text-align: center;
+        }
+
+        .hero-text h1 {
+            font-size: 42px;
+        }
+
+        .hero-text p {
+            margin: auto;
+        }
+
+        .hero-image img {
+            height: 230px;
+        }
     }
 
-    /* Listado de promos en el banner */
-    .promo-container {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        flex-wrap: wrap;
-        margin-top: 25px;
+    .hero-buttons {
+        margin-top: 22px;
     }
 
-    .promo-pill {
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(5px);
-        padding: 10px 20px;
-        border-radius: 50px;
-        border: 1px solid rgba(255,255,255,0.3);
-        transition: all 0.3s;
+    .btn-buy-now {
+        display: inline-block;
+        background: var(--public-primary);
+        color: #fff;
+        padding: 12px 28px;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        border: 1px solid var(--public-primary);
     }
-    .promo-pill:hover { background: var(--celeste-brillante); transform: translateY(-3px); }
 
-    /* === GRID DE ZAPATOS === */
+        .btn-buy-now:hover {
+            background: var(--public-primary-dark);
+            color: #fff;
+        }
+
+        .promo-pill i {
+            color: var(--public-primary);
+            margin-right: 6px;
+        }
+
+        .promo-pill:hover {
+            background: var(--public-primary);
+            color: #fff;
+            transform: translateY(-3px);
+        }
+
+            .promo-pill:hover i {
+                color: #fff;
+            }
+
+    .container > h2 {
+        font-family: var(--public-title);
+        font-size: 34px;
+        font-weight: 600 !important;
+        color: var(--public-dark) !important;
+        margin-bottom: 45px !important;
+    }
+
     .shoe-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 30px;
-        padding: 20px;
-        max-width: 1200px;
+        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+        gap: 45px 30px;
+        padding: 0 0 75px;
+        max-width: 1120px;
         margin: 0 auto;
     }
 
-    /* === CARD ESTILO ADMIN CLEAN === */
     .shoe-card {
-        background: white;
-        border-radius: 15px;
-        overflow: hidden;
-        border: 1px solid #e3e6f0;
-        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        text-align: center;
     }
 
-    .shoe-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 1rem 3rem rgba(0,0,0,0.15);
-        border-color: var(--azul-admin);
-    }
+        .shoe-card:hover {
+            transform: translateY(-8px);
+            box-shadow: none;
+            border: none;
+        }
 
     .img-box {
-        width: 100%;
-        height: 250px;
-        background: #f1f1f1;
+        height: 190px;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 18px;
         overflow: hidden;
     }
-    .img-box img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.5s;
+
+        .img-box img {
+            max-width: 90%;
+            max-height: 165px;
+            object-fit: contain;
+            padding: 0;
+        }
+
+
+    .shoe-card:hover img {
+        transform: scale(1.08);
     }
-    .shoe-card:hover img { transform: scale(1.08); }
 
-    .shoe-body { padding: 20px; text-align: center; }
-    .shoe-body h3 { font-size: 1.25rem; font-weight: 700; color: #4e73df; }
-    .price-tag { font-size: 1.5rem; color: #1cc88a; font-weight: 800; margin: 10px 0; }
+    .shoe-body {
+        padding: 0 10px;
+    }
 
-    /* === BOTÓN AZUL === */
+        .shoe-body h3 {
+            font-family: var(--public-title);
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--public-dark);
+            margin-bottom: 8px;
+        }
+
+    .price-tag {
+        font-size: 15px;
+        color: var(--public-primary);
+        font-weight: 700;
+        margin: 8px 0 14px;
+    }
+
     .btn-action {
-        background-color: var(--azul-admin);
-        color: white;
-        padding: 12px 25px;
-        border-radius: 8px;
-        text-decoration: none;
         display: inline-block;
+        width: auto;
+        background: transparent;
+        color: var(--public-dark);
+        border: 1px solid var(--public-primary);
+        border-radius: 0;
+        padding: 10px 22px;
+        font-size: 13px;
         font-weight: 600;
-        transition: background 0.3s;
-        width: 80%;
+        text-decoration: none;
     }
-    .btn-action:hover { background-color: var(--azul-oscuro); color: white; }
 
+        .btn-action:hover {
+            background: var(--public-primary);
+            color: #fff;
+        }
+
+    @@media (max-width: 768px) {
+        .hero-banner {
+            text-align: center;
+            padding: 65px 20px;
+        }
+
+            .hero-banner h1 {
+                font-size: 40px;
+            }
+
+            .hero-banner p {
+                margin: 0 auto;
+            }
+
+        .promo-container {
+            justify-content: center;
+        }
+
+        .shoe-grid {
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 35px 20px;
+        }
+    }
 </style>
 
-<div class="hero-banner">
-    <div class="container">
-        <h1>Nueva Colección 2026</h1>
-        <p>Estilo, confort y durabilidad en cada paso.</p>
-        
-        <div class="promo-container">
-            @foreach (var promo in Model.PromocionesActivas)
+@{
+    var productoHero = Model.ProductosDestacados?.FirstOrDefault();
+}
+
+<section class="hero-banner">
+    <div class="container hero-content">
+
+        <div class="hero-text">
+            <h1>New Arrivals</h1>
+            <p>
+                Descubre nuestra nueva colección de calzado. Estilo, comodidad y calidad en cada paso.
+            </p>
+
+            <a href="#productos" class="hero-link">
+                Ver colección <i class="fas fa-arrow-right"></i>
+            </a>
+            <div class="hero-buttons">
+                <a href="#productos" class="btn-buy-now">Comprar ahora</a>
+            </div>
+
+        </div>
+
+        <div class="hero-image">
+            @if (productoHero != null)
             {
-                <div class="promo-pill">
-                    <i class="fas @promo.Icono"></i> @promo.Texto
-                </div>
+                <img src="@productoHero.ImagenUrl" alt="@productoHero.Nombre" />
             }
         </div>
+
     </div>
-</div>
+</section>
 
 <div class="container">
-    <h2 class="text-center mb-5" style="font-weight: 800; color: var(--texto-oscuro);">Productos Destacados</h2>
+    <h2 id="productos" class="text-center mb-5">Productos Destacados</h2>
 
     <div class="shoe-grid">
         @foreach (var producto in Model.ProductosDestacados)
@@ -151,7 +284,7 @@
                 <div class="shoe-body">
                     <h3>@producto.Nombre</h3>
                     <div class="price-tag">$@producto.Precio.ToString("N2")</div>
-                    <a href="#" class="btn-action">Ver Detalles</a>
+                    <a asp-controller="Productos" asp-action="DetallePublico" asp-route-id="@producto.Id" class="btn-action"> Ver Detalles </a>
                 </div>
             </div>
         }
